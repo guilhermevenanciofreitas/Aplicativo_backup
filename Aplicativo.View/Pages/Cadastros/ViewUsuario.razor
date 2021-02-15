@@ -1,0 +1,67 @@
+﻿@inherits ViewUsuarioPage
+
+<style>
+    .fab-button {
+        right: 16px;
+        bottom: 16px;
+        position: absolute;
+    }
+</style>
+
+
+<ViewModal @ref="ViewModalUsuarioEmail">
+    <ViewUsuarioEmail OnClose="ViewModalUsuarioEmail.Hide"></ViewUsuarioEmail>
+</ViewModal>
+
+
+<AppBar Style="position: relative;">
+    <Toolbar>
+        <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="@Close" aria-label="close">
+            <CloseIcon />
+        </IconButton>
+        <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
+            Usuário
+        </Typography>
+        <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
+            save
+        </Button>
+        <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
+            delete
+        </Button>
+    </Toolbar>
+</AppBar>
+
+<AppBar Position="@AppBarPosition.Static" Color="Color.Inherit">
+    <Tabs Value="@TabUsuarioItem" OnChange="@TabUsuario_Change">
+        <Tab Id="simple-tab" Control="simple-tabpanel" Label="Principal" Value="0" />
+        <Tab Id="simple-tab" Control="simple-tabpanel" Label="Email" Value="1" />
+    </Tabs>
+</AppBar>
+
+<TabPanel Id="simple-tabpanel" Label="simple-tab" Value="@TabUsuarioItem" Index="0">
+
+    <TextBox @ref="TxtNome" _Label="Nome"></TextBox>
+
+    <TextBox @ref="TxtLogin" _Label="Login"></TextBox>
+
+    <TextBox @ref="TxtSenha" _Label="Senha"></TextBox>
+
+</TabPanel>
+
+<TabPanel Id="simple-tabpanel" Label="simple-tab" Value="@TabUsuarioItem" Index="1">
+
+    Emails
+
+</TabPanel>
+
+
+<Scale Class="fab-button" In="(int)TabUsuarioItem == 0">
+    <Fab Color="Color.Inherit">
+        <EditIcon></EditIcon>
+    </Fab>
+</Scale>
+<Scale Class="fab-button" In="(int)TabUsuarioItem == 1">
+    <Fab Color="Color.Primary" OnClick="BtnAdicionarEmail_Click">
+        <AddIcon></AddIcon>
+    </Fab>
+</Scale>

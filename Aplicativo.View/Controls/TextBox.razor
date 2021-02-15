@@ -1,0 +1,14 @@
+﻿@inherits TextBoxComponent
+
+@*@if (_Label != null)
+{
+    <label for="@TextBox.Id">@_Label</label>
+}
+
+<input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />*@
+
+<TextField @bind-Value="@_Text"
+           Label="@_Label"
+           Margin="@Margin.Normal"
+           Variant="@TextFieldVariant.Outlined"
+           Style="width: 100%" />

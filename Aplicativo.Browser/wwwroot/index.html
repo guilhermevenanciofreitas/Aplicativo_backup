@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+    <title>Skclusive-UI Docs</title>
+
+    <base href="/" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+
+    
+
+    <style>
+        ::-webkit-scrollbar-track {
+            background-color: #F4F4F4;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+            background: #F4F4F4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dad7d7;
+        }
+    </style>
+
+    <style>
+        #blazor-error-ui {
+            background: lightyellow;
+            bottom: 0;
+            box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+            left: 0;
+            padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+            #blazor-error-ui .dismiss {
+                cursor: pointer;
+                position: absolute;
+                right: 0.75rem;
+                top: 0.5rem;
+            }
+    </style>
+
+    <style>
+        .loading {
+            background-color: rgba(0,0,0,.65);
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 90000;
+        }
+
+        .loading-center {
+            margin-top: calc(50vh - 80px);
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            -webkit-animation: rotation .6s infinite linear;
+            -moz-animation: rotation .6s infinite linear;
+            -o-animation: rotation .6s infinite linear;
+            animation: rotation .6s infinite linear;
+            border-left: 8px solid rgba(255,255,255,.15);
+            border-right: 8px solid rgba(255,255,255,.15);
+            border-bottom: 8px solid rgba(255,255,255,.15);
+            border-top: 8px solid rgba(255,255,255,.8);
+            border-radius: 100%;
+        }
+
+        .loading-text {
+            margin-top: 10px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 20px;
+            color: white;
+        }
+
+        @-webkit-keyframes rotation {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(359deg);
+            }
+        }
+
+        @-moz-keyframes rotation {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+
+            to {
+                -moz-transform: rotate(359deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app">
+        Loading...
+    </div>
+
+    <div class="loading" style="display: none">
+        <div class="loading-center">
+            <center>
+                <div class="loading-spinner"></div>
+                <div class="loading-text"></div>
+            </center>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Aplicativo.View/js/app.js"></script>
+
+    <script>
+        function Loading(display, text) {
+            document.getElementsByClassName("loading")[0].style.display = display;
+            document.getElementsByClassName("loading-text")[0].innerHTML = text;
+        }
+    </script>
+
+</body>
+
+</html>

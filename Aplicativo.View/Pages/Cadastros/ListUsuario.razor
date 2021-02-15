@@ -1,0 +1,86 @@
+﻿@page "/"
+
+@inherits ListUsuarioPage
+
+<ViewModal @ref="ViewModalFiltro" FullScreen="false">
+    Filtro
+</ViewModal>
+
+<ViewModal @ref="ViewModalUsuario" FullScreen="true">
+    <ViewUsuario @ref="ViewUsuario" OnClose="ViewModalUsuario.Hide" OnSave="ViewUsuario_Save"></ViewUsuario>
+</ViewModal>
+
+@if (ListItemView.Any(c => c.Bool01 == true))
+{
+<AppBar>
+    <Toolbar>
+        <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="ListItemView_Unmake">
+            <ArrowBackIcon />
+        </IconButton>
+        <Typography Variant="@TypographyVariant.H6" Style="flex-grow: 1;">
+            @ListItemView.Where(c => c.Bool01 == true).Count()  Selecionado(s)
+        </Typography>
+    </Toolbar>
+</AppBar>
+}
+
+<Button Variant="@ButtonVariant.Contained" OnClick="BtnFiltro_Click">
+    <StartIcon>
+        <FilterListIcon />
+    </StartIcon>
+    <ChildContent>
+        Filtro
+    </ChildContent>
+</Button>
+
+<Button Variant="@ButtonVariant.Contained" Color="@Color.Primary" OnClick="BtnCarregar_Click">
+    <StartIcon>
+        <SearchIcon />
+    </StartIcon>
+    <ChildContent>
+        Pesquisar
+    </ChildContent>
+</Button>
+
+<List>
+    @foreach (var item in ListItemView)
+    {
+    <LongPress OnLongPress="@(() => ListItemView_LongPress(item))" OnPress="@(() => ListItemView_Press(item))">
+        <Content>
+            <ListItem AlignItems="@AlignItems.FlexStart" Button="true">
+                @if (ListItemView.Any(c => c.Bool01 == true))
+                    {
+                <ListItemIcon>
+                    <CheckBox _Checked="@(item.Bool01 ?? false)" />
+                </ListItemIcon>
+                    }
+                <ListItemText Primary="@item.Descricao01">
+                    <SecondaryContent>
+                        <Typography Component="span"
+                                    Variant="@TypographyVariant.Body2"
+                                    Color="@Color.TextPrimary"
+                                    Style="display: inline;">
+                            Teste
+                        </Typography>
+                        — I'll be in your neighborhood doing errands this…
+                    </SecondaryContent>
+                </ListItemText>
+            </ListItem>
+            <Divider Variant="@DividerVariant.Inset" Component="li" />
+        </Content>
+    </LongPress>
+    }
+</List>
+
+<Scale Class="fab-button" In="!ListItemView.Any(c => c.Bool01 == true)">
+    <Fab Color="@Color.Primary" OnClick="BtnNovo_Click" Style="background-color: #5cb85c">
+        <AddIcon></AddIcon>
+    </Fab>
+</Scale>
+
+<Scale Class="fab-button" In="ListItemView.Any(c => c.Bool01 == true)">
+    <Fab Style="color: #fff; background-color: #df4759;
+    " OnClick="BtnExcluir_Click">
+        <DeleteIcon></DeleteIcon>
+    </Fab>
+</Scale>

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <EnableDefaultCssItems>false</EnableDefaultCssItems>
+    <WwwRootResourcePath>wwwroot</WwwRootResourcePath>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <!-- Skclusive.Dashboard.App.Binding as assembly name not working in macos project -->
+    <AssemblyName>Aplicativo.Binding</AssemblyName>
+    <RootNamespace>Aplicativo.Binding</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.MobileBlazorBindings" Version="0.6.18-preview" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1931" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aplicativo.View\Aplicativo.View.csproj" />
+  </ItemGroup>
+</Project>

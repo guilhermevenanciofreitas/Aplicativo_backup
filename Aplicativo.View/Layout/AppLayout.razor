@@ -1,0 +1,24 @@
+﻿@inherits MaterialLayoutComponent
+
+<MainLayout
+    TopbarClass="App-Topbar">
+    <LogoContent>
+        <Logo Class="App-Logo" />
+    </LogoContent>
+    <TitleContent>
+        <Typography Class="App-Title" Variant="@TypographyVariant.H6" NoWrap>
+            Skclusive-UI
+        </Typography>
+    </TitleContent>
+    <ActionsContent>
+        <ToggleTheme />
+    </ActionsContent>
+    <BodyContent>
+        <Box Padding="3" Class="App-Body">
+            @Body
+        </Box>
+    </BodyContent>
+     <SidebarContent>
+        <Aplicativo.View.Layout.Menu />
+    </SidebarContent>
+</MainLayout>

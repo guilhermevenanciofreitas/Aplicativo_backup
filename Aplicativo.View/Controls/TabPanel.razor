@@ -1,0 +1,13 @@
+@inherits TabPanelControl
+
+<Typography
+    Component="div"
+    Role="tabpanel"
+    id="@_Id"
+    hidden="@Hidden"
+    aria-labelledby="@_Label">
+    <Box
+        Padding="3">
+        @ChildContent
+    </Box>
+</Typography>
