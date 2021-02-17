@@ -1,9 +1,8 @@
 ﻿using Aplicativo.Utils;
+using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Model;
-using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Microsoft.JSInterop;
-using System;
+using Aplicativo.View.Layout;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,156 +12,57 @@ namespace Aplicativo.View.Pages.Cadastros
     public class ListUsuarioPage : HelpPage
     {
 
-        protected ViewModal ViewModalFiltro;
-        protected ViewModal ViewModalUsuario;
-        protected ViewUsuario ViewUsuario;
+        protected ListItemViewLayout ViewLayout { get; set; }
+        protected ViewUsuario ViewUsuario { get; set; }
 
-        public List<ItemView> ListItemView { get; set; } = new List<ItemView>();
-
-        protected async void BtnFiltro_Click()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            try
+            await base.OnAfterRenderAsync(firstRender);
+
+            if (firstRender)
             {
-                ViewModalFiltro.Show();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+                ViewLayout.Filtros = new List<HelpFiltro>() {
+                                HelpViewFiltro.HelpFiltro("Nome", "Nome", FiltroType.TextBox),
+                                HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
+                             };
+
+                await ViewLayout.OnPesquisar.InvokeAsync(null);
+
             }
         }
 
-        protected async void BtnCarregar_Click()
+        protected async Task ViewLayout_Pesquisar()
         {
-            try
-            {
-                await HelpLoading.Show(this, "Carregando...");
-                await Carregar();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
-            }
-        }
 
-        private async Task Carregar()
-        {
             var Request = new Request();
+            Request.Parameters.Add(new Parameters("Filtro", ViewLayout.Filtros));
+            var Result = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
 
-            var content = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
-
-            ListItemView = content.Select(c =>
+            ViewLayout.ListItemView = Result.Select(c =>
             new ItemView()
             {
                 Bool01 = false,
-                Inteiro01 = c.UsuarioID,
+                Long01 = c.UsuarioID,
                 Descricao01 = c.Nome,
+                Descricao02 = c.Login,
             }).ToList();
 
-            StateHasChanged();
         }
 
-        protected async void BtnNovo_Click()
+        protected async Task ViewLayout_ItemView(object ID)
         {
-            try
-            {
-                await ViewUsuario.Carregar(null);
-                ViewModalUsuario.Show();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-            }
+            await ViewUsuario.Carregar(ID?.ToString().ToIntOrNull());
         }
 
-        public async Task BtnExcluir_Click()
+        protected async Task ViewLayout_Delete(object List)
         {
-            try
-            {
 
-                await HelpLoading.Show(this, "Excluindo...");
+            var Request = new Request();
 
-                var Request = new Request();
+            Request.Parameters.Add(new Parameters("Usuarios", (List<long?>)List));
 
-                var Usuarios = ListItemView.Where(c => c.Bool01 == true).Select(c => c.Inteiro01);
+            await HelpHttp.Send(Http, "api/Usuario/Delete", Request);
 
-                Request.Parameters.Add(new Parameters("Usuarios", Usuarios));
-
-                await HelpHttp.Send(Http, "api/Usuario/Delete", Request);
-
-                await Carregar();
-
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
-            }
-        }
-
-        protected async void ViewUsuario_Save()
-        {
-            try
-            {
-                ViewModalUsuario.Hide();
-                await Carregar();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
-            }
-        }
-
-        protected async void ListItemView_Press(ItemView ItemView)
-        {
-            if (!ListItemView.Any(c => c.Bool01 == true))
-            {
-                try
-                {
-                    await HelpLoading.Show(this, "Carregando...");
-
-                    await ViewUsuario.Carregar(ItemView.Inteiro01);
-                    ViewModalUsuario.Show();
-
-                    StateHasChanged();
-
-                }
-                catch (Exception ex)
-                {
-                    await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-                }
-                finally
-                {
-                    await HelpLoading.Hide(this);
-                }
-            }
-            else
-            {
-                ItemView.Bool01 = !ItemView.Bool01;
-            }
-        }
-
-        protected void ListItemView_LongPress(ItemView ItemView)
-        {
-            ItemView.Bool01 = !ItemView.Bool01;
-        }
-
-        protected void ListItemView_Unmake()
-        {
-            foreach(var item in ListItemView)
-            {
-                item.Bool01 = false;
-            }
         }
 
     }

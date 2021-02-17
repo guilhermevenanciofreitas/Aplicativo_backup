@@ -1,4 +1,5 @@
 ﻿using Aplicativo.Binding.Services;
+using Aplicativo.View.Helpers;
 using Aplicativo.View.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;

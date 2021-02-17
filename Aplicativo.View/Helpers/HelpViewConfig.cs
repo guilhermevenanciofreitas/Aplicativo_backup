@@ -39,19 +39,19 @@ namespace Aplicativo.View.Helpers
     {
         public static void TryAddViewServices(this IServiceCollection services, IHelpViewConfig config)
         {
-            services.TryAddMarkdownServices(config);
+            //services.TryAddMarkdownServices(config);
 
             services.TryAddLayoutServices(config);
 
-            services.TryAddAlertServices(config);
+            //services.TryAddAlertServices(config);
 
             services.TryAddMaterialServices(config);
 
-            services.TryAddScoped(sp => config);
+            //services.TryAddScoped(sp => config);
 
-            services.TryAddStyleTypeProvider<HelpViewStyleProvider>();
+            //services.TryAddStyleTypeProvider<HelpViewStyleProvider>();
 
-            services.TryAddStyleProducer<HelpViewStyleProducer>();
+            //services.TryAddStyleProducer<HelpViewStyleProducer>();
         }
     }
 

@@ -2,12 +2,14 @@
 using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Model;
+using Build.Server.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using UAParser;
 
 namespace Sistema.Server.Controllers
@@ -30,17 +32,19 @@ namespace Sistema.Server.Controllers
             //var uaParser = Parser.GetDefault();
             //ClientInfo ClientInfo = uaParser.Parse(userAgent);
 
-
+            
 
             using var db = new Context();
 
             var Response = new Response();
 
-            var query = db.Usuario.AsQueryable();
+            var Query = db.Usuario.AsQueryable();
 
-            query = query.Where(c => c.Ativo == true);
+            Query = Query.Where(c => c.Ativo == true);
 
-            Response.Data = query.ToList();
+            Query = HelpQuery.Filtro(Query, Request);
+
+            Response.Data = Query.ToList();
 
             return Response;
 

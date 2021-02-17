@@ -12,7 +12,7 @@ namespace Aplicativo.View.Controls
         [Parameter] public EventCallback OnLongPress { get; set; }
         [Parameter] public EventCallback OnPress { get; set; }
 
-        [Parameter] public RenderFragment Content { get; set; }
+        [Parameter] public RenderFragment ChildContent { get; set; }
 
         protected bool IsPressedLong = false;
 
