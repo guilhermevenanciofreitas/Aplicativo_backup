@@ -9,3 +9,12 @@
         });
     },
 };
+
+window.Modal = {
+    Show: function (divModal) {
+        $(divModal).modal('show');
+    },
+    Hide: async function (divModal) {
+        $(divModal).modal('hide');
+    },
+};

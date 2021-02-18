@@ -3,6 +3,7 @@
 @inherits ListUsuarioPage
 
 <ListItemViewLayout @ref="ViewLayout"
+                    ViewTitle="Usuário"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView" 
                     OnDelete="ViewLayout_Delete">
@@ -18,9 +19,17 @@
                     <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
                         @item.Descricao02
                     </Typography>
-                    — I'll be in your neighborhood doing errands this…
+                    — I'll be in your neighborhood
                 </SecondaryContent>
             </ListItemText>
         }
     </ItemView>
+    <GridView>
+        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
+    </GridView>
 </ListItemViewLayout>

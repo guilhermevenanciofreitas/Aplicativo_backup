@@ -4,13 +4,14 @@ using Aplicativo.Utils.Model;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.JSInterop;
+using Skclusive.Material.Icon;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros
 {
-    public class ListUsuarioPage : HelpPage
+    public class ListUsuarioPage : HelpComponent
     {
 
         protected ListItemViewLayout ViewLayout { get; set; }
@@ -27,8 +28,8 @@ namespace Aplicativo.View.Pages.Cadastros
                                 HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
                              };
 
-                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Label = "Imprimir", OnClick = Imprimir });
-                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Label = "Compartilhar", OnClick = Imprimir });
+                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
+                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
 
                 await ViewLayout.OnPesquisar.InvokeAsync(null);
 
@@ -40,9 +41,13 @@ namespace Aplicativo.View.Pages.Cadastros
             await JSRuntime.InvokeVoidAsync("alert", "Imprimir");
         }
 
+        private async void Compartilhar()
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Compartilhar");
+        }
+
         protected async Task ViewLayout_Pesquisar()
         {
-
             var Request = new Request();
             Request.Parameters.Add(new Parameters("Filtro", ViewLayout.Filtros));
             var Result = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
@@ -55,24 +60,18 @@ namespace Aplicativo.View.Pages.Cadastros
                 Descricao01 = c.Nome,
                 Descricao02 = c.Login,
             }).ToList();
-
         }
 
         protected async Task ViewLayout_ItemView(object ID)
         {
-            await ViewUsuario.Carregar(ID?.ToString().ToIntOrNull());
+            await ViewUsuario.EditItemViewLayout.Carregar(ID?.ToString().ToIntOrNull());
         }
 
         protected async Task ViewLayout_Delete(object List)
         {
-
             var Request = new Request();
-
             Request.Parameters.Add(new Parameters("Usuarios", (List<long?>)List));
-
             await HelpHttp.Send(Http, "api/Usuario/Delete", Request);
-
         }
-
     }
 }

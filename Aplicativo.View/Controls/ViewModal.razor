@@ -1,5 +1,59 @@
 ﻿@inherits ViewModalControl
 
-<Dialog DisableEscapeKeyDown="false" FullScreen="@FullScreen" Open="@Open" OnClose="@Hide">
-    @ChildContent
-</Dialog>
+@if (HelpParametros.Template == Template.Mobile)
+{
+    <Dialog DisableEscapeKeyDown="false" FullScreen="@FullScreen" Open="@Open" OnClose="@Hide">
+        @ChildContent
+    </Dialog>
+}
+else
+{
+    <div class="modal fade" @ref="DivModal" style="z-index: 10000; @(MarginTop == null ? "" : "margin-top: " + MarginTop + ";")">
+        <div class="modal-dialog" style="width:@Width">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" @onclick="Hide">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title">@Title</h3>
+
+                    @Header
+
+                </div>
+
+                @if (ChildContent != null)
+                {
+                    <div class="modal-body">
+                        @ChildContent
+                    </div>
+                }
+
+                @if (@Footer != null)
+                {
+                    <div class="modal-footer">
+                        @Footer
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+@code{
+
+    [Parameter] public string Id { get; set; }
+
+    [Parameter] public string Width { get; set; }
+
+    [Parameter] public string Height { get; set; }
+
+    [Parameter] public string MarginTop { get; set; }
+
+    [Parameter] public string Title { get; set; }
+
+    [Parameter] public RenderFragment Header { get; set; }
+
+    [Parameter] public RenderFragment Footer { get; set; }
+
+}

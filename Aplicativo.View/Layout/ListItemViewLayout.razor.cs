@@ -7,7 +7,9 @@ using Aplicativo.View.Pages.Cadastros;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Core.Component;
+using Skclusive.Material.Icon;
 using Skclusive.Material.Menu;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +22,11 @@ namespace Aplicativo.View.Layout
     public class ItemViewButton
     {
 
+        public SvgIconBase Icon { get; set; }
+
         public string Label { get; set; }
 
-        public Action OnClick { get; set; }
+        public System.Action OnClick { get; set; }
 
     }
 
@@ -34,8 +38,14 @@ namespace Aplicativo.View.Layout
 
         public List<HelpFiltro> Filtros { get; set; } = new List<HelpFiltro>();
 
+        [Parameter] public string ViewTitle { get; set; }
+        [Parameter] public string ViewWidth { get; set; } = "1250px";
         [Parameter] public RenderFragment View { get; set; }
         [Parameter] public RenderFragment<ItemView> ItemView { get; set; }
+
+        [Parameter] public RenderFragment GridView { get; set; }
+
+        protected SfGrid<ItemView> GridViewItem { get; set; }
 
         public List<ItemViewButton> ItemViewButtons { get; set; } = new List<ItemViewButton>();
 
@@ -260,21 +270,62 @@ namespace Aplicativo.View.Layout
         protected void ItemViewOpen_Close(EventArgs args)
         {
             ItemViewButtonOpen = false;
-            StateHasChanged();
         }
 
         protected void ItemViewOpen_Close(MenuCloseReason reason)
         {
             ItemViewButtonOpen = false;
-            StateHasChanged();
         }
 
         protected void ItemViewButtonOpen_Show()
         {
             ItemViewButtonOpen = true;
+        }
+
+        protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<ItemView> ItemView)
+        {
+            try
+            {
+                await HelpLoading.Show(this, "Carregando...");
+
+                await OnItemView.InvokeAsync(ItemView.RowData.Long01);
+                ViewModal.Show();
+
+                StateHasChanged();
+
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+            }
+            finally
+            {
+                await HelpLoading.Hide(this);
+            }
+        }
+
+        protected void GridViewItem_Chcked(ItemView ItemView)
+        {
+            ItemView.Bool01 = !ItemView.Bool01;
             StateHasChanged();
         }
 
+        protected void ListItemViewHeeader_Change(ChangeEventArgs args)
+        {
+            foreach (var item in ListItemView)
+            {
+                item.Bool01 = (bool)args.Value;
+            }
+        }
+
+        protected void MnuMarcarTodos_Click()
+        {
+            foreach (var item in ListItemView)
+            {
+                item.Bool01 = true;
+            }
+            ItemViewOpen_Close(null);
+        }
 
     }
 }

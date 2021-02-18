@@ -1,0 +1,66 @@
+﻿@inherits EditItemViewLayoutPage
+
+<style>
+    .fab-button {
+        right: 16px;
+        bottom: 16px;
+        position: fixed;
+    }
+</style>
+
+@if (HelpParametros.Template == Template.Mobile)
+{
+    <AppBar Style="position: relative;">
+        <Toolbar>
+            <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="@Close" aria-label="close">
+                <CloseIcon />
+            </IconButton>
+            <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
+                Usuário
+            </Typography>
+            <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
+                save
+            </Button>
+            @if (ItemViewMode == ItemViewMode.Edit)
+            {
+                <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
+                    delete
+                </Button>
+            }
+        </Toolbar>
+    </AppBar>
+}
+else
+{
+<div class="box-header with-border">
+    <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnLimpar_Click">
+        <StartIcon>
+            <FacebookIcon />
+        </StartIcon>
+        <ChildContent>
+            Limpar
+        </ChildContent>
+    </Button>
+    <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
+        <StartIcon>
+            <SaveIcon />
+        </StartIcon>
+        <ChildContent>
+            Salvar
+        </ChildContent>
+    </Button>
+    @if (ItemViewMode == ItemViewMode.Edit)
+    {
+        <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnExcluir_Click">
+            <StartIcon>
+                <DeleteIcon />
+            </StartIcon>
+            <ChildContent>
+                Excluir
+            </ChildContent>
+        </Button>
+    }
+</div>
+}
+
+@View

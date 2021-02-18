@@ -7,6 +7,7 @@ using Aplicativo.Browser.Services;
 using Aplicativo.View.Services;
 using Skclusive.Material.Docs.App.View;
 using Aplicativo.View.Helpers;
+using Syncfusion.Blazor;
 
 namespace Aplicativo.Browser
 {
@@ -32,6 +33,8 @@ namespace Aplicativo.Browser
                 .WithResponsive(true)
                 .Build()
             );
+
+            builder.Services.AddSyncfusionBlazor();
 
             await builder.Build().RunAsync();
 
