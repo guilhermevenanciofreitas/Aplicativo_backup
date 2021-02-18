@@ -3,6 +3,7 @@ using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Model;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +27,17 @@ namespace Aplicativo.View.Pages.Cadastros
                                 HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
                              };
 
+                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Label = "Imprimir", OnClick = Imprimir });
+                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Label = "Compartilhar", OnClick = Imprimir });
+
                 await ViewLayout.OnPesquisar.InvokeAsync(null);
 
             }
+        }
+
+        private async void Imprimir()
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Imprimir");
         }
 
         protected async Task ViewLayout_Pesquisar()

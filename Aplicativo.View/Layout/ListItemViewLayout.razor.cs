@@ -6,6 +6,8 @@ using Aplicativo.View.Helpers;
 using Aplicativo.View.Pages.Cadastros;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Skclusive.Core.Component;
+using Skclusive.Material.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +15,29 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout
 {
+
+
+    public class ItemViewButton
+    {
+
+        public string Label { get; set; }
+
+        public Action OnClick { get; set; }
+
+    }
+
     public class ListItemViewLayoutPage : HelpComponent
     {
 
         public ViewModal ViewFiltro;
         public ViewModal ViewModal;
 
-        public List<HelpFiltro> Filtros { get; set; }
+        public List<HelpFiltro> Filtros { get; set; } = new List<HelpFiltro>();
 
         [Parameter] public RenderFragment View { get; set; }
         [Parameter] public RenderFragment<ItemView> ItemView { get; set; }
+
+        public List<ItemViewButton> ItemViewButtons { get; set; } = new List<ItemViewButton>();
 
         public List<ItemView> ListItemView { get; set; } = new List<ItemView>();
 
@@ -238,6 +253,28 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        
+        protected bool ItemViewButtonOpen { set; get; }
+
+        protected IReference ItemViewOpenButtonRef { set; get; } = new Reference();
+
+        protected void ItemViewOpen_Close(EventArgs args)
+        {
+            ItemViewButtonOpen = false;
+            StateHasChanged();
+        }
+
+        protected void ItemViewOpen_Close(MenuCloseReason reason)
+        {
+            ItemViewButtonOpen = false;
+            StateHasChanged();
+        }
+
+        protected void ItemViewButtonOpen_Show()
+        {
+            ItemViewButtonOpen = true;
+            StateHasChanged();
+        }
+
+
     }
 }

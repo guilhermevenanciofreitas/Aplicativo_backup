@@ -9,8 +9,17 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Helpers
 {
+
+    public enum Template
+    {
+        Desktop,
+        Mobile,
+    }
+
     public class HelpParametros
     {
+
+        public static Template Template { get; set; } = Template.Mobile;
 
         public static void GetParametros(int UsuarioID, int EmpresaID)
         {

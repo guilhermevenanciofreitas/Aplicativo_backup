@@ -11,21 +11,16 @@
     </View>
     <ItemView>
         @{
-
             var item = (context as ItemView);
 
             <ListItemText Primary="@item.Descricao01">
                 <SecondaryContent>
-                    <Typography Component="span"
-                                Variant="@TypographyVariant.Body2"
-                                Color="@Color.TextPrimary"
-                                Style="display: inline;">
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
                         @item.Descricao02
                     </Typography>
                     — I'll be in your neighborhood doing errands this…
                 </SecondaryContent>
             </ListItemText>
-
         }
     </ItemView>
 </ListItemViewLayout>
