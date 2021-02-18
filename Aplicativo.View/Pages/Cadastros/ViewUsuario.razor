@@ -1,6 +1,9 @@
 ﻿@inherits ViewUsuarioPage
 
 <EditItemViewLayout @ref="EditItemViewLayout"
+                    ListItemViewLayout="ListItemViewLayout"
+                    Title="Usuário"
+                    Width="1250px"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -36,101 +39,3 @@
 
     </View>
 </EditItemViewLayout>
-@*@inherits ViewUsuarioPage
-
-    <style>
-        .fab-button {
-            right: 16px;
-            bottom: 16px;
-            position: fixed;
-        }
-    </style>
-
-    <ViewModal @ref="ViewModalUsuarioEmail">
-        <ViewUsuarioEmail OnClose="ViewModalUsuarioEmail.Hide"></ViewUsuarioEmail>
-    </ViewModal>
-
-
-    @if (HelpParametros.Template == Template.Mobile)
-    {
-        <AppBar Style="position: relative;">
-            <Toolbar>
-                <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="@Close" aria-label="close">
-                    <CloseIcon />
-                </IconButton>
-                <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
-                    Usuário
-                </Typography>
-                <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
-                    save
-                </Button>
-                <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
-                    delete
-                </Button>
-            </Toolbar>
-        </AppBar>
-    }
-    else
-    {
-    <div class="box-header with-border">
-        <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnLimpar_Click">
-            <StartIcon>
-                <FacebookIcon />
-            </StartIcon>
-            <ChildContent>
-                Limpar
-            </ChildContent>
-        </Button>
-        <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
-            <StartIcon>
-                <SaveIcon />
-            </StartIcon>
-            <ChildContent>
-                Salvar
-            </ChildContent>
-        </Button>
-        <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnExcluir_Click">
-            <StartIcon>
-                <DeleteIcon />
-            </StartIcon>
-            <ChildContent>
-                Excluir
-            </ChildContent>
-        </Button>
-    </div>
-
-    }
-
-    <TabSet @ref="TabSet" Changed="StateHasChanged">
-        <TabPage Id="Principal" Title="Principal">
-            Page 1
-
-            <TextBox @ref="TxtNome" _Label="Nome"></TextBox>
-
-            <TextBox @ref="TxtLogin" _Label="Login"></TextBox>
-
-            <TextBox @ref="TxtSenha" _Label="Senha"></TextBox>
-
-        </TabPage>
-        <TabPage Id="Email" Title="Email">
-            Email
-        </TabPage>
-    </TabSet>
-
-    <Scale Class="fab-button" In=@(TabSet?.Id == "Principal")>
-        <Fab Color="Color.Inherit">
-            <EditIcon></EditIcon>
-        </Fab>
-    </Scale>
-
-    <Scale Class="fab-button" In=@(TabSet?.Id == "Email")>
-        <Fab Color="Color.Primary" OnClick="BtnAdicionarEmail_Click">
-            <AddIcon></AddIcon>
-        </Fab>
-    </Scale>
-
-    @code {
-
-        protected TabSet TabSet { get; set; }
-
-    }*@

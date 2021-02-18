@@ -8,39 +8,42 @@
     }
 </style>
 
-@if (HelpParametros.Template == Template.Mobile)
-{
-    <AppBar Style="position: relative;">
-        <Toolbar>
-            <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="@Close" aria-label="close">
-                <CloseIcon />
-            </IconButton>
-            <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
-                Usuário
-            </Typography>
-            <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
-                save
-            </Button>
-            @if (ItemViewMode == ItemViewMode.Edit)
-            {
-                <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
-                    delete
+<ViewModal @ref="ViewModal" FullScreen="true" Title="@Title" Width="@Width">
+
+    @if (HelpParametros.Template == Template.Mobile)
+    {
+        <AppBar Style="position: relative;">
+            <Toolbar>
+                <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="ViewModal.Hide" aria-label="close">
+                    <CloseIcon />
+                </IconButton>
+                <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
+                    Usuário
+                </Typography>
+                <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
+                    save
                 </Button>
-            }
-        </Toolbar>
-    </AppBar>
-}
-else
-{
+                @if (ItemViewMode == ItemViewMode.Edit)
+                {
+                    <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
+                        delete
+                    </Button>
+                }
+            </Toolbar>
+        </AppBar>
+    }
+    else
+    {
 <div class="box-header with-border">
-    <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnLimpar_Click">
+    <Button Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click">
         <StartIcon>
-            <FacebookIcon />
+            <FilterListIcon />
         </StartIcon>
         <ChildContent>
             Limpar
         </ChildContent>
     </Button>
+
     <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
         <StartIcon>
             <SaveIcon />
@@ -51,7 +54,7 @@ else
     </Button>
     @if (ItemViewMode == ItemViewMode.Edit)
     {
-        <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnExcluir_Click">
+        <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 110px">
             <StartIcon>
                 <DeleteIcon />
             </StartIcon>
@@ -61,6 +64,8 @@ else
         </Button>
     }
 </div>
-}
+    }
 
-@View
+    @View
+
+</ViewModal>

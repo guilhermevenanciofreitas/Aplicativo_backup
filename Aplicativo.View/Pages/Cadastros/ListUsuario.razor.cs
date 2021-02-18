@@ -60,11 +60,13 @@ namespace Aplicativo.View.Pages.Cadastros
                 Descricao01 = c.Nome,
                 Descricao02 = c.Login,
             }).ToList();
+
         }
 
         protected async Task ViewLayout_ItemView(object ID)
         {
             await ViewUsuario.EditItemViewLayout.Carregar(ID?.ToString().ToIntOrNull());
+            ViewUsuario.EditItemViewLayout.ViewModal.Show();
         }
 
         protected async Task ViewLayout_Delete(object List)

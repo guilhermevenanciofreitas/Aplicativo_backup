@@ -34,12 +34,9 @@ namespace Aplicativo.View.Layout
     {
 
         public ViewModal ViewFiltro;
-        public ViewModal ViewModal;
 
         public List<HelpFiltro> Filtros { get; set; } = new List<HelpFiltro>();
 
-        [Parameter] public string ViewTitle { get; set; }
-        [Parameter] public string ViewWidth { get; set; } = "1250px";
         [Parameter] public RenderFragment View { get; set; }
         [Parameter] public RenderFragment<ItemView> ItemView { get; set; }
 
@@ -61,6 +58,7 @@ namespace Aplicativo.View.Layout
             try
             {
                 ViewFiltro.Show();
+                StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -68,7 +66,7 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        protected async Task BtnPesquisar_Click()
+        public async Task BtnPesquisar_Click()
         {
             try
             {
@@ -115,6 +113,8 @@ namespace Aplicativo.View.Layout
 
             await OnPesquisar.InvokeAsync(null);
 
+            StateHasChanged();
+
         }
 
         protected async void BtnNovo_Click()
@@ -122,7 +122,7 @@ namespace Aplicativo.View.Layout
             try
             {
                 await OnItemView.InvokeAsync(null);
-                ViewModal.Show();
+                StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        public async Task BtnExcluir_Click()
+        protected async Task BtnExcluir_Click()
         {
             try
             {
@@ -158,47 +158,15 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        public async void ViewModal_Save()
-        {
-            try
-            {
-                ViewModal.Hide();
-                await Pesquisar();
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
-            }
-        }
-
-        public async void ViewModal_Close()
-        {
-            try
-            {
-                ViewModal.Hide();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
-        }
-
         protected async void ListItemView_Press(ItemView ItemView)
         {
             if (!ListItemView.Any(c => c.Bool01 == true))
             {
                 try
                 {
+
                     await HelpLoading.Show(this, "Carregando...");
-
                     await OnItemView.InvokeAsync(ItemView.Long01);
-                    ViewModal.Show();
-
                     StateHasChanged();
 
                 }
@@ -216,6 +184,7 @@ namespace Aplicativo.View.Layout
                 try
                 {
                     ItemView.Bool01 = !ItemView.Bool01;
+                    StateHasChanged();
                 }
                 catch (Exception ex)
                 {
@@ -229,6 +198,7 @@ namespace Aplicativo.View.Layout
             try
             {
                 ItemView.Bool01 = !ItemView.Bool01;
+                StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -244,6 +214,9 @@ namespace Aplicativo.View.Layout
                 {
                     item.Bool01 = false;
                 }
+
+                StateHasChanged();
+
             }
             catch (Exception ex)
             {
@@ -256,6 +229,7 @@ namespace Aplicativo.View.Layout
             try
             {
                 ViewFiltro.Hide();
+                StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -289,7 +263,6 @@ namespace Aplicativo.View.Layout
                 await HelpLoading.Show(this, "Carregando...");
 
                 await OnItemView.InvokeAsync(ItemView.RowData.Long01);
-                ViewModal.Show();
 
                 StateHasChanged();
 
@@ -316,6 +289,9 @@ namespace Aplicativo.View.Layout
             {
                 item.Bool01 = (bool)args.Value;
             }
+
+            StateHasChanged();
+
         }
 
         protected void MnuMarcarTodos_Click()
@@ -324,7 +300,10 @@ namespace Aplicativo.View.Layout
             {
                 item.Bool01 = true;
             }
+
             ItemViewOpen_Close(null);
+
+            StateHasChanged();
         }
 
     }

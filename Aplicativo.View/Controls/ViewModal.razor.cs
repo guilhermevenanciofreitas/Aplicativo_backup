@@ -26,6 +26,9 @@ namespace Aplicativo.View.Controls
             {
                 await JSRuntime.InvokeVoidAsync("Modal.Show", DivModal);
             }
+
+            StateHasChanged();
+
         }
 
         public async void Hide()
@@ -38,6 +41,9 @@ namespace Aplicativo.View.Controls
             {
                 await JSRuntime.InvokeVoidAsync("Modal.Hide", DivModal);
             }
+
+            StateHasChanged();
+
         }
 
     }

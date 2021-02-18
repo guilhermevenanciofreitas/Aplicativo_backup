@@ -3,12 +3,11 @@
 @inherits ListUsuarioPage
 
 <ListItemViewLayout @ref="ViewLayout"
-                    ViewTitle="Usuário"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView" 
                     OnDelete="ViewLayout_Delete">
     <View>
-        <ViewUsuario @ref="ViewUsuario" OnClose="ViewLayout.ViewModal_Close" OnSave="ViewLayout.ViewModal_Save"></ViewUsuario>
+        <ViewUsuario @ref="ViewUsuario" ListItemViewLayout="ViewLayout"></ViewUsuario>
     </View>
     <ItemView>
         @{

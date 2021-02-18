@@ -20,12 +20,19 @@ namespace Aplicativo.View.Layout
         Edit,
     }
 
-    public class EditItemViewLayoutPage : HelpPage
+    public class EditItemViewLayoutPage : HelpComponent
     {
+
+        [Parameter]
+        public ListItemViewLayout ListItemViewLayout { get; set; }
+
+        public ViewModal ViewModal { get; set; }
 
         public ItemViewMode ItemViewMode { get; set; }
 
         [Parameter] public string Title { get; set; }
+        [Parameter] public string Width { get; set; }
+
         [Parameter] public EventCallback OnLimpar { get; set; }
         [Parameter] public EventCallback<object> OnCarregar { get; set; }
         [Parameter] public EventCallback OnSalvar { get; set; }
@@ -39,6 +46,7 @@ namespace Aplicativo.View.Layout
             {
                 ItemViewMode = ItemViewMode.New;
                 await OnLimpar.InvokeAsync(null);
+                StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -51,12 +59,15 @@ namespace Aplicativo.View.Layout
 
             if (ID == null)
             {
+                ItemViewMode = ItemViewMode.New;
                 await OnLimpar.InvokeAsync(null);
                 return;
             }
 
             ItemViewMode = ItemViewMode.Edit;
             await OnCarregar.InvokeAsync(ID);
+            ViewModal.Show();
+            StateHasChanged();
 
         }
 
@@ -66,10 +77,10 @@ namespace Aplicativo.View.Layout
             {
 
                 await HelpLoading.Show(this, "Salvando...");
-
                 await OnSalvar.InvokeAsync(null);
-
-                Save();
+                ViewModal.Hide();
+                await ListItemViewLayout.BtnPesquisar_Click();
+                StateHasChanged();
 
             }
             catch (Exception ex)
@@ -88,14 +99,13 @@ namespace Aplicativo.View.Layout
             {
 
                 var confirm = await JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja excluir ?");
-
                 if (!confirm) return;
 
                 await HelpLoading.Show(this, "Excluindo...");
-
                 await OnExcluir.InvokeAsync(null);
-
-                Save();
+                ViewModal.Hide();
+                await ListItemViewLayout.BtnPesquisar_Click();
+                StateHasChanged();
 
             }
             catch (Exception ex)
@@ -107,6 +117,7 @@ namespace Aplicativo.View.Layout
                 await HelpLoading.Hide(this);
             }
         }
+
 
     }
 }
