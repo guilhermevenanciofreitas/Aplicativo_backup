@@ -1,5 +1,9 @@
 ﻿@inherits ListItemViewLayoutPage
 
+<SfToast ID="toast_default" @ref="Toast" Timeout="5000" ShowCloseButton="true">
+    <ToastPosition X="Center" Y="Bottom"></ToastPosition>
+</SfToast>
+
 <ViewModal @ref="ViewFiltro" FullScreen="false" Title="Filtro">
     @if (HelpParametros.Template == Template.Mobile)
     {

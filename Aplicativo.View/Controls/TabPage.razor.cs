@@ -14,7 +14,7 @@ namespace Aplicativo.View.Controls
         [Parameter] public string Title { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        protected bool? Visible => ContainerTabSet?.Tabs?.FirstOrDefault(c => c.Id == Id)?.Visible == true ? true : false;
+        protected bool Visible => ContainerTabSet.Tabs.FirstOrDefault(c => c.Id == Id)?.Visible == true ? true : false;
 
         protected override async Task OnInitializedAsync()
         {

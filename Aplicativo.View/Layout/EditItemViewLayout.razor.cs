@@ -5,6 +5,8 @@ using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Skclusive.Core.Component;
+using Skclusive.Material.Menu;
 using Skclusive.Material.Tab;
 using System;
 using System.Collections.Generic;
@@ -75,17 +77,18 @@ namespace Aplicativo.View.Layout
         {
             try
             {
-
+                ViewModal.Hide();
                 await HelpLoading.Show(this, "Salvando...");
                 await OnSalvar.InvokeAsync(null);
-                ViewModal.Hide();
                 await ListItemViewLayout.BtnPesquisar_Click();
+                await ListItemViewLayout.ShowToast("Informação:", "Salvo com sucesso!", "e-toast-success", "e-success toast-icons");
                 StateHasChanged();
 
             }
             catch (Exception ex)
             {
                 await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                ViewModal.Show();
             }
             finally
             {
@@ -101,16 +104,18 @@ namespace Aplicativo.View.Layout
                 var confirm = await JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja excluir ?");
                 if (!confirm) return;
 
+                ViewModal.Hide();
                 await HelpLoading.Show(this, "Excluindo...");
                 await OnExcluir.InvokeAsync(null);
-                ViewModal.Hide();
                 await ListItemViewLayout.BtnPesquisar_Click();
+                await ListItemViewLayout.ShowToast("Informação:", "Excluído com sucesso!", "e-toast-success", "e-success toast-icons");
                 StateHasChanged();
 
             }
             catch (Exception ex)
             {
                 await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                ViewModal.Show();
             }
             finally
             {
@@ -118,6 +123,24 @@ namespace Aplicativo.View.Layout
             }
         }
 
+        protected bool ItemViewButtonOpen { set; get; }
+
+        protected IReference ItemViewOpenButtonRef { set; get; } = new Reference();
+
+        protected void ItemViewOpen_Close(EventArgs args)
+        {
+            ItemViewButtonOpen = false;
+        }
+
+        protected void ItemViewOpen_Close(MenuCloseReason reason)
+        {
+            ItemViewButtonOpen = false;
+        }
+
+        protected void ItemViewButtonOpen_Show()
+        {
+            ItemViewButtonOpen = true;
+        }
 
     }
 }

@@ -10,6 +10,7 @@ using Skclusive.Core.Component;
 using Skclusive.Material.Icon;
 using Skclusive.Material.Menu;
 using Syncfusion.Blazor.Grids;
+using Syncfusion.Blazor.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,9 +142,13 @@ namespace Aplicativo.View.Layout
 
                 await HelpLoading.Show(this, "Excluindo...");
 
-                await OnDelete.InvokeAsync(ListItemView.Where(c => c.Bool01 == true).Select(c => c.Long01).ToList());
+                var List = ListItemView.Where(c => c.Bool01 == true).Select(c => c.Long01).ToList();
+
+                await OnDelete.InvokeAsync(List);
 
                 await Pesquisar();
+
+                await ShowToast("Informação:", List.Count + " registro(s) excluído(s) com sucesso!", "e-toast-success", "e-success toast-icons");
 
                 StateHasChanged();
 
@@ -304,6 +309,17 @@ namespace Aplicativo.View.Layout
             ItemViewOpen_Close(null);
 
             StateHasChanged();
+        }
+
+        protected SfToast Toast;
+
+        public async Task ShowToast(string Title, string Content, string CssClass = null, string Icon = null)
+        {
+            await Toast.Show(new ToastModel() { Title = Title, Content = Content, CssClass = CssClass, Icon = Icon });
+        }
+        public async Task HideToast()
+        {
+            await Toast.Hide("All");
         }
 
     }

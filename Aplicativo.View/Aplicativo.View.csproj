@@ -50,6 +50,7 @@
     <PackageReference Include="Skclusive.Material.Transition" Version="5.2.0" />
     <PackageReference Include="Skclusive.Material.Typography" Version="5.2.0" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="18.4.0.43" />
+    <PackageReference Include="Syncfusion.Blazor.Notifications" Version="18.4.0.43" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.43" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>

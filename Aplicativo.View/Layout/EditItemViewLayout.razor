@@ -29,6 +29,15 @@
                         delete
                     </Button>
                 }
+
+                <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
+                    <MoreVertIcon />
+                </IconButton>
+                <Skclusive.Material.Menu.Menu Open="@ItemViewButtonOpen" AnchorRef="@ItemViewOpenButtonRef" OnClose="@ItemViewOpen_Close">
+                    <MenuItem OnClick="BtnLimpar_Click">
+                        Limpar
+                    </MenuItem>
+                </Skclusive.Material.Menu.Menu>
             </Toolbar>
         </AppBar>
     }

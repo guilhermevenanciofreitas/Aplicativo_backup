@@ -2,11 +2,11 @@
 
 @if (HelpParametros.Template == Template.Mobile)
 {
-    <Tab Label="@Title" OnClick="Active" Class="@(Visible == true ? "Tab-Selected" : "")" Style="@(Visible == true ? "color: #1976d2; border-bottom: 3px solid #1976d2;" : "")" />
+    <Tab Label="@Title" OnClick="Active" Class="@(Visible ? "Tab-Selected" : "")" Style="@(Visible ? "color: #1976d2; border-bottom: 3px solid #1976d2;" : "")" />
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link@(Visible == true ? " active" : "")" style="text-decoration: none;" href="#" @onclick="Active"><font size="4">@Title</font></a>
+        <a class="nav-link@(Visible ? " active" : "")" style="text-decoration: none;" href="#" @onclick="Active"><font size="4">@Title</font></a>
     </li>
 }
