@@ -1,0 +1,34 @@
+﻿@inherits TabSetControl
+
+@if (HelpParametros.Template == Template.Mobile)
+{
+    <AppBar Position="@AppBarPosition.Static" Color="Color.Inherit">
+        <Tabs>
+            <CascadingValue Value=this>
+                @ChildContent
+            </CascadingValue>
+        </Tabs>
+    </AppBar>
+}
+else
+{
+    <CascadingValue Value=this>
+        <ul class="nav nav-tabs">
+            @ChildContent
+        </ul>
+    </CascadingValue>
+}
+
+@if (Tabs != null)
+{
+    @foreach (var Tab in Tabs)
+    {
+        <div style="display: @(Tab.Visible ? "block": "none")">
+            <Typography>
+                <Box Padding="3">
+                    @Tab?.ChildContent
+                </Box>
+            </Typography>
+        </div>
+    }
+}
