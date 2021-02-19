@@ -1,6 +1,5 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Linq;
 
