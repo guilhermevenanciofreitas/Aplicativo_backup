@@ -40,6 +40,8 @@ namespace Aplicativo.View.Layout
         [Parameter] public EventCallback OnSalvar { get; set; }
         [Parameter] public EventCallback OnExcluir { get; set; }
 
+        public List<ItemViewButton> ItemViewButtons { get; set; } = new List<ItemViewButton>();
+
         [Parameter] public RenderFragment View { get; set; }
 
         protected async void BtnLimpar_Click()
@@ -77,7 +79,6 @@ namespace Aplicativo.View.Layout
         {
             try
             {
-                ViewModal.Hide();
                 await HelpLoading.Show(this, "Salvando...");
                 await OnSalvar.InvokeAsync(null);
                 await ListItemViewLayout.BtnPesquisar_Click();

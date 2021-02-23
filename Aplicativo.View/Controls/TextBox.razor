@@ -1,14 +1,30 @@
 ﻿@inherits TextBoxComponent
-
 @*@if (_Label != null)
+    {
+        <label for="@TextBox.Id">@_Label</label>
+    }
+
+    <input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />*@
+
+@if (HelpParametros.Template == Template.Mobile)
 {
-    <label for="@TextBox.Id">@_Label</label>
+    <TextField @bind-Value="@_Text"
+               Label="@_Label"
+               Margin="@Margin.Normal"
+               Variant="@TextFieldVariant.Outlined"
+               Style="width: 100%" />
 }
+else
+{
 
-<input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />*@
+<div class="form-group">
+    @if (_Label != null)
+    {
+        <label for="@TextBox.Id">@_Label</label>
+    }
 
-<TextField @bind-Value="@_Text"
-           Label="@_Label"
-           Margin="@Margin.Normal"
-           Variant="@TextFieldVariant.Outlined"
-           Style="width: 100%" />
+    <input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />
+
+</div>
+    
+}

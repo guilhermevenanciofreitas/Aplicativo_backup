@@ -16,17 +16,18 @@
             </IconButton>
         </DialogTitle>
     }
-    <DialogContent Style="padding: 16px;" Dividers>
-
+    <DialogContent Style="padding: 16px;" Dividers="HelpParametros.Template == Template.Mobile">
         <div style="width: 460px; height: 360px;">
             @foreach (var item in Filtros)
             {
-
                 if (item.Type == FiltroType.TextBox)
                 {
-                    <TextBox @ref="item.Element[0]" _Label="@item.Label"></TextBox>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <TextBox @ref="item.Element[0]" _Label="@item.Label"></TextBox>
+                        </div>
+                    </div>
                 }
-
             }
         </div>
     </DialogContent>

@@ -19,7 +19,7 @@ namespace Aplicativo.View.Helpers
     public class HelpParametros
     {
 
-        public static Template Template { get; set; } = Template.Mobile;
+        public static Template Template { get; set; } = Template.Desktop;
 
         public static void GetParametros(int UsuarioID, int EmpresaID)
         {

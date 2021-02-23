@@ -2,12 +2,12 @@
 
 @inherits ListUsuarioPage
 
-<ListItemViewLayout @ref="ViewLayout"
+<ListItemViewLayout @ref="ListItemViewLayout"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView" 
                     OnDelete="ViewLayout_Delete">
     <View>
-        <ViewUsuario @ref="ViewUsuario" ListItemViewLayout="ViewLayout"></ViewUsuario>
+        <ViewUsuario @ref="ViewUsuario" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>
     </View>
     <ItemView>
         @{

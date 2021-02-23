@@ -14,7 +14,7 @@ namespace Aplicativo.View.Pages.Cadastros
     public class ListUsuarioPage : HelpComponent
     {
 
-        protected ListItemViewLayout ViewLayout { get; set; }
+        protected ListItemViewLayout ListItemViewLayout { get; set; }
         protected ViewUsuario ViewUsuario { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -23,15 +23,15 @@ namespace Aplicativo.View.Pages.Cadastros
 
             if (firstRender)
             {
-                ViewLayout.Filtros = new List<HelpFiltro>() {
+                ListItemViewLayout.Filtros = new List<HelpFiltro>() {
                                 HelpViewFiltro.HelpFiltro("Nome", "Nome", FiltroType.TextBox),
                                 HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
                              };
 
-                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
-                ViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
+                ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
+                ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
 
-                await ViewLayout.OnPesquisar.InvokeAsync(null);
+                await ListItemViewLayout.OnPesquisar.InvokeAsync(null);
 
             }
         }
@@ -49,10 +49,10 @@ namespace Aplicativo.View.Pages.Cadastros
         protected async Task ViewLayout_Pesquisar()
         {
             var Request = new Request();
-            Request.Parameters.Add(new Parameters("Filtro", ViewLayout.Filtros));
+            Request.Parameters.Add(new Parameters("Filtro", ListItemViewLayout.Filtros));
             var Result = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
 
-            ViewLayout.ListItemView = Result.Select(c =>
+            ListItemViewLayout.ListItemView = Result.Select(c =>
             new ItemView()
             {
                 Bool01 = false,

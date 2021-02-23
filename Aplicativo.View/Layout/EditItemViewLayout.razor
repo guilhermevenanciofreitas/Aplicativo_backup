@@ -72,6 +72,22 @@
             </ChildContent>
         </Button>
     }
+
+    @if (ItemViewMode == ItemViewMode.Edit)
+    {
+        @foreach (var item in ItemViewButtons)
+        {
+            <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
+                @*<StartIcon>
+                        @item.Icon
+                    </StartIcon>*@
+                <ChildContent>
+                    @item.Label
+                </ChildContent>
+            </Button>
+        }
+    }
+
 </div>
     }
 

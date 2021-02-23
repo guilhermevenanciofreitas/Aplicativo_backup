@@ -1,9 +1,7 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Model;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Aplicativo.View.Pages.Cadastros;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Core.Component;
