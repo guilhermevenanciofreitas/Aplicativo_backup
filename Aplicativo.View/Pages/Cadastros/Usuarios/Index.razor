@@ -1,11 +1,12 @@
 ﻿@page "/"
+@page "/Cadastros/Usuarios"
 
 @inherits ListUsuarioPage
 
 <ListItemViewLayout @ref="ListItemViewLayout"
                     TValue="Usuario"
                     OnPesquisar="ViewLayout_Pesquisar"
-                    OnItemView="ViewLayout_ItemView" 
+                    OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
         <ViewUsuario @ref="ViewUsuario" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>

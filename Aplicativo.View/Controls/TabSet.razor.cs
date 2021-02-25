@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
@@ -24,31 +25,31 @@ namespace Aplicativo.View.Controls
 
         public List<ITab> Tabs { get; set; } = new List<ITab>();
 
-        public void AddTab(ITab Tab)
+        public async void AddTab(ITab Tab)
         {
 
             Tabs.Add(Tab);
 
             if (!Tabs.Any(c => c.Visible))
             {
-                Active(Tab.Id);
+                await Active(Tab.Id);
             }
 
         }
 
-        public void RemoveTab(ITab Tab)
+        public async void RemoveTab(ITab Tab)
         {
 
             Tabs.Remove(Tab);
 
             if (Tab.Visible == true)
             {
-                Active(Tabs.LastOrDefault()?.Id);
+                await Active(Tabs.LastOrDefault()?.Id);
             }
 
         }
 
-        public async void Active(string Id)
+        public async Task Active(string Id)
         {
 
             foreach(var Item in Tabs)

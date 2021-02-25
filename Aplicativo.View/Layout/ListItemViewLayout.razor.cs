@@ -146,7 +146,7 @@ namespace Aplicativo.View.Layout
 
                 await HelpLoading.Show(this, "Excluindo...");
 
-                var List = ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).ToList();
+                var List = ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).ToList();
 
                 await OnDelete.InvokeAsync(List);
 
@@ -174,7 +174,7 @@ namespace Aplicativo.View.Layout
 
         protected async void ListItemView_Press(TValue ItemView)
         {
-            if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+            if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
             {
                 try
                 {
@@ -198,7 +198,7 @@ namespace Aplicativo.View.Layout
                 try
                 {
                     //ItemView.Bool01 = !ItemView.Bool01;
-                    ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
+                    ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
                     StateHasChanged();
                 }
                 catch (Exception ex)
@@ -214,7 +214,7 @@ namespace Aplicativo.View.Layout
             {
                 //ItemView.Bool01 = !ItemView.Bool01;
 
-                ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
+                ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
 
                 StateHasChanged();
             }
@@ -234,7 +234,7 @@ namespace Aplicativo.View.Layout
 
                     //Convert.ToBoolean() == true
 
-                    item.GetType().GetProperty("Selecionado").SetValue(item, false);
+                    item.GetType().GetProperty("Selected").SetValue(item, false);
 
 
                 }
@@ -304,7 +304,7 @@ namespace Aplicativo.View.Layout
         protected void GridViewItem_Chcked(TValue ItemView)
         {
             //ItemView.Bool01 = !ItemView.Bool01;
-            ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
+            ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
             StateHasChanged();
         }
 
@@ -314,7 +314,7 @@ namespace Aplicativo.View.Layout
             {
                 //item.Bool01 = (bool)args.Value;
 
-                item.GetType().GetProperty("Selecionado").SetValue(item, (bool)args.Value);
+                item.GetType().GetProperty("Selected").SetValue(item, (bool)args.Value);
 
             }
 
@@ -328,7 +328,7 @@ namespace Aplicativo.View.Layout
             {
                 //item.Bool01 = true;
 
-                item.GetType().GetProperty("Selecionado").SetValue(item, true);
+                item.GetType().GetProperty("Selected").SetValue(item, true);
 
             }
 

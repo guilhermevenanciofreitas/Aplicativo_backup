@@ -50,7 +50,7 @@
 @View
 
 
-@if (HelpParametros.Template == Template.Mobile && ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+@if (HelpParametros.Template == Template.Mobile && ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
 {
     <AppBar>
         <Toolbar>
@@ -58,7 +58,7 @@
                 <ArrowBackIcon />
             </IconButton>
             <Typography Variant="@TypographyVariant.H6" Style="flex-grow: 1;">
-                @ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count()  Selecionado(s)
+                @ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count()  Selecionado(s)
             </Typography>
 
             <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
@@ -88,7 +88,7 @@
 
         @if (HelpParametros.Template == Template.Desktop)
         {
-            @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+            @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
             {
                 <Button Variant="@ButtonVariant.Contained" OnClick="BtnNovo_Click" Style="color: #fff; background-color: #5cb85c; width: 110px">
                     <StartIcon>
@@ -111,7 +111,7 @@
                 </Button>
             }
 
-            @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+            @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
             {
                 @foreach (var item in ItemViewButtons)
                 {
@@ -164,10 +164,10 @@
         {
             <LongPress OnLongPress="@(() => ListItemView_LongPress(item))" OnPress="@(() => ListItemView_Press(item))">
                 <ListItem AlignItems="@AlignItems.FlexStart" Button="true">
-                    @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+                    @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
                     {
                         <ListItemIcon>
-                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selecionado").GetValue(item)))" />
+                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selected").GetValue(item)))" />
                         </ListItemIcon>
                     }
                     @ItemView(item)
@@ -177,13 +177,13 @@
         }
     </List>
 
-    <Scale Class="fab-button" In=@(!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))>
+    <Scale Class="fab-button" In=@(!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))>
         <Fab Color="@Color.Primary" OnClick="BtnNovo_Click" Style="background-color: #5cb85c">
             <AddIcon></AddIcon>
         </Fab>
     </Scale>
 
-    <Scale Class="fab-button" In=@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))>
+    <Scale Class="fab-button" In=@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))>
         <Fab Style="color: #fff; background-color: #df4759;" OnClick="BtnExcluir_Click">
             <DeleteIcon></DeleteIcon>
         </Fab>
@@ -193,13 +193,13 @@ else
 {
 
     <div style="margin-top: 5px; margin-bottom: 4px">
-        @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+        @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
         {
             <font size="3">Nenhum registro selecionado</font>
         }
         else
         {
-            <font size="3">@ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
+            <font size="3">@ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
         }
     </div>
 
@@ -210,13 +210,13 @@ else
         <GridColumns>
             <GridColumn Width="60" AllowSorting="false">
                 <HeaderTemplate>
-                    <Checkbox OnChange="ListItemViewHeeader_Change" Checked="@(ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true) && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() != ListItemView.Count)" />
+                    <Checkbox OnChange="ListItemViewHeeader_Change" Checked="@(ListItemView.Any() && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() != ListItemView.Count)" />
                 </HeaderTemplate>
                 <Template>
                     @{
                         var item = (TValue)context;
                         <LongPress OnPress="@(c => GridViewItem_Chcked(item))">
-                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selecionado").GetValue(item)))" />
+                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selected").GetValue(item)))" />
                         </LongPress>
                     }
                 </Template>

@@ -115,10 +115,11 @@ namespace Aplicativo.View.Controls
             }
         }
 
-        //public void Focus()
-        //{
-        //    TextBox.Focus(JSRuntime);
-        //}
+        public void Focus()
+        {
+            Element.Focus(JSRuntime);
+            //StateHasChanged();
+        }
 
     }
 }

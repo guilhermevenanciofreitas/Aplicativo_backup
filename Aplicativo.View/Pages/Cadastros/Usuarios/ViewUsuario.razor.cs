@@ -54,7 +54,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             await JSRuntime.InvokeVoidAsync("alert", "Compartilhar");
         }
 
-        protected void ViewLayout_Limpar()
+        protected async Task ViewLayout_Limpar()
         {
 
             Usuario = new Usuario();
@@ -67,7 +67,10 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
 
-            TabSet.Active("Principal");
+
+            TxtNome.Focus();
+
+            await TabSet.Active("Principal");
 
         }
 
@@ -94,13 +97,13 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             if (string.IsNullOrEmpty(TxtNome.Text))
             {
-                TabSet.Active("Principal");
+                await TabSet.Active("Principal");
                 throw new EmptyException("Informe o nome!", TxtNome.Element);
             }
 
             if (string.IsNullOrEmpty(TxtLogin.Text))
             {
-                TabSet.Active("Principal");
+                await TabSet.Active("Principal");
                 throw new EmptyException("Informe o nome!", TxtLogin.Element);
             }
 

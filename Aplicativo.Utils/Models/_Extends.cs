@@ -6,7 +6,7 @@ namespace Aplicativo.Utils.Models
     {
 
         [NotMapped]
-        public bool Selecionado { get; set; }
+        public bool Selected { get; set; }
 
     }
 }
