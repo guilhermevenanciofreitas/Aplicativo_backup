@@ -9,7 +9,7 @@ namespace Aplicativo.View.Controls
     public class CheckBoxControl : HelpComponent
     {
 
-        public ElementReference CheckBox;
+        public ElementReference Element;
 
         [Parameter] public string _Label { get; set; }
 

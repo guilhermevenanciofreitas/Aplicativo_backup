@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aplicativo.Utils.Model
+namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
     [Table("EmpresaEndereco")]
-    public partial class EmpresaEndereco
+    public partial class EmpresaEndereco : _Extends
     {
 
         [Key]

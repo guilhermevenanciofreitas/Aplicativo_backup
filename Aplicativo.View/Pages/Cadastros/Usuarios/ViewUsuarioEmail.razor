@@ -1,0 +1,45 @@
+﻿@inherits ViewUsuarioEmailPage
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="UsuarioEmail"
+                    Simples="true"
+                    Height="300px"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <EditItemViewLayout @ref="EditItemViewLayout"
+                            ListItemViewLayout="ListItemViewLayout"
+                            Title="Email"
+                            Simples="true"
+                            Width="650px"
+                            OnLimpar="ViewLayout_Limpar"
+                            OnCarregar="ViewLayout_Carregar"
+                            OnSalvar="ViewLayout_Salvar"
+                            OnExcluir="@(() => ViewLayout_Delete(new List<UsuarioEmail>() { UsuarioEmail }))">
+            <View>
+                <Box Padding="3">
+
+                    <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+
+                </Box>
+            </View>
+        </EditItemViewLayout>
+    </View>
+    <ItemView>
+        @{
+            var item = (UsuarioEmail)context;
+
+            <ListItemText Primary="@item.Senha">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Email
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="Email" HeaderText="Email" Width="300"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

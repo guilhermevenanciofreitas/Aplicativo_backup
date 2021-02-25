@@ -1,6 +1,6 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Model;
+using Aplicativo.Utils.Models;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.JSInterop;
@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Cadastros
+namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
     public class ListUsuarioPage : HelpComponent
     {
 
-        protected ListItemViewLayout ListItemViewLayout { get; set; }
+        protected ListItemViewLayout<Usuario> ListItemViewLayout { get; set; }
         protected ViewUsuario ViewUsuario { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -23,10 +23,12 @@ namespace Aplicativo.View.Pages.Cadastros
 
             if (firstRender)
             {
-                ListItemViewLayout.Filtros = new List<HelpFiltro>() {
-                                HelpViewFiltro.HelpFiltro("Nome", "Nome", FiltroType.TextBox),
-                                HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
-                             };
+
+                ListItemViewLayout.Filtros = new List<HelpFiltro>() 
+                {
+                    HelpViewFiltro.HelpFiltro("Nome", "Nome", FiltroType.TextBox),
+                    HelpViewFiltro.HelpFiltro("Login", "Login", FiltroType.TextBox),
+                };
 
                 ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
                 ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
@@ -50,29 +52,19 @@ namespace Aplicativo.View.Pages.Cadastros
         {
             var Request = new Request();
             Request.Parameters.Add(new Parameters("Filtro", ListItemViewLayout.Filtros));
-            var Result = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
-
-            ListItemViewLayout.ListItemView = Result.Select(c =>
-            new ItemView()
-            {
-                Bool01 = false,
-                Long01 = c.UsuarioID,
-                Descricao01 = c.Nome,
-                Descricao02 = c.Login,
-            }).ToList();
-
+            ListItemViewLayout.ListItemView = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/GetAll", Request);
         }
 
-        protected async Task ViewLayout_ItemView(object ID)
+        protected async Task ViewLayout_ItemView(object args)
         {
-            await ViewUsuario.EditItemViewLayout.Carregar(ID?.ToString().ToIntOrNull());
+            await ViewUsuario.EditItemViewLayout.Carregar((Usuario)args);
             ViewUsuario.EditItemViewLayout.ViewModal.Show();
         }
 
-        protected async Task ViewLayout_Delete(object List)
+        protected async Task ViewLayout_Delete(object args)
         {
             var Request = new Request();
-            Request.Parameters.Add(new Parameters("Usuarios", (List<long?>)List));
+            Request.Parameters.Add(new Parameters("Usuarios", ((List<Usuario>)args).Select(c => c.UsuarioID)));
             await HelpHttp.Send(Http, "api/Usuario/Delete", Request);
         }
     }

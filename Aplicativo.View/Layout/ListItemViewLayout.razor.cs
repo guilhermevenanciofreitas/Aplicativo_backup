@@ -1,5 +1,6 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
+using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
@@ -12,6 +13,7 @@ using Syncfusion.Blazor.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout
@@ -29,28 +31,32 @@ namespace Aplicativo.View.Layout
 
     }
 
-    public class ListItemViewLayoutPage : HelpComponent
+    public class ListItemViewLayoutPage<TValue> : HelpComponent
     {
+
+        [Parameter] public string Height { get; set; } = "460px";
 
         public ViewModal ViewFiltro;
 
         public List<HelpFiltro> Filtros { get; set; } = new List<HelpFiltro>();
 
         [Parameter] public RenderFragment View { get; set; }
-        [Parameter] public RenderFragment<ItemView> ItemView { get; set; }
+        [Parameter] public RenderFragment<TValue> ItemView { get; set; }
 
         [Parameter] public RenderFragment GridView { get; set; }
 
-        protected SfGrid<ItemView> GridViewItem { get; set; }
+        public SfGrid<TValue> GridViewItem { get; set; }
 
         public List<ItemViewButton> ItemViewButtons { get; set; } = new List<ItemViewButton>();
 
-        public List<ItemView> ListItemView { get; set; } = new List<ItemView>();
+        public List<TValue> ListItemView { get; set; } = new List<TValue>();
 
 
         [Parameter] public EventCallback<object> OnDelete { get; set; }
         [Parameter] public EventCallback<object> OnItemView { get; set; }
         [Parameter] public EventCallback OnPesquisar { get; set; }
+
+        [Parameter] public bool Simples { get; set; } = false;
 
         protected async void BtnFiltro_Click()
         {
@@ -140,14 +146,19 @@ namespace Aplicativo.View.Layout
 
                 await HelpLoading.Show(this, "Excluindo...");
 
-                var List = ListItemView.Where(c => c.Bool01 == true).Select(c => c.Long01).ToList();
+                var List = ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).ToList();
 
                 await OnDelete.InvokeAsync(List);
 
                 await Pesquisar();
 
-                await ShowToast("Informação:", List.Count + " registro(s) excluído(s) com sucesso!", "e-toast-success", "e-success toast-icons");
+                await ShowToast("Informação:", List.Count() + " registro(s) excluído(s) com sucesso!", "e-toast-success", "e-success toast-icons");
 
+                if (HelpParametros.Template == Template.Desktop)
+                {
+                    GridViewItem.Refresh();
+                }
+                
                 StateHasChanged();
 
             }
@@ -161,15 +172,15 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        protected async void ListItemView_Press(ItemView ItemView)
+        protected async void ListItemView_Press(TValue ItemView)
         {
-            if (!ListItemView.Any(c => c.Bool01 == true))
+            if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
             {
                 try
                 {
 
                     await HelpLoading.Show(this, "Carregando...");
-                    await OnItemView.InvokeAsync(ItemView.Long01);
+                    await OnItemView.InvokeAsync(ItemView);
                     StateHasChanged();
 
                 }
@@ -186,7 +197,8 @@ namespace Aplicativo.View.Layout
             {
                 try
                 {
-                    ItemView.Bool01 = !ItemView.Bool01;
+                    //ItemView.Bool01 = !ItemView.Bool01;
+                    ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
                     StateHasChanged();
                 }
                 catch (Exception ex)
@@ -196,11 +208,14 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        protected async Task ListItemView_LongPress(ItemView ItemView)
+        protected async Task ListItemView_LongPress(TValue ItemView)
         {
             try
             {
-                ItemView.Bool01 = !ItemView.Bool01;
+                //ItemView.Bool01 = !ItemView.Bool01;
+
+                ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
+
                 StateHasChanged();
             }
             catch (Exception ex)
@@ -215,7 +230,13 @@ namespace Aplicativo.View.Layout
             {
                 foreach (var item in ListItemView)
                 {
-                    item.Bool01 = false;
+                    //item.Bool01 = false;
+
+                    //Convert.ToBoolean() == true
+
+                    item.GetType().GetProperty("Selecionado").SetValue(item, false);
+
+
                 }
 
                 StateHasChanged();
@@ -259,13 +280,13 @@ namespace Aplicativo.View.Layout
             ItemViewButtonOpen = true;
         }
 
-        protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<ItemView> ItemView)
+        protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<TValue> ItemView)
         {
             try
             {
                 await HelpLoading.Show(this, "Carregando...");
 
-                await OnItemView.InvokeAsync(ItemView.RowData.Long01);
+                await OnItemView.InvokeAsync(ItemView.RowData);
 
                 StateHasChanged();
 
@@ -280,9 +301,10 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        protected void GridViewItem_Chcked(ItemView ItemView)
+        protected void GridViewItem_Chcked(TValue ItemView)
         {
-            ItemView.Bool01 = !ItemView.Bool01;
+            //ItemView.Bool01 = !ItemView.Bool01;
+            ItemView.GetType().GetProperty("Selecionado").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selecionado").GetValue(ItemView)));
             StateHasChanged();
         }
 
@@ -290,7 +312,10 @@ namespace Aplicativo.View.Layout
         {
             foreach (var item in ListItemView)
             {
-                item.Bool01 = (bool)args.Value;
+                //item.Bool01 = (bool)args.Value;
+
+                item.GetType().GetProperty("Selecionado").SetValue(item, (bool)args.Value);
+
             }
 
             StateHasChanged();
@@ -301,7 +326,10 @@ namespace Aplicativo.View.Layout
         {
             foreach (var item in ListItemView)
             {
-                item.Bool01 = true;
+                //item.Bool01 = true;
+
+                item.GetType().GetProperty("Selecionado").SetValue(item, true);
+
             }
 
             ItemViewOpen_Close(null);
@@ -318,6 +346,12 @@ namespace Aplicativo.View.Layout
         public async Task HideToast()
         {
             await Toast.Hide("All");
+        }
+
+        public void Refresh()
+        {
+            //GridViewItem.Refresh();
+            StateHasChanged();
         }
 
     }

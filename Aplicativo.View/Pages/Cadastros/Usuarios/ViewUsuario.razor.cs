@@ -1,6 +1,6 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Model;
+using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
@@ -11,21 +11,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Cadastros
+namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
     public class ViewUsuarioPage : HelpComponent
     {
 
         [Parameter]
-        public ListItemViewLayout ListItemViewLayout { get; set; }
-        public EditItemViewLayout EditItemViewLayout { get; set; }
+        public ListItemViewLayout<Usuario> ListItemViewLayout { get; set; }
+        public EditItemViewLayout<Usuario> EditItemViewLayout { get; set; }
         
-
-        protected TabSet TabPrincipal { get; set; }
 
         protected TextBox TxtNome { get; set; }
         protected TextBox TxtLogin { get; set; }
         protected TextBox TxtSenha { get; set; }
+
+        protected TabSet TabSet { get; set; }
+
+        protected ViewUsuarioEmail ViewUsuarioEmail { get; set; }
 
         private Usuario Usuario = new Usuario();
 
@@ -61,14 +63,20 @@ namespace Aplicativo.View.Pages.Cadastros
             TxtLogin.Text = null;
             TxtSenha.Text = null;
 
+
+            ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
+            ViewUsuarioEmail.ListItemViewLayout.Refresh();
+
+            TabSet.Active("Principal");
+
         }
 
-        protected async Task ViewLayout_Carregar(object ID)
+        protected async Task ViewLayout_Carregar(object args)
         {
 
             var Request = new Request();
 
-            Request.Parameters.Add(new Parameters("UsuarioID", ID.ToString().ToIntOrNull()));
+            Request.Parameters.Add(new Parameters("UsuarioID", ((Usuario)args)?.UsuarioID));
 
             Usuario = await HelpHttp.Send<Usuario>(Http, "api/Usuario/Get", Request);
 
@@ -76,17 +84,31 @@ namespace Aplicativo.View.Pages.Cadastros
             TxtLogin.Text = Usuario.Login;
             TxtSenha.Text = Usuario.Senha;
 
+            ViewUsuarioEmail.ListItemViewLayout.ListItemView = Usuario.UsuarioEmail.ToList();
+            ViewUsuarioEmail.ListItemViewLayout.Refresh();
+
         }
 
         protected async Task ViewLayout_Salvar()
         {
 
-            if (EditItemViewLayout.ItemViewMode == ItemViewMode.Edit)
-                EditItemViewLayout.ViewModal.Hide();
+            if (string.IsNullOrEmpty(TxtNome.Text))
+            {
+                TabSet.Active("Principal");
+                throw new EmptyException("Informe o nome!", TxtNome.Element);
+            }
+
+            if (string.IsNullOrEmpty(TxtLogin.Text))
+            {
+                TabSet.Active("Principal");
+                throw new EmptyException("Informe o nome!", TxtLogin.Element);
+            }
 
             Usuario.Nome = TxtNome.Text.ToStringOrNull();
             Usuario.Login = TxtLogin.Text.ToStringOrNull();
             Usuario.Senha = TxtSenha.Text.ToStringOrNull();
+
+            Usuario.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView;
 
             var Request = new Request();
 
@@ -99,7 +121,13 @@ namespace Aplicativo.View.Pages.Cadastros
             Usuario = Usuarios.FirstOrDefault();
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
-                await EditItemViewLayout.Carregar(Usuario.UsuarioID);
+            {
+                await EditItemViewLayout.Carregar(Usuario);
+            }
+            else
+            {
+                EditItemViewLayout.ViewModal.Hide();
+            }
             
 
         }

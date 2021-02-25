@@ -23,12 +23,8 @@ else
 {
     @foreach (var Tab in Tabs)
     {
-        <div style="display: @(Tab.Visible ? "block": "none")">
-            <Typography>
-                <Box Padding="3">
-                    @Tab?.ChildContent
-                </Box>
-            </Typography>
-        </div>
+<div style="display: @(Tab.Visible ? "block": "none")">
+    @Tab?.ChildContent
+</div>
     }
 }

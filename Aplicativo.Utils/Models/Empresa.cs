@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aplicativo.Utils.Model
+namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
     [Table("Empresa")]
-    public partial class Empresa
+    public partial class Empresa : _Extends
     {
 
         public Empresa()

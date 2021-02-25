@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aplicativo.Utils.Model
+namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
     [Table("Estado")]
-    public partial class Estado
+    public partial class Estado : _Extends
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,5 +1,5 @@
 ﻿using Aplicativo.Utils;
-using Aplicativo.Utils.Model;
+using Aplicativo.Utils.Models;
 //using Aplicativo.View.Utils;
 //using Blazored.SessionStorage;
 using Microsoft.JSInterop;

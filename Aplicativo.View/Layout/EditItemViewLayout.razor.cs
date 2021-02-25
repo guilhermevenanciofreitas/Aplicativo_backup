@@ -1,6 +1,6 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Model;
+using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
@@ -22,11 +22,11 @@ namespace Aplicativo.View.Layout
         Edit,
     }
 
-    public class EditItemViewLayoutPage : HelpComponent
+    public class EditItemViewLayoutPage<TValue> : HelpComponent
     {
 
         [Parameter]
-        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public ListItemViewLayout<TValue> ListItemViewLayout { get; set; }
 
         public ViewModal ViewModal { get; set; }
 
@@ -34,6 +34,7 @@ namespace Aplicativo.View.Layout
 
         [Parameter] public string Title { get; set; }
         [Parameter] public string Width { get; set; }
+        [Parameter] public bool Simples { get; set; } = false;
 
         [Parameter] public EventCallback OnLimpar { get; set; }
         [Parameter] public EventCallback<object> OnCarregar { get; set; }
@@ -58,18 +59,21 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        public async Task Carregar(long? ID)
+        public async Task Carregar(object args)
         {
 
-            if (ID == null)
+            await OnLimpar.InvokeAsync(null);
+
+            if (args == null)
             {
                 ItemViewMode = ItemViewMode.New;
-                await OnLimpar.InvokeAsync(null);
-                return;
             }
-
-            ItemViewMode = ItemViewMode.Edit;
-            await OnCarregar.InvokeAsync(ID);
+            else
+            {
+                ItemViewMode = ItemViewMode.Edit;
+                await OnCarregar.InvokeAsync(args);
+            }
+            
             ViewModal.Show();
             StateHasChanged();
 
@@ -83,13 +87,23 @@ namespace Aplicativo.View.Layout
                 await OnSalvar.InvokeAsync(null);
                 await ListItemViewLayout.BtnPesquisar_Click();
                 await ListItemViewLayout.ShowToast("Informação:", "Salvo com sucesso!", "e-toast-success", "e-success toast-icons");
+
+                if (HelpParametros.Template == Template.Desktop)
+                {
+                    ListItemViewLayout.GridViewItem.Refresh();
+                }
+
                 StateHasChanged();
 
+            }
+            catch (EmptyException ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                ex.Element.Focus(JSRuntime);
             }
             catch (Exception ex)
             {
                 await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-                ViewModal.Show();
             }
             finally
             {
@@ -110,6 +124,10 @@ namespace Aplicativo.View.Layout
                 await OnExcluir.InvokeAsync(null);
                 await ListItemViewLayout.BtnPesquisar_Click();
                 await ListItemViewLayout.ShowToast("Informação:", "Excluído com sucesso!", "e-toast-success", "e-success toast-icons");
+
+                ListItemViewLayout.GridViewItem.Refresh();
+                ListItemViewLayout.Refresh();
+
                 StateHasChanged();
 
             }

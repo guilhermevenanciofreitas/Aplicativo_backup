@@ -1,4 +1,4 @@
-﻿using Aplicativo.Utils.Model;
+﻿using Aplicativo.Utils.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -25,6 +25,8 @@ namespace Aplicativo.Server
         public DbSet<Municipio> Municipio { get; set; }
 
         public DbSet<Usuario> Usuario { get; set; }
+
+        public DbSet<UsuarioEmail> UsuarioEmail { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

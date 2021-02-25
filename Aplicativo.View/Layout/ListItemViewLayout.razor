@@ -1,4 +1,6 @@
-﻿@inherits ListItemViewLayoutPage
+﻿@typeparam TValue
+
+@inherits ListItemViewLayoutPage<TValue>
 
 <SfToast ID="toast_default" @ref="Toast" Timeout="5000" ShowCloseButton="true">
     <ToastPosition X="Center" Y="Bottom"></ToastPosition>
@@ -16,8 +18,8 @@
             </IconButton>
         </DialogTitle>
     }
-    <DialogContent Style="padding: 16px;" Dividers="HelpParametros.Template == Template.Mobile">
-        <div style="width: 460px; height: 360px;">
+    <DialogContent Style="padding: 16px; width: 460px" Dividers="HelpParametros.Template == Template.Mobile">
+        <div style="height: 360px;">
             @foreach (var item in Filtros)
             {
                 if (item.Type == FiltroType.TextBox)
@@ -48,7 +50,7 @@
 @View
 
 
-@if (HelpParametros.Template == Template.Mobile && ListItemView.Any(c => c.Bool01 == true))
+@if (HelpParametros.Template == Template.Mobile && ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
 {
     <AppBar>
         <Toolbar>
@@ -56,7 +58,7 @@
                 <ArrowBackIcon />
             </IconButton>
             <Typography Variant="@TypographyVariant.H6" Style="flex-grow: 1;">
-                @ListItemView.Where(c => c.Bool01 == true).Count()  Selecionado(s)
+                @ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count()  Selecionado(s)
             </Typography>
 
             <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
@@ -65,7 +67,7 @@
 
             <Skclusive.Material.Menu.Menu Open="@ItemViewButtonOpen" AnchorRef="@ItemViewOpenButtonRef" OnClose="@ItemViewOpen_Close">
 
-                <MenuItem OnClick="MnuMarcarTodos_Click">
+                <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); MnuMarcarTodos_Click(); })">
                     Marcar todos
                 </MenuItem>
 
@@ -86,11 +88,11 @@
 
         @if (HelpParametros.Template == Template.Desktop)
         {
-            @if (!ListItemView.Any(c => c.Bool01 == true))
+            @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
             {
                 <Button Variant="@ButtonVariant.Contained" OnClick="BtnNovo_Click" Style="color: #fff; background-color: #5cb85c; width: 110px">
                     <StartIcon>
-                        <AddIcon />
+                        <AddCircleIcon />
                     </StartIcon>
                     <ChildContent>
                         Novo
@@ -109,14 +111,14 @@
                 </Button>
             }
 
-            @if (ListItemView.Any(c => c.Bool01 == true))
+            @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
             {
                 @foreach (var item in ItemViewButtons)
                 {
                     <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
                         @*<StartIcon>
-                                @item.Icon
-                            </StartIcon>*@
+                            @item.Icon
+                        </StartIcon>*@
                         <ChildContent>
                             @item.Label
                         </ChildContent>
@@ -125,27 +127,30 @@
             }
         }
 
-        <div class="form-inline pull-right">
-            <div class="form-group">
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnFiltro_Click">
-                    <StartIcon>
-                        <FilterListIcon />
-                    </StartIcon>
-                    <ChildContent>
-                        Filtro
-                    </ChildContent>
-                </Button>
+        @if (!Simples)
+        {
+            <div class="form-inline pull-right">
+                <div class="form-group">
+                    <Button Variant="@ButtonVariant.Contained" OnClick="BtnFiltro_Click">
+                        <StartIcon>
+                            <FilterListIcon />
+                        </StartIcon>
+                        <ChildContent>
+                            Filtro
+                        </ChildContent>
+                    </Button>
 
-                <Button Variant="@ButtonVariant.Contained" Color="@Color.Primary" OnClick="BtnPesquisar_Click">
-                    <StartIcon>
-                        <SearchIcon />
-                    </StartIcon>
-                    <ChildContent>
-                        Pesquisar
-                    </ChildContent>
-                </Button>
+                    <Button Variant="@ButtonVariant.Contained" Color="@Color.Primary" OnClick="BtnPesquisar_Click">
+                        <StartIcon>
+                            <SearchIcon />
+                        </StartIcon>
+                        <ChildContent>
+                            Pesquisar
+                        </ChildContent>
+                    </Button>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -159,10 +164,10 @@
         {
             <LongPress OnLongPress="@(() => ListItemView_LongPress(item))" OnPress="@(() => ListItemView_Press(item))">
                 <ListItem AlignItems="@AlignItems.FlexStart" Button="true">
-                    @if (ListItemView.Any(c => c.Bool01 == true))
+                    @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
                     {
                         <ListItemIcon>
-                            <Checkbox Checked="@(item.Bool01 ?? false)" />
+                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selecionado").GetValue(item)))" />
                         </ListItemIcon>
                     }
                     @ItemView(item)
@@ -172,13 +177,13 @@
         }
     </List>
 
-    <Scale Class="fab-button" In="!ListItemView.Any(c => c.Bool01 == true)">
+    <Scale Class="fab-button" In=@(!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))>
         <Fab Color="@Color.Primary" OnClick="BtnNovo_Click" Style="background-color: #5cb85c">
             <AddIcon></AddIcon>
         </Fab>
     </Scale>
 
-    <Scale Class="fab-button" In="ListItemView.Any(c => c.Bool01 == true)">
+    <Scale Class="fab-button" In=@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))>
         <Fab Style="color: #fff; background-color: #df4759;" OnClick="BtnExcluir_Click">
             <DeleteIcon></DeleteIcon>
         </Fab>
@@ -187,31 +192,31 @@
 else
 {
 
-<div style="margin-top: 5px; margin-bottom: 4px">
-    @if (!ListItemView.Any(c => c.Bool01 == true))
-    {
-        <font size="3">Nenhum registro selecionado</font>
-    }
-    else
-    {
-        <font size="3">@ListItemView.Where(c => c.Bool01 == true).Count() registro(s) selecionado(s)</font>
-    }
-</div>
-    
-    <SfGrid @ref="GridViewItem" DataSource="ListItemView" TValue="ItemView" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="true" AllowPaging="true" Height="460" RowHeight="30" onselectstart='return false'>
+    <div style="margin-top: 5px; margin-bottom: 4px">
+        @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true))
+        {
+            <font size="3">Nenhum registro selecionado</font>
+        }
+        else
+        {
+            <font size="3">@ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
+        }
+    </div>
+
+    <SfGrid @ref="GridViewItem" DataSource="ListItemView" TValue="TValue" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="!Simples" AllowPaging="true" Height="@Height" RowHeight="30" onselectstart='return false'>
         <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
-        <GridEvents TValue="ItemView" OnRecordDoubleClick="GridViewItem_DoubleClick"></GridEvents>
+        <GridEvents TValue="TValue" OnRecordDoubleClick="GridViewItem_DoubleClick"></GridEvents>
         <GridPageSettings PageSize="30"></GridPageSettings>
         <GridColumns>
             <GridColumn Width="60" AllowSorting="false">
                 <HeaderTemplate>
-                    <Checkbox OnChange="ListItemViewHeeader_Change" Checked="@(ListItemView.Where(c => c.Bool01 == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => c.Bool01 == true) && ListItemView.Where(c => c.Bool01 == true).Count() != ListItemView.Count)" />
+                    <Checkbox OnChange="ListItemViewHeeader_Change" Checked="@(ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true) && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selecionado").GetValue(c)) == true).Count() != ListItemView.Count)" />
                 </HeaderTemplate>
                 <Template>
                     @{
-                        var item = (context as ItemView);
+                        var item = (TValue)context;
                         <LongPress OnPress="@(c => GridViewItem_Chcked(item))">
-                            <Checkbox Checked="@(item.Bool01 ?? false)" />
+                            <Checkbox Checked="@(Convert.ToBoolean(item.GetType().GetProperty("Selecionado").GetValue(item)))" />
                         </LongPress>
                     }
                 </Template>

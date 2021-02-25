@@ -11,10 +11,17 @@
 };
 
 window.Modal = {
-    Show: function (divModal) {
-        $(divModal).modal('show');
+    Show: function (element) {
+        $(element).modal('show');
     },
-    Hide: async function (divModal) {
-        $(divModal).modal('hide');
+    Hide: async function (element) {
+        $(element).modal('hide');
     },
+};
+
+window.ElementReference =
+{
+    Focus: function (element) {
+        element.focus();
+    }
 };

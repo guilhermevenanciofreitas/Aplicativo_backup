@@ -3,6 +3,7 @@
 @inherits ListUsuarioPage
 
 <ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="Usuario"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView" 
                     OnDelete="ViewLayout_Delete">
@@ -11,12 +12,12 @@
     </View>
     <ItemView>
         @{
-            var item = (context as ItemView);
+            var item = (Usuario)context;
 
-            <ListItemText Primary="@item.Descricao01">
+            <ListItemText Primary="@item.Nome">
                 <SecondaryContent>
                     <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Descricao02
+                        @item.Login
                     </Typography>
                     — I'll be in your neighborhood
                 </SecondaryContent>
@@ -24,11 +25,11 @@
         }
     </ItemView>
     <GridView>
-        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
-        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
-        <GridColumn Field="Descricao01" HeaderText="Nome" Width="300"></GridColumn>
-        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
-        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
-        <GridColumn Field="Descricao02" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="Nome" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Nome" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Nome" HeaderText="Nome" Width="300"></GridColumn>
+        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
     </GridView>
 </ListItemViewLayout>

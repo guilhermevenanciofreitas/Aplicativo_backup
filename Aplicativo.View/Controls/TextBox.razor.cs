@@ -17,7 +17,7 @@ namespace Aplicativo.View.Controls
     public class TextBoxComponent : HelpComponent
     {
 
-        protected ElementReference TextBox;
+        public ElementReference Element;
 
         [Parameter] public string _Label { get; set; }
         [Parameter] public string _Text { get; set; }
@@ -115,10 +115,10 @@ namespace Aplicativo.View.Controls
             }
         }
 
-        public void Focus()
-        {
-            //TextBox.Focus(JSRuntime);
-        }
+        //public void Focus()
+        //{
+        //    TextBox.Focus(JSRuntime);
+        //}
 
     }
 }

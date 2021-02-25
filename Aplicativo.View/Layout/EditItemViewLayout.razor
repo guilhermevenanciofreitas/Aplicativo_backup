@@ -1,4 +1,6 @@
-﻿@inherits EditItemViewLayoutPage
+﻿@typeparam TValue
+
+@inherits EditItemViewLayoutPage<TValue>
 
 <style>
     .fab-button {
@@ -18,7 +20,7 @@
                     <CloseIcon />
                 </IconButton>
                 <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
-                    Usuário
+                    @Title
                 </Typography>
                 <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
                     save
@@ -33,64 +35,93 @@
                 <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
                     <MoreVertIcon />
                 </IconButton>
+               
                 <Skclusive.Material.Menu.Menu Open="@ItemViewButtonOpen" AnchorRef="@ItemViewOpenButtonRef" OnClose="@ItemViewOpen_Close">
-                    <MenuItem OnClick="BtnLimpar_Click">
-                        Limpar
-                    </MenuItem>
+                    @if (!Simples)
+                    {
+                        <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); BtnLimpar_Click(); })">
+                            Limpar
+                        </MenuItem>
+                    }
+                    @if (ItemViewMode == ItemViewMode.Edit)
+                    {
+                        @foreach (var item in ItemViewButtons)
+                        {
+                            <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); item.OnClick(); })">
+                                @item.Label
+                            </MenuItem>
+                        }
+                    }
                 </Skclusive.Material.Menu.Menu>
+             
             </Toolbar>
         </AppBar>
+
+        @View
+
     }
     else
     {
-<div class="box-header with-border">
-    <Button Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click">
-        <StartIcon>
-            <FilterListIcon />
-        </StartIcon>
-        <ChildContent>
-            Limpar
-        </ChildContent>
-    </Button>
+        <div class="box-header with-border">
 
-    <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
-        <StartIcon>
-            <SaveIcon />
-        </StartIcon>
-        <ChildContent>
-            Salvar
-        </ChildContent>
-    </Button>
-    @if (ItemViewMode == ItemViewMode.Edit)
-    {
-        <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 110px">
-            <StartIcon>
-                <DeleteIcon />
-            </StartIcon>
-            <ChildContent>
-                Excluir
-            </ChildContent>
-        </Button>
-    }
+            @if (!Simples)
+            {
+                <Button Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click">
+                    <StartIcon>
+                        <FileCopyIcon />
+                    </StartIcon>
+                    <ChildContent>
+                        Limpar
+                    </ChildContent>
+                </Button>
+            }
 
-    @if (ItemViewMode == ItemViewMode.Edit)
-    {
-        @foreach (var item in ItemViewButtons)
-        {
-            <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
-                @*<StartIcon>
-                        @item.Icon
-                    </StartIcon>*@
+            <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
+                <StartIcon>
+                    <SaveIcon />
+                </StartIcon>
                 <ChildContent>
-                    @item.Label
+                    Salvar
                 </ChildContent>
             </Button>
-        }
+            @if (ItemViewMode == ItemViewMode.Edit)
+            {
+                <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 110px">
+                    <StartIcon>
+                        <DeleteIcon />
+                    </StartIcon>
+                    <ChildContent>
+                        Excluir
+                    </ChildContent>
+                </Button>
+            }
+
+            @if (ItemViewMode == ItemViewMode.Edit)
+            {
+                @foreach (var item in ItemViewButtons)
+                {
+                    <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
+                        @*<StartIcon>
+                                @item.Icon
+                            </StartIcon>*@
+                        <ChildContent>
+                            @item.Label
+                        </ChildContent>
+                    </Button>
+                }
+            }
+
+        </div>
+
+        <br />
+        <Divider />
+
+        <div style="margin-top: 20px">
+            @View
+        </div>
+
     }
 
-</div>
-    }
 
-    @View
 
 </ViewModal>

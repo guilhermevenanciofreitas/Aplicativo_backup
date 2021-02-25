@@ -20,10 +20,10 @@ else
 <div class="form-group">
     @if (_Label != null)
     {
-        <label for="@TextBox.Id">@_Label</label>
+        <label for="@Element.Id">@_Label</label>
     }
 
-    <input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />
+    <input type="text" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />
 
 </div>
     

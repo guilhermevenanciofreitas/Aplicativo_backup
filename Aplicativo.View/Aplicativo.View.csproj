@@ -52,10 +52,17 @@
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="18.4.0.43" />
     <PackageReference Include="Syncfusion.Blazor.Notifications" Version="18.4.0.43" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.43" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aplicativo.Utils\Aplicativo.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\Cadastros\Usuarios\ViewUsuarioEmail - Cópia.razor.cs">
+      <DependentUpon>ViewUsuarioEmail.razor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

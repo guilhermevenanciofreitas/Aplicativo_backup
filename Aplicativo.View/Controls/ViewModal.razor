@@ -8,7 +8,7 @@
 }
 else
 {
-    <div class="modal fade" @ref="DivModal" style="z-index: 10000; @(MarginTop == null ? "" : "margin-top: " + MarginTop + ";")">
+    <div id="@DivModal.Id" class="modal fade" @ref="DivModal" style="z-index: 10000; @(MarginTop == null ? "" : "margin-top: " + MarginTop + ";")">
         <div class="modal-dialog" style="width:@Width">
             <div class="modal-content">
                 <div class="modal-header">

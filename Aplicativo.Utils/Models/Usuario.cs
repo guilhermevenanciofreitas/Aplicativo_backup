@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Aplicativo.Utils.Model
+namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
     [Table("Usuario")]
-    public partial class Usuario
+    public partial class Usuario : _Extends
     {
+
+        public Usuario()
+        {
+            UsuarioEmail = new HashSet<UsuarioEmail>();
+        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

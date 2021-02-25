@@ -1,7 +1,7 @@
 ﻿using Aplicativo.Server;
 using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Model;
+using Aplicativo.Utils.Models;
 using Build.Server.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -90,7 +90,12 @@ namespace Sistema.Server.Controllers
                 }
                 else
                 {
+
+                    var UsuarioEmail = db.UsuarioEmail.Where(c => c.UsuarioID == item.UsuarioID && !item.UsuarioEmail.Select(c => c.UsuarioEmailID).Contains(c.UsuarioEmailID)).ToList();
+                    db.UsuarioEmail.RemoveRange(UsuarioEmail);
+                    
                     db.Usuario.Update(item);
+
                 }
             }
 
