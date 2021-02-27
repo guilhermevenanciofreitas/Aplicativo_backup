@@ -1,11 +1,17 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Skclusive.Material.Text;
 using System;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
+    public enum TextBoxType
+    {
+        String,
+        Password,
+    }
 
     public enum CharacterCasing
     {
@@ -17,10 +23,14 @@ namespace Aplicativo.View.Controls
     public class TextBoxComponent : HelpComponent
     {
 
+        protected TextField TextField;
+
         public ElementReference Element;
 
+        [Parameter] public TextBoxType _Type { get; set; } = TextBoxType.String;
         [Parameter] public string _Label { get; set; }
         [Parameter] public string _Text { get; set; }
+        [Parameter] public string _Mask { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
@@ -106,6 +116,19 @@ namespace Aplicativo.View.Controls
 
                     Text = _Text;
                     PlaceHolder = _PlaceHolder;
+
+                    if (!string.IsNullOrEmpty(_Mask))
+                    {
+                        if (HelpParametros.Template == Template.Mobile)
+                        {
+                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
+                        }
+                        else
+                        {
+                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
+                        }
+                        
+                    }
 
                 }
                 catch (Exception ex)
