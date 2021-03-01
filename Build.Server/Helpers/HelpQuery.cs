@@ -1,14 +1,18 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Build.Server.Helpers
 {
+
     public static class HelpQuery
     {
 

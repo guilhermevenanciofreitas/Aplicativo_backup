@@ -17,7 +17,7 @@ namespace Sistema.Server.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class ProdutoController : ControllerBase
     {
        
         [HttpPost]
@@ -38,7 +38,7 @@ namespace Sistema.Server.Controllers
 
             var Response = new Response();
 
-            var Query = db.Usuario.AsQueryable();
+            var Query = db.Produto.AsQueryable();
 
             Query = Query.Where(c => c.Ativo == true);
 
@@ -59,13 +59,16 @@ namespace Sistema.Server.Controllers
 
             var Response = new Response();
 
-            var query = db.Usuario.Include(c => c.UsuarioEmail).AsQueryable();
+            var query = db.Produto
+                .Include(c => c.ProdutoFornecedor).ThenInclude(c => c.Fornecedor)
+                .Include(c => c.ProdutoFornecedor).ThenInclude(c => c.UnidadeMedida)
+                .AsQueryable();
 
             query = query.Where(c => c.Ativo == true);
 
-            var UsuarioID = Request.GetParameter("UsuarioID").ToIntOrNull();
+            var ProdutoID = Request.GetParameter("ProdutoID").ToIntOrNull();
 
-            Response.Data = query.FirstOrDefault(c => c.UsuarioID == UsuarioID);
+            Response.Data = query.FirstOrDefault(c => c.ProdutoID == ProdutoID);
 
             return Response;
 
@@ -80,28 +83,40 @@ namespace Sistema.Server.Controllers
 
             var Response = new Response();
 
-            var Usuarios = JsonConvert.DeserializeObject<List<Usuario>>(Request.GetParameter("Usuarios"));
+            var Produtos = JsonConvert.DeserializeObject<List<Produto>>(Request.GetParameter("Produtos"));
 
-            foreach(var item in Usuarios)
+            foreach(var item in Produtos)
             {
-                if (item.UsuarioID == null)
+                if (item.ProdutoID == null)
                 {
-                    db.Usuario.Add(item);
+                    db.Produto.Add(item);
                 }
                 else
                 {
 
-                    var UsuarioEmail = db.UsuarioEmail.Where(c => c.UsuarioID == item.UsuarioID && !item.UsuarioEmail.Select(c => c.UsuarioEmailID).Contains(c.UsuarioEmailID)).ToList();
-                    db.UsuarioEmail.RemoveRange(UsuarioEmail);
+                    //var UsuarioEmail = db.UsuarioEmail.Where(c => c.UsuarioID == item.UsuarioID && !item.UsuarioEmail.Select(c => c.UsuarioEmailID).Contains(c.UsuarioEmailID)).ToList();
+                    //db.UsuarioEmail.RemoveRange(UsuarioEmail);
                     
-                    db.Usuario.Update(item);
+                    db.Produto.Update(item);
 
                 }
             }
 
             db.SaveChanges();
 
-            Response.Data = Usuarios;
+
+            foreach (var item in Produtos)
+            {
+                if (item.Codigo == null)
+                {
+                    item.Codigo = item.ProdutoID.ToStringOrNull();
+                    db.Produto.Update(item);
+                }
+            }
+
+            db.SaveChanges();
+
+            Response.Data = Produtos;
 
             return Response;
 
@@ -116,14 +131,14 @@ namespace Sistema.Server.Controllers
 
             var Response = new Response();
 
-            var Usuarios = JsonConvert.DeserializeObject<List<int?>>(Request.GetParameter("Usuarios"));
+            var Produtos = JsonConvert.DeserializeObject<List<int?>>(Request.GetParameter("Produtos"));
 
-            var Items = db.Usuario.Where(c => Usuarios.Contains(c.UsuarioID)).ToList();
+            var Items = db.Produto.Where(c => Produtos.Contains(c.ProdutoID)).ToList();
 
             foreach(var item in Items)
             {
                 item.Ativo = false;
-                db.Usuario.Update(item);
+                db.Produto.Update(item);
             }
 
             db.SaveChanges();
@@ -133,5 +148,4 @@ namespace Sistema.Server.Controllers
         }
 
     }
-
 }
