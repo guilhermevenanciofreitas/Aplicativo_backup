@@ -19,11 +19,15 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         [Parameter]
         public ListItemViewLayout<Usuario> ListItemViewLayout { get; set; }
         public EditItemViewLayout<Usuario> EditItemViewLayout { get; set; }
-        
 
+
+        protected TextBox TxtCodigo { get; set; }
         protected TextBox TxtNome { get; set; }
         protected TextBox TxtLogin { get; set; }
         protected TextBox TxtSenha { get; set; }
+        protected TextBox TxtConfirmarSenha { get; set; }
+
+        protected DatePicker DtpInicio { get; set; }
 
         protected TabSet TabSet { get; set; }
 
@@ -38,20 +42,9 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (firstRender)
             {
 
-                EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
-                EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
-
+                //EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Teste", OnClick = Teste });
+                
             }
-        }
-
-        private async void Imprimir()
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Imprimir");
-        }
-
-        private async void Compartilhar()
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Compartilhar");
         }
 
         protected async Task ViewLayout_Limpar()
@@ -59,9 +52,11 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             Usuario = new Usuario();
 
+            TxtCodigo.Text = null;
             TxtNome.Text = null;
             TxtLogin.Text = null;
             TxtSenha.Text = null;
+            TxtConfirmarSenha.Text = null;
 
 
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
@@ -83,9 +78,11 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             Usuario = await HelpHttp.Send<Usuario>(Http, "api/Usuario/Get", Request);
 
-            TxtNome.Text = Usuario.Nome;
-            TxtLogin.Text = Usuario.Login;
-            TxtSenha.Text = Usuario.Senha;
+            TxtCodigo.Text = Usuario.UsuarioID.ToStringOrNull();
+            TxtNome.Text = Usuario.Nome.ToStringOrNull();
+            TxtLogin.Text = Usuario.Login.ToStringOrNull();
+            TxtSenha.Text = Usuario.Senha.ToStringOrNull();
+            TxtConfirmarSenha.Text = Usuario.Senha.ToStringOrNull();
 
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = Usuario.UsuarioEmail.ToList();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
@@ -104,9 +101,16 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (string.IsNullOrEmpty(TxtLogin.Text))
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe o nome!", TxtLogin.Element);
+                throw new EmptyException("Informe o login!", TxtLogin.Element);
             }
 
+            if (TxtSenha.Text != TxtConfirmarSenha.Text)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
+            }
+
+            Usuario.UsuarioID = TxtCodigo.Text.ToIntOrNull();
             Usuario.Nome = TxtNome.Text.ToStringOrNull();
             Usuario.Login = TxtLogin.Text.ToStringOrNull();
             Usuario.Senha = TxtSenha.Text.ToStringOrNull();

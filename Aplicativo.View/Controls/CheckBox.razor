@@ -1,5 +1,7 @@
 ﻿@inherits CheckBoxControl
 
-<FormControlLabel Label="@_Label">
-    <Checkbox Checked="@_Checked" OnChange="@_Checked_Change" />
-</FormControlLabel>
+<div onselectstart='return false'>
+    <FormControlLabel Label="@_Label">
+        <Checkbox Checked="@_Checked" OnChange="@_Checked_Change" />
+    </FormControlLabel>
+</div>

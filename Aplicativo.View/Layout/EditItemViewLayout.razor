@@ -22,20 +22,20 @@
                 <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
                     @Title
                 </Typography>
-                <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
-                    save
+                <Button @ref="BtnSalvar.Button" Color="@Color.Inherit" OnClick="@BtnSalvar_Click" Disabled="BtnSalvar.Disabled">
+                    @BtnSalvar.Label
                 </Button>
                 @if (ItemViewMode == ItemViewMode.Edit)
                 {
-                    <Button Color="@Color.Inherit" OnClick="@BtnExcluir_Click">
-                        delete
+                    <Button @ref="BtnExcluir.Button" Color="@Color.Inherit" OnClick="@BtnExcluir_Click" Disabled="BtnExcluir.Disabled">
+                        @BtnExcluir.Label
                     </Button>
                 }
 
                 <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
                     <MoreVertIcon />
                 </IconButton>
-               
+
                 <Skclusive.Material.Menu.Menu Open="@ItemViewButtonOpen" AnchorRef="@ItemViewOpenButtonRef" OnClose="@ItemViewOpen_Close">
                     @if (!Simples)
                     {
@@ -53,7 +53,7 @@
                         }
                     }
                 </Skclusive.Material.Menu.Menu>
-             
+
             </Toolbar>
         </AppBar>
 
@@ -76,22 +76,22 @@
                 </Button>
             }
 
-            <Button Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 110px" OnClick="BtnSalvar_Click">
+            <Button @ref="BtnSalvar.Button" Variant="@ButtonVariant.Contained" OnClick="BtnSalvar_Click" Disabled="BtnSalvar.Disabled" Style=@("color: #fff; background-color: #5cb85c; width:" + BtnSalvar.Width)>
                 <StartIcon>
                     <SaveIcon />
                 </StartIcon>
                 <ChildContent>
-                    Salvar
+                    @BtnSalvar.Label
                 </ChildContent>
             </Button>
             @if (ItemViewMode == ItemViewMode.Edit)
             {
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 110px">
+                <Button @ref="BtnExcluir.Button" Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Disabled="BtnExcluir.Disabled" Style=@("color: #fff; background-color: #df4759; width:" + BtnExcluir.Width)>
                     <StartIcon>
                         <DeleteIcon />
                     </StartIcon>
                     <ChildContent>
-                        Excluir
+                        @BtnExcluir.Label
                     </ChildContent>
                 </Button>
             }
@@ -100,7 +100,7 @@
             {
                 @foreach (var item in ItemViewButtons)
                 {
-                    <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
+                    <Button @ref="item.Button" Variant="@ButtonVariant.Contained" OnClick="@item.OnClick" Disabled="item.Disabled">
                         @*<StartIcon>
                                 @item.Icon
                             </StartIcon>*@
@@ -114,14 +114,11 @@
         </div>
 
         <br />
+
         <Divider />
 
-        <div style="margin-top: 20px">
-            @View
-        </div>
+        @View
 
     }
-
-
 
 </ViewModal>

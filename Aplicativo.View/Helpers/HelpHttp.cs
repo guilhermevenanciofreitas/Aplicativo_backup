@@ -1,4 +1,5 @@
 ﻿using Aplicativo.Utils;
+using Aplicativo.Utils.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -29,6 +30,14 @@ namespace Aplicativo.View.Helpers
         public async static Task<Response> Post(HttpClient Http, string Action, Request Request)
         {
             var Result = await Http.PostAsJsonAsync(Path.Combine(Url, Action), Request);
+
+            if (!Result.IsSuccessStatusCode) throw new Exception("Problema na conexão com o servidor!");
+        
+            if (string.IsNullOrEmpty((await Result.Content.ReadAsStringAsync())))
+            {
+                return null;
+            }
+
             return await Result.Content.ReadFromJsonAsync<Response>();
         }
 
@@ -38,6 +47,9 @@ namespace Aplicativo.View.Helpers
             {
                 case StatusCode.Success:
                     return;
+
+                case StatusCode.Error:
+                    throw new Exception(Response.Data.ToString());
 
                 case StatusCode.LoginExpired:
                     throw new Exception("LoginExpired");

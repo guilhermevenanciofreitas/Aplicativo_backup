@@ -19,9 +19,11 @@ window.Modal = {
     },
 };
 
-window.ElementReference =
-{
+window.ElementReference = {
     Focus: function (element) {
         element.focus();
-    }
+    },
+    Mask: function (element, mask) {
+        $(element).mask(mask);
+    },
 };

@@ -7,6 +7,6 @@
 else
 {
     <li class="nav-item">
-        <a class="nav-link@(Visible ? " active" : "")" style="text-decoration: none;" href="#@(Id.ToLower())" @onclick="Active"><font size="4">@Title</font></a>
+        <span class="nav-link@(Visible ? " active" : "")" style="cursor: pointer" @onclick="Active"><font size="4">@Title</font></span>
     </li>
 }

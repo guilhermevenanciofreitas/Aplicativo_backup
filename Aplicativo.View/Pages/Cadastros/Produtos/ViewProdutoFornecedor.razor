@@ -1,7 +1,7 @@
-﻿@inherits ViewUsuarioEmailPage
+﻿@inherits ViewProdutoFornecedorPage
 
 <ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="UsuarioEmail"
+                    TValue="ProdutoFornecedor"
                     Simples="true"
                     Height="300px"
                     OnItemView="ViewLayout_ItemView"
@@ -15,7 +15,7 @@
                             OnLimpar="ViewLayout_Limpar"
                             OnCarregar="ViewLayout_Carregar"
                             OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<UsuarioEmail>() { UsuarioEmail }))">
+                            OnExcluir="@(() => ViewLayout_Delete(new List<ProdutoFornecedor>() { ProdutoFornecedor }))">
             <View>
                 <Box Padding="3">
 
@@ -47,9 +47,6 @@
                         <div class="col-md-10 col-sm-12">
                             <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true"></CheckBox>
                         </div>
-                        <div class="col-md-2 col-sm-12">
-                            <Button Variant="@ButtonVariant.Contained" Color="Color.Primary" OnClick="BtnTestar_Click">Testar</Button>
-                        </div>
                     </div>
 
                 </Box>
@@ -58,12 +55,12 @@
     </View>
     <ItemView>
         @{
-            var item = (UsuarioEmail)context;
+            var item = (ProdutoFornecedor)context;
 
-            <ListItemText Primary="@item.Senha">
+            <ListItemText Primary="@item.Fornecedor.NomeFantasia">
                 <SecondaryContent>
                     <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Email
+                        @item.Fornecedor.RazaoSocial
                     </Typography>
                     — I'll be in your neighborhood
                 </SecondaryContent>
@@ -71,9 +68,10 @@
         }
     </ItemView>
     <GridView>
-        <GridColumn Field="Smtp" HeaderText="Smtp" Width="200"></GridColumn>
-        <GridColumn Field="Porta" HeaderText="Porta" Width="100"></GridColumn>
-        <GridColumn Field="Email" HeaderText="Email" Width="400"></GridColumn>
-        <GridColumn Field="Ssl" HeaderText="Ssl" Width="60"></GridColumn>
+        <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="220"></GridColumn>
+        <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="80"></GridColumn>
+        <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="80"></GridColumn>
+        <GridColumn Field="Contem" HeaderText="Contém" Width="70" TextAlign="TextAlign.Right"></GridColumn>
+        <GridColumn Field="Preco" HeaderText="Preço Un." Width="70" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
     </GridView>
 </ListItemViewLayout>

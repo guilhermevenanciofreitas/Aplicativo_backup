@@ -1,0 +1,31 @@
+﻿@page "/Estoque/Requisicao"
+
+@inherits ListRequisicaoPage
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="Requisicao"
+                    OnPesquisar="ViewLayout_Pesquisar"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <ViewRequisicao @ref="ViewRequisicao" ListItemViewLayout="ListItemViewLayout"></ViewRequisicao>
+    </View>
+    <ItemView>
+        @{
+            var item = (Requisicao)context;
+
+            <ListItemText Primary="@item.Observacao">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @*@item.Descricao*@
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="RequisicaoID" HeaderText="Código" Width="50"></GridColumn>
+        <GridColumn Field="Status" HeaderText="Status" Width="50"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

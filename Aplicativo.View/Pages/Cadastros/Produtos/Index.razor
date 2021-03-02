@@ -1,0 +1,31 @@
+﻿@page "/Cadastros/Produtos"
+
+@inherits ListProdutoPage
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="Produto"
+                    OnPesquisar="ViewLayout_Pesquisar"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <ViewProduto @ref="ViewProduto" ListItemViewLayout="ListItemViewLayout"></ViewProduto>
+    </View>
+    <ItemView>
+        @{
+            var item = (Produto)context;
+
+            <ListItemText Primary="@item.Descricao">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Descricao
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="Codigo" HeaderText="Código" Width="50"></GridColumn>
+        <GridColumn Field="Descricao" HeaderText="Descricao" Width="300"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

@@ -1,0 +1,23 @@
+﻿
+@inherits DropDownListComponent
+
+@*@if (Label != null)
+    {
+        <label>@Label</label>
+        @if (InfoToolTip != null)
+        {
+            <InfoToolTip ToolTip="@InfoToolTip"></InfoToolTip>
+        }
+    }*@
+
+@if (_Label != null)
+{
+    <label for="@Element.Id">@_Label</label>
+}
+
+<select class="form-control" id="@Element.Id" @ref="Element" @bind="@SelectedValue">
+    @foreach (var item in @_Items)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+</select>

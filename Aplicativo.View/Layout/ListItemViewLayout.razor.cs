@@ -6,6 +6,7 @@ using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Core.Component;
+using Skclusive.Material.Button;
 using Skclusive.Material.Icon;
 using Skclusive.Material.Menu;
 using Syncfusion.Blazor.Grids;
@@ -23,9 +24,13 @@ namespace Aplicativo.View.Layout
     public class ItemViewButton
     {
 
+        public Button Button { get; set; }
+
         public SvgIconBase Icon { get; set; }
 
         public string Label { get; set; }
+
+        public bool Disabled { get; set; }
 
         public System.Action OnClick { get; set; }
 
@@ -77,6 +82,7 @@ namespace Aplicativo.View.Layout
             {
                 await HelpLoading.Show(this, "Carregando...");
                 await Pesquisar();
+                GridViewItem.Refresh();
                 StateHasChanged();
             }
             catch (Exception ex)

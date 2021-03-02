@@ -33,7 +33,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
                 ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Imprimir", OnClick = Imprimir });
                 ListItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Compartilhar", OnClick = Compartilhar });
 
-                await ListItemViewLayout.OnPesquisar.InvokeAsync(null);
+                await ListItemViewLayout.BtnPesquisar_Click();
 
             }
         }

@@ -1,0 +1,55 @@
+﻿@inherits ViewRequisicaoPage
+
+<EditItemViewLayout @ref="EditItemViewLayout"
+                    ListItemViewLayout="ListItemViewLayout"
+                    Title="Requisição"
+                    Width="1250px"
+                    OnLimpar="ViewLayout_Limpar"
+                    OnCarregar="ViewLayout_Carregar"
+                    OnSalvar="ViewLayout_Salvar"
+                    OnExcluir="ViewLayout_Excluir">
+    <View>
+
+        <Box Padding="3">
+
+            <div class="row">
+
+                <div class="col-md-1 col-sm-6">
+                    <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
+                </div>
+
+                <div class="col-md-5 col-sm-6">
+                    <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
+                </div>
+
+
+                <div class="col-md-5 col-sm-12">
+                    <div class="col-md-6 col-sm-6">
+                        <DateTimePicker @ref="DtpSaida" _Label="Saída"></DateTimePicker>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <DateTimePicker @ref="DtpEntrada" _Label="Entrada"></DateTimePicker>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <ViewRequisicaoItem @ref="ViewRequisicaoItem"></ViewRequisicaoItem>
+                </div>
+            </div>
+
+        </Box>
+
+    </View>
+</EditItemViewLayout>

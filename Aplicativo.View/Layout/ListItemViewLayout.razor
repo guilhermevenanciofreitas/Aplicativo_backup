@@ -90,18 +90,18 @@
         {
             @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
             {
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnNovo_Click" Style="color: #fff; background-color: #5cb85c; width: 110px">
+                <Button Variant="@ButtonVariant.Contained" OnClick="BtnNovo_Click" Style="color: #fff; background-color: #5cb85c; width: 130px">
                     <StartIcon>
                         <AddCircleIcon />
                     </StartIcon>
                     <ChildContent>
-                        Novo
+                        @(Simples ? "Adicionar" : "Novo")
                     </ChildContent>
                 </Button>
             }
             else
             {
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 110px">
+                <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 130px">
                     <StartIcon>
                         <DeleteIcon />
                     </StartIcon>

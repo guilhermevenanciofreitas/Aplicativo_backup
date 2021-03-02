@@ -6,6 +6,7 @@ using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Core.Component;
+using Skclusive.Material.Button;
 using Skclusive.Material.Menu;
 using Skclusive.Material.Tab;
 using System;
@@ -15,6 +16,14 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout
 {
+
+    public class BtnView
+    {
+        public Button Button { get; set; }
+        public string Label { get; set; }
+        public string Width { get; set; } = "110px";
+        public bool Disabled { get; set; }
+    }
 
     public enum ItemViewMode
     {
@@ -40,6 +49,9 @@ namespace Aplicativo.View.Layout
         [Parameter] public EventCallback<object> OnCarregar { get; set; }
         [Parameter] public EventCallback OnSalvar { get; set; }
         [Parameter] public EventCallback OnExcluir { get; set; }
+
+        public BtnView BtnSalvar { get; set; } = new BtnView() { Label = "Salvar" };
+        public BtnView BtnExcluir { get; set; } = new BtnView() { Label = "Excluir" };
 
         public List<ItemViewButton> ItemViewButtons { get; set; } = new List<ItemViewButton>();
 
