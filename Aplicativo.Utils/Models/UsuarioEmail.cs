@@ -17,12 +17,18 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("Usuario")]
         public int? UsuarioID { get; set; }
 
+        [StringLength(200)]
+        public string Smtp { get; set; }
+
+        public int? Porta { get; set; }
+
         [StringLength(100)]
         public string Email { get; set; }
 
         [StringLength(40)]
         public string Senha { get; set; }
 
+        public bool? Ssl { get; set; }
 
         public virtual Usuario Usuario { get; set; }
 

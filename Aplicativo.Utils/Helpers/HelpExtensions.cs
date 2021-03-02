@@ -26,6 +26,11 @@ namespace Aplicativo.Utils.Helpers
             return value ?? false;
         }
 
+        public static bool ToBoolean(this object value)
+        {
+            return (bool)TryParse<bool>(value.ToString(), bool.TryParse);
+        }
+
 
 
         public static long ToLong(this long? value)
