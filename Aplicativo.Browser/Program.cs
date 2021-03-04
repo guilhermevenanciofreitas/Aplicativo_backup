@@ -8,6 +8,7 @@ using Aplicativo.View.Services;
 using Skclusive.Material.Docs.App.View;
 using Aplicativo.View.Helpers;
 using Syncfusion.Blazor;
+using Syncfusion.Licensing;
 
 namespace Aplicativo.Browser
 {
@@ -35,6 +36,9 @@ namespace Aplicativo.Browser
             );
 
             builder.Services.AddSyncfusionBlazor();
+
+
+            SyncfusionLicenseProvider.RegisterLicense("NDA3MzI5QDMxMzgyZTM0MmUzMFJYOFhwTm81eUlzL1g4QmJNNXZSRi9ZcDZSbS9Tcm9OY0ZIcjkrbmFMWG89");
 
             await builder.Build().RunAsync();
 
