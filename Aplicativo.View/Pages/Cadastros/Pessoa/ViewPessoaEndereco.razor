@@ -1,0 +1,70 @@
+﻿@inherits ViewPessoaEnderecoPage
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="PessoaEndereco"
+                    Simples="true"
+                    Height="300px"
+                    OnPageLoad="ViewLayout_PageLoad"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <EditItemViewLayout @ref="EditItemViewLayout"
+                            ListItemViewLayout="ListItemViewLayout"
+                            Title="Endereço"
+                            Simples="true"
+                            Width="840px"
+                            OnLimpar="ViewLayout_Limpar"
+                            OnCarregar="ViewLayout_Carregar"
+                            OnSalvar="ViewLayout_Salvar"
+                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
+            <View>
+                <Box Padding="3">
+
+                    <div class="row">
+                        <div class="col-md-2 col-sm-12">
+                            <TextBox @ref="TxtCEP" _Label="CEP" _Mask="99.999-999" _AutoFocus="true"></TextBox>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <TextBox @ref="TxtLogradouro" _Label="Logradouro"></TextBox>
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <TextBox @ref="TxtNumero" _Label="Número"></TextBox>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <TextBox @ref="TxtComplemento" _Label="Complemento"></TextBox>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <TextBox @ref="TxtBairro" _Label="Bairro"></TextBox>
+                        </div>
+                        <div class="col-md-5 col-sm-12">
+                            <TextBox @ref="TxtMunicipio" _Label="Município"></TextBox>
+                        </div>
+                    </div>
+
+                </Box>
+            </View>
+        </EditItemViewLayout>
+    </View>
+    <ItemView>
+        @{
+            var item = (PessoaEndereco)context;
+
+            <ListItemText Primary="@item.Endereco.Logradouro">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Endereco.Logradouro
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="Endereco.CEP" HeaderText="CEP" Width="100"></GridColumn>
+        <GridColumn Field="Endereco.EnderecoCompleto" HeaderText="Endereço" Width="400"></GridColumn>
+        <GridColumn Field="Endereco.Municipio.Descricao" HeaderText="Município" Width="200"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

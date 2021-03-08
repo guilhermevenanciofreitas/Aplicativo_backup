@@ -4,6 +4,7 @@
                     TValue="UsuarioEmail"
                     Simples="true"
                     Height="300px"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
@@ -15,13 +16,13 @@
                             OnLimpar="ViewLayout_Limpar"
                             OnCarregar="ViewLayout_Carregar"
                             OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<UsuarioEmail>() { UsuarioEmail }))">
+                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
             <View>
                 <Box Padding="3">
 
                     <div class="row">
                         <div class="col-md-10 col-sm-10">
-                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" _AutoFocus="true"></TextBox>
                         </div>
                         <div class="col-md-2 col-sm-12">
                             <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
@@ -74,6 +75,6 @@
         <GridColumn Field="Smtp" HeaderText="Smtp" Width="200"></GridColumn>
         <GridColumn Field="Porta" HeaderText="Porta" Width="100"></GridColumn>
         <GridColumn Field="Email" HeaderText="Email" Width="400"></GridColumn>
-        <GridColumn Field="Ssl" HeaderText="Ssl" Width="60"></GridColumn>
+        <GridColumn Field="Ssl_Habilitado" HeaderText="Ssl" Width="60"></GridColumn>
     </GridView>
 </ListItemViewLayout>

@@ -32,12 +32,16 @@ namespace Aplicativo.View.Layout
 
         public bool Disabled { get; set; }
 
+        public bool Visible { get; set; } = true;
+
         public System.Action OnClick { get; set; }
 
     }
 
     public class ListItemViewLayoutPage<TValue> : HelpComponent
     {
+
+       
 
         [Parameter] public string Height { get; set; } = "460px";
 
@@ -57,11 +61,36 @@ namespace Aplicativo.View.Layout
         public List<TValue> ListItemView { get; set; } = new List<TValue>();
 
 
-        [Parameter] public EventCallback<object> OnDelete { get; set; }
+        [Parameter] public EventCallback OnPageLoad { get; set; }
         [Parameter] public EventCallback<object> OnItemView { get; set; }
         [Parameter] public EventCallback OnPesquisar { get; set; }
+        [Parameter] public EventCallback<object> OnDelete { get; set; }
+
+        public BtnView BtnExcluir { get; set; } = new BtnView() { Label = "Excluir" };
 
         [Parameter] public bool Simples { get; set; } = false;
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            try
+            {
+
+                await base.OnAfterRenderAsync(firstRender);
+
+                if (firstRender)
+                {
+                    await OnPageLoad.InvokeAsync(null);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+            }
+        }
+
+
+        #region Filtro
 
         protected async void BtnFiltro_Click()
         {
@@ -73,25 +102,6 @@ namespace Aplicativo.View.Layout
             catch (Exception ex)
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-            }
-        }
-
-        public async Task BtnPesquisar_Click()
-        {
-            try
-            {
-                await HelpLoading.Show(this, "Carregando...");
-                await Pesquisar();
-                GridViewItem.Refresh();
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
             }
         }
 
@@ -114,18 +124,33 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        private async Task Pesquisar()
+        #endregion
+
+        #region Buttons
+
+        public async Task BtnPesquisar_Click()
         {
-
-            foreach (var item in Filtros)
+            try
             {
-                item.Search = new object[] { ((TextBox)item.Element[0]).Text };
+                await HelpLoading.Show(this, "Carregando...");
+                await Pesquisar();
+
+                if (HelpParametros.Template == Template.Desktop)
+                {
+                    GridViewItem.Refresh();
+                }
+
+                StateHasChanged();
+
             }
-
-            await OnPesquisar.InvokeAsync(null);
-
-            StateHasChanged();
-
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+            }
+            finally
+            {
+                await HelpLoading.Hide(this);
+            }
         }
 
         protected async void BtnNovo_Click()
@@ -164,7 +189,7 @@ namespace Aplicativo.View.Layout
                 {
                     GridViewItem.Refresh();
                 }
-                
+
                 StateHasChanged();
 
             }
@@ -177,6 +202,24 @@ namespace Aplicativo.View.Layout
                 await HelpLoading.Hide(this);
             }
         }
+
+        #endregion
+
+        private async Task Pesquisar()
+        {
+
+            foreach (var item in Filtros)
+            {
+                item.Search = new object[] { ((TextBox)item.Element[0]).Text };
+            }
+
+            await OnPesquisar.InvokeAsync(null);
+
+            StateHasChanged();
+
+        }
+
+        #region ListView
 
         protected async void ListItemView_Press(TValue ItemView)
         {
@@ -203,7 +246,6 @@ namespace Aplicativo.View.Layout
             {
                 try
                 {
-                    //ItemView.Bool01 = !ItemView.Bool01;
                     ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
                     StateHasChanged();
                 }
@@ -218,7 +260,6 @@ namespace Aplicativo.View.Layout
         {
             try
             {
-                //ItemView.Bool01 = !ItemView.Bool01;
 
                 ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
 
@@ -236,13 +277,7 @@ namespace Aplicativo.View.Layout
             {
                 foreach (var item in ListItemView)
                 {
-                    //item.Bool01 = false;
-
-                    //Convert.ToBoolean() == true
-
                     item.GetType().GetProperty("Selected").SetValue(item, false);
-
-
                 }
 
                 StateHasChanged();
@@ -254,37 +289,10 @@ namespace Aplicativo.View.Layout
             }
         }
 
-        protected async Task ViewFiltro_Close()
-        {
-            try
-            {
-                ViewFiltro.Hide();
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
-            }
-        }
 
-        protected bool ItemViewButtonOpen { set; get; }
+        #endregion
 
-        protected IReference ItemViewOpenButtonRef { set; get; } = new Reference();
-
-        protected void ItemViewOpen_Close(EventArgs args)
-        {
-            ItemViewButtonOpen = false;
-        }
-
-        protected void ItemViewOpen_Close(MenuCloseReason reason)
-        {
-            ItemViewButtonOpen = false;
-        }
-
-        protected void ItemViewButtonOpen_Show()
-        {
-            ItemViewButtonOpen = true;
-        }
+        #region GridView
 
         protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<TValue> ItemView)
         {
@@ -309,23 +317,60 @@ namespace Aplicativo.View.Layout
 
         protected void GridViewItem_Chcked(TValue ItemView)
         {
-            //ItemView.Bool01 = !ItemView.Bool01;
             ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
             StateHasChanged();
         }
 
-        protected void ListItemViewHeeader_Change(ChangeEventArgs args)
+        protected void GridViewItemHeader_Change(ChangeEventArgs args)
         {
             foreach (var item in ListItemView)
             {
-                //item.Bool01 = (bool)args.Value;
-
                 item.GetType().GetProperty("Selected").SetValue(item, (bool)args.Value);
-
             }
 
             StateHasChanged();
 
+        }
+
+
+
+        #endregion
+
+        #region Toast
+
+        protected SfToast Toast;
+
+        public async Task ShowToast(string Title, string Content, string CssClass = null, string Icon = null)
+        {
+            await Toast.Show(new ToastModel() { Title = Title, Content = Content, CssClass = CssClass, Icon = Icon });
+        }
+        public async Task HideToast()
+        {
+            await Toast.Hide("All");
+        }
+
+        #endregion
+
+        #region Menu
+
+
+        protected bool ItemViewButtonOpen { set; get; }
+
+        protected IReference ItemViewOpenButtonRef { set; get; } = new Reference();
+
+        protected void ItemViewOpen_Close(EventArgs args)
+        {
+            ItemViewButtonOpen = false;
+        }
+
+        protected void ItemViewOpen_Close(MenuCloseReason reason)
+        {
+            ItemViewButtonOpen = false;
+        }
+
+        protected void ItemViewButtonOpen_Show()
+        {
+            ItemViewButtonOpen = true;
         }
 
         protected void MnuMarcarTodos_Click()
@@ -343,22 +388,42 @@ namespace Aplicativo.View.Layout
             StateHasChanged();
         }
 
-        protected SfToast Toast;
+        #endregion
 
-        public async Task ShowToast(string Title, string Content, string CssClass = null, string Icon = null)
+        #region HelpHttp
+
+        public async Task<List<TValue>> Pesquisar(HelpQuery Query)
         {
-            await Toast.Show(new ToastModel() { Title = Title, Content = Content, CssClass = CssClass, Icon = Icon });
+
+            var Request = new Request();
+
+            Query.AddFiltro(Filtros);
+
+            Request.Parameters.Add(new Parameters("Query", Query));
+
+            return await HelpHttp.Send<List<TValue>>(Http, "api/Default/Query", Request);
+
         }
-        public async Task HideToast()
+
+        public async Task Delete(object args)
         {
-            await Toast.Hide("All");
+
+            var Request = new Request();
+
+            Request.Parameters.Add(new Parameters("Table", typeof(TValue).Name));
+            Request.Parameters.Add(new Parameters(typeof(TValue).Name, args));
+
+            await HelpHttp.Send(Http, "api/Default/Delete", Request);
+
         }
+
+        #endregion
 
         public void Refresh()
         {
-            //GridViewItem.Refresh();
             StateHasChanged();
         }
+
 
     }
 }

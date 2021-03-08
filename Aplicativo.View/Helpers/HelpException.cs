@@ -9,11 +9,12 @@ namespace Aplicativo.Utils.Helpers
     public class EmptyException : Exception
     {
 
+        public bool Focus { get; set; } = false;
         public ElementReference Element { get; set; }
 
         public EmptyException() : base() { }
         public EmptyException(string message) : base(message) { }
-        public EmptyException(string message, ElementReference Element) : base(message) { this.Element = Element; }
+        public EmptyException(string message, ElementReference Element) : base(message) { Focus = true; this.Element = Element; }
         public EmptyException(string message, Exception inner) : base(message, inner) { }
 
         // A constructor is needed for serialization when an

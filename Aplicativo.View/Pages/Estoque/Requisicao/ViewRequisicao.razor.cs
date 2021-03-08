@@ -6,7 +6,6 @@ using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Skclusive.Material.Icon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,93 +13,86 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Estoque.Requisicao
 {
-    public class ViewRequisicaoPage : HelpComponent
+    public partial class ViewRequisicaoPage<TValue> : HelpComponent
     {
+
+        protected ViewModal ViewModalFinalizar { get; set; }
+        public DateTimePicker DtpFinalizarEntrada { get; set; }
 
         [Parameter]
         public ListItemViewLayout<Utils.Models.Requisicao> ListItemViewLayout { get; set; }
         public EditItemViewLayout<Utils.Models.Requisicao> EditItemViewLayout { get; set; }
 
+        #region Elements
 
-        protected TextBox TxtCodigo { get; set; }
-        protected TextBox TxtDescricao { get; set; }
+        
 
-        protected DateTimePicker DtpSaida { get; set; }
-        protected DateTimePicker DtpEntrada { get; set; }
+        public TextBox TxtCodigo { get; set; }
+        public TextBox TxtDescricao { get; set; }
+        public TextArea TxtObservacao { get; set; }
+        public DateTimePicker DtpSaida { get; set; }
+        public DateTimePicker DtpEntrada { get; set; }
 
-        protected TextArea TxtObservacao { get; set; }
-
+        protected TabSet TabSet { get; set; }
 
         protected ViewRequisicaoItem ViewRequisicaoItem { get; set; }
+        #endregion
 
-        private Utils.Models.Requisicao Requisicao = new Utils.Models.Requisicao();
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected void ViewLayout_PageLoad()
         {
-            await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
-            {
+            EditItemViewLayout.BtnExcluir.Visible = false;
 
-                EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Finalizar", OnClick = BtnFinalizar_Click });
-
-            }
+            EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Label = "Finalizar", OnClick = BtnFinalizar_Click });
         }
 
-        protected void ViewLayout_Limpar()
+        protected async Task ViewLayout_Limpar()
         {
 
-            Requisicao = new Utils.Models.Requisicao();
-
-
             EditItemViewLayout.BtnSalvar.Disabled = false;
-            EditItemViewLayout.BtnExcluir.Disabled = false;
-            EditItemViewLayout.ItemViewButtons[0].Disabled = false;
+            EditItemViewLayout.Disable(this, false);
 
-            //Principal
-            TxtCodigo.Text = null;
-            TxtDescricao.Text = null;
+            TxtCodigo.ReadOnly = true;
 
-            DtpSaida.Value = DateTime.Now;
-            DtpEntrada.Value = null;
-
-            TxtObservacao.Text = null;
-
+            EditItemViewLayout.LimparCampos(this);
 
             ViewRequisicaoItem.ListItemViewLayout.ListItemView = new List<RequisicaoItem>();
             ViewRequisicaoItem.ListItemViewLayout.Refresh();
 
-
             TxtDescricao.Focus();
+
+            await TabSet.Active("Principal");
 
         }
 
         protected async Task ViewLayout_Carregar(object args)
         {
 
-            var Request = new Request();
+            var Query = new HelpQuery(typeof(TValue).Name);
 
-            Request.Parameters.Add(new Parameters("RequisicaoID", ((Utils.Models.Requisicao)args)?.RequisicaoID));
+            Query.AddInclude("RequisicaoItem");
+            Query.AddInclude("RequisicaoItem.Produto");
+            Query.AddInclude("RequisicaoItem.EstoqueMovimentoItemEntrada");
+            Query.AddWhere("RequisicaoID == @0", ((Utils.Models.Requisicao)args)?.RequisicaoID);
+            Query.AddTake(1);
 
-            Requisicao = await HelpHttp.Send<Utils.Models.Requisicao>(Http, "api/Requisicao/Get", Request);
-
-
-            EditItemViewLayout.BtnSalvar.Disabled = (Requisicao.DataEntrada != null);
-            EditItemViewLayout.BtnExcluir.Disabled = (Requisicao.DataEntrada != null);
-            EditItemViewLayout.ItemViewButtons[0].Disabled = (Requisicao.DataEntrada != null);
-            
-
-            //Principal
-            TxtCodigo.Text = Requisicao.RequisicaoID.ToStringOrNull();
-            //TxtDescricao.Text = Requisicao.Descricao.ToStringOrNull();
-
-            DtpSaida.Value = Requisicao.DataSaida;
-            DtpEntrada.Value = Requisicao.DataEntrada;
-
-            TxtObservacao.Text = Requisicao.Observacao.ToStringOrNull();
+            EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<Utils.Models.Requisicao>(Query);
 
 
-            ViewRequisicaoItem.ListItemViewLayout.ListItemView = Requisicao.RequisicaoItem.ToList();
+            EditItemViewLayout.BtnSalvar.Disabled = EditItemViewLayout.ViewModel.DataEntrada != null;
+            EditItemViewLayout.ItemViewButtons[0].Disabled = EditItemViewLayout.ViewModel.DataEntrada != null;
+
+            EditItemViewLayout.Disable(this, EditItemViewLayout.ViewModel.DataEntrada != null);
+            TxtCodigo.ReadOnly = true;
+
+            TxtCodigo.Text = EditItemViewLayout.ViewModel.RequisicaoID.ToStringOrNull();
+
+            DtpSaida.Value = EditItemViewLayout.ViewModel.DataSaida;
+            DtpEntrada.Value = EditItemViewLayout.ViewModel.DataEntrada;
+            TxtObservacao.Text = EditItemViewLayout.ViewModel.Observacao.ToStringOrNull();
+
+
+            ViewRequisicaoItem.ListItemViewLayout.ListItemView = EditItemViewLayout.ViewModel.RequisicaoItem.ToList();
             ViewRequisicaoItem.ListItemViewLayout.Refresh();
 
         }
@@ -110,97 +102,139 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
 
             if (DtpSaida.Value == null)
             {
+                await TabSet.Active("Principal");
                 throw new EmptyException("Informe a data da saída!", DtpSaida.Element);
             }
 
-            //Principal
-            Requisicao.RequisicaoID = TxtCodigo.Text.ToIntOrNull();
+            if (DtpEntrada.Value != null)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("Informe a data da entrada somente ao finalizar!", DtpEntrada.Element);
+            }
 
-            Requisicao.DataSaida = DtpSaida.Value;
-            Requisicao.Observacao = TxtObservacao.Text.ToStringOrNull();
+            if (ViewRequisicaoItem.ListItemViewLayout.ListItemView.Count == 0)
+            {
+                await TabSet.Active("Itens");
+                throw new EmptyException("Nenhum item inserido!");
+            }
 
-            Requisicao.RequisicaoItem = ViewRequisicaoItem.ListItemViewLayout.ListItemView;
+            EditItemViewLayout.ViewModel.RequisicaoID = TxtCodigo.Text.ToIntOrNull();
+            EditItemViewLayout.ViewModel.DataSaida = DtpSaida.Value;
+            EditItemViewLayout.ViewModel.DataEntrada = DtpEntrada.Value;
+            EditItemViewLayout.ViewModel.Observacao = TxtObservacao.Text.ToStringOrNull();
 
+            EditItemViewLayout.ViewModel.RequisicaoItem = ViewRequisicaoItem.ListItemViewLayout.ListItemView;
+
+            foreach(var item in EditItemViewLayout.ViewModel.RequisicaoItem)
+            {
+                item.Produto = null;
+            }
 
             var Request = new Request();
 
-            var Requisicoes = new List<Utils.Models.Requisicao> { Requisicao };
+            Request.Parameters.Add(new Parameters(typeof(Utils.Models.Requisicao).Name, new List<object> { EditItemViewLayout.ViewModel }));
 
-            Request.Parameters.Add(new Parameters("Requisicoes", Requisicoes));
-
-            Requisicoes = await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Save", Request);
-
-            Requisicao = Requisicoes.FirstOrDefault();
+            EditItemViewLayout.ViewModel = (await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Salvar", Request)).FirstOrDefault();
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
-            {
-                await EditItemViewLayout.Carregar(Requisicao);
-            }
+                await EditItemViewLayout.Carregar(EditItemViewLayout.ViewModel);
             else
-            {
                 EditItemViewLayout.ViewModal.Hide();
+
+        }
+
+        protected async void ViewModalFinalizar_Validate()
+        {
+
+            if (DtpFinalizarEntrada.Value == null)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Informe a data da entrada!");
+                DtpFinalizarEntrada.Focus();
+                return;
             }
-            
+
+            ViewModalFinalizar.Confirm();
+
         }
 
         protected async void BtnFinalizar_Click()
         {
+
+            var List = EditItemViewLayout.SelectedValue();
+
             try
             {
 
-                if (DtpEntrada.Value == null)
+                foreach (var item in List)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", "Informe a data da entrada!");
-                    DtpEntrada.Focus();
-                    return;
+                    if (item.DataEntrada != null)
+                    {
+                        await JSRuntime.InvokeVoidAsync("alert", "Requisição Nº " + item.RequisicaoID + " já está finalizada!");
+                        return;
+                    }
                 }
 
-                await HelpLoading.Show(this, "Finalizado...");
+                DateTime? DataEntrada = null;
 
-                EditItemViewLayout.ItemViewMode = ItemViewMode.New;
+                //Verifica se está finalizando pelo modal
+                if (!EditItemViewLayout.ViewModal.Open)
+                {
+                    var Confirm = await ViewModalFinalizar.ShowAsync();
+                    if (!Confirm) return;
 
-                await ViewLayout_Salvar();
+                    DataEntrada = DtpFinalizarEntrada.Value;
+                }
+                else
+                {
+                    if (DtpEntrada.Value == null)
+                    {
+                        await JSRuntime.InvokeVoidAsync("alert", "Informe a data da entrada!");
+                        DtpEntrada.Focus();
+                        return;
+                    }
 
-                //Editar dados
-                Requisicao.DataEntrada = DtpEntrada.Value;
+                    DataEntrada = DtpEntrada.Value;
 
+                }
+
+
+
+                foreach (var item in List)
+                {
+                    item.DataEntrada = DataEntrada;
+                }
 
                 var Request = new Request();
 
-                var Requisicoes = new List<Utils.Models.Requisicao> { Requisicao };
+                Request.Parameters.Add(new Parameters("Requisicao", List));
 
-                Request.Parameters.Add(new Parameters("Requisicoes", Requisicoes));
+                List = await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Finalizar", Request);
 
-                Requisicoes = await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Finalizar", Request);
-
-                Requisicao = Requisicoes.FirstOrDefault();
+                EditItemViewLayout.ViewModel = List.FirstOrDefault();
 
                 EditItemViewLayout.ViewModal.Hide();
 
-                await ListItemViewLayout.ShowToast("", "Requisição finalizada com sucesso!");
+                await ListItemViewLayout.ShowToast("Informação:", "Requisição finalizada com sucesso!", "e-toast-success", "e-success toast-icons");
+
+                await ListItemViewLayout.BtnPesquisar_Click();
+
 
             }
             catch (Exception ex)
             {
+
+                foreach(var item in List)
+                {
+                    item.DataEntrada = null;
+                }
+
                 await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
-            finally
-            {
-                await HelpLoading.Hide(this);
             }
         }
 
         protected async Task ViewLayout_Excluir()
         {
-
-            var Request = new Request();
-
-            var Requisicoes = new List<int?> { Requisicao.RequisicaoID };
-
-            Request.Parameters.Add(new Parameters("Requisicoes", Requisicoes));
-
-            await HelpHttp.Send(Http, "api/Requisicao/Delete", Request);
-
+            await EditItemViewLayout.Delete(EditItemViewLayout.ViewModel);
         }
     }
 }

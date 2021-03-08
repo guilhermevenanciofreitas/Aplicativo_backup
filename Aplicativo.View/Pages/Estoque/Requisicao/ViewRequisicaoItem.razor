@@ -4,6 +4,7 @@
                     TValue="RequisicaoItem"
                     Simples="true"
                     Height="280px"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
@@ -15,7 +16,7 @@
                             OnLimpar="ViewLayout_Limpar"
                             OnCarregar="ViewLayout_Carregar"
                             OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<RequisicaoItem>() { RequisicaoItem }))">
+                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
             <View>
                 <Box Padding="3">
 

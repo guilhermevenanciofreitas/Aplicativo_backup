@@ -1,55 +1,58 @@
-﻿@inherits ViewRequisicaoPage
+﻿@inherits ViewRequisicaoPage<Requisicao>
+
+<ViewModal @ref="ViewModalFinalizar" Title="Finalizar" Width="400">
+    <Box Padding="3">
+        <DateTimePicker @ref="DtpFinalizarEntrada" _Label="Entrada"></DateTimePicker>
+    </Box>
+    <Button OnClick="ViewModalFinalizar_Validate" Variant="@ButtonVariant.Contained" Style="color: #fff; background-color: #5cb85c; width: 130px">Confirmar</Button>
+</ViewModal>
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
                     Title="Requisição"
                     Width="1250px"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
                     OnExcluir="ViewLayout_Excluir">
     <View>
 
-        <Box Padding="3">
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <Box Padding="3">
 
-            <div class="row">
-
-                <div class="col-md-1 col-sm-6">
-                    <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
-                </div>
-
-                <div class="col-md-5 col-sm-6">
-                    <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
-                </div>
-
-
-                <div class="col-md-5 col-sm-12">
-                    <div class="col-md-6 col-sm-6">
-                        <DateTimePicker @ref="DtpSaida" _Label="Saída"></DateTimePicker>
+                    <div class="row">
+                        <div class="col-md-1 col-sm-6">
+                            <TextBox @ref="TxtCodigo" _Label="Número"></TextBox>
+                        </div>
+                        <div class="col-md-5 col-sm-6">
+                            <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
+                        </div>
+                        <div class="col-md-5 col-sm-12">
+                            <div class="col-md-6 col-sm-6">
+                                <DateTimePicker @ref="DtpSaida" _Label="Saída"></DateTimePicker>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <DateTimePicker @ref="DtpEntrada" _Label="Entrada"></DateTimePicker>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        <DateTimePicker @ref="DtpEntrada" _Label="Entrada"></DateTimePicker>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
+                        </div>
                     </div>
-                </div>
 
-
-
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 col-sm-12">
-                    <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12 col-sm-12">
+                </Box>
+            </TabPage>
+            <TabPage Id="Itens" Title="Itens">
+                <Box Padding="3">
                     <ViewRequisicaoItem @ref="ViewRequisicaoItem"></ViewRequisicaoItem>
-                </div>
-            </div>
-
-        </Box>
+                </Box>
+            </TabPage>
+        </TabSet>
 
     </View>
 </EditItemViewLayout>

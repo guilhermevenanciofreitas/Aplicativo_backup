@@ -1,8 +1,8 @@
-﻿@inherits ViewUsuarioPage<Usuario>
+﻿@inherits ViewPessoaPage<Pessoa>
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
-                    Title="Usuário"
+                    Title="@Title"
                     Width="1250px"
                     OnPageLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
@@ -22,25 +22,16 @@
                         </div>
 
                         <div class="col-md-5 col-sm-6">
-                            <TextBox @ref="TxtLogin" _Label="Login"></TextBox>
+                            <TextBox @ref="TxtRazaoSocial" _Label="Razão social" _AutoFocus="true"></TextBox>
                         </div>
 
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha"></TextBox>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha"></TextBox>
-                        </div>
                     </div>
 
                 </Box>
             </TabPage>
-            <TabPage Id="Email" Title="Email">
+            <TabPage Id="Endereco" Title="Endereço">
                 <Box Padding="3">
-                    <ViewUsuarioEmail @ref="ViewUsuarioEmail"></ViewUsuarioEmail>
+                    <ViewPessoaEndereco @ref="ViewPessoaEndereco"></ViewPessoaEndereco>
                 </Box>
             </TabPage>
         </TabSet>

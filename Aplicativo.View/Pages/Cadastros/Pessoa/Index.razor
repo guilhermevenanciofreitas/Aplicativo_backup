@@ -1,25 +1,22 @@
-﻿@page "/"
-@page "/Cadastros/Usuarios"
-
-@inherits IndexPage<Usuario>
+﻿@inherits IndexPage<Pessoa>
 
 <ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="Usuario"
+                    TValue="Pessoa"
                     OnPageLoad="ViewLayout_PageLoad"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
-        <ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>
+        <ViewPessoa @ref="View" ListItemViewLayout="ListItemViewLayout" Title="@TitleView"></ViewPessoa>
     </View>
     <ItemView>
         @{
-            var item = (Usuario)context;
+            var item = (Pessoa)context;
 
-            <ListItemText Primary="@item.Login">
+            <ListItemText Primary="@item.RazaoSocial">
                 <SecondaryContent>
                     <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Login
+                        @item.RazaoSocial
                     </Typography>
                     — I'll be in your neighborhood
                 </SecondaryContent>
@@ -27,8 +24,6 @@
         }
     </ItemView>
     <GridView>
-        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
-        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
-        <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
+        <GridColumn Field="RazaoSocial" HeaderText="Razão Social" Width="300"></GridColumn>
     </GridView>
 </ListItemViewLayout>

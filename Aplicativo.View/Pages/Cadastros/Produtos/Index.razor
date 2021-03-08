@@ -1,14 +1,15 @@
 ﻿@page "/Cadastros/Produtos"
 
-@inherits ListProdutoPage
+@inherits IndexPage<Produto>
 
 <ListItemViewLayout @ref="ListItemViewLayout"
                     TValue="Produto"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
-        <ViewProduto @ref="ViewProduto" ListItemViewLayout="ListItemViewLayout"></ViewProduto>
+        <ViewProduto @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewProduto>
     </View>
     <ItemView>
         @{

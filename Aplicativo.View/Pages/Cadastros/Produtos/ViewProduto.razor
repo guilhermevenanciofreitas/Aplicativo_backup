@@ -1,9 +1,10 @@
-﻿@inherits ViewProdutoPage
+﻿@inherits ViewProdutoPage<Produto>
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
                     Title="Produto"
                     Width="1250px"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -50,3 +51,56 @@
 
     </View>
 </EditItemViewLayout>
+
+@*@inherits ViewProdutoPage
+
+    <EditItemViewLayout @ref="EditItemViewLayout"
+                        ListItemViewLayout="ListItemViewLayout"
+                        Title="Produto"
+                        Width="1250px"
+                        OnLimpar="ViewLayout_Limpar"
+                        OnCarregar="ViewLayout_Carregar"
+                        OnSalvar="ViewLayout_Salvar"
+                        OnExcluir="ViewLayout_Excluir">
+        <View>
+
+            <TabSet @ref="TabSet" Changed="StateHasChanged">
+                <TabPage Id="Principal" Title="Principal">
+                    <Box Padding="3">
+
+                        <div class="row">
+
+                            <div class="col-md-1 col-sm-6">
+                                <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
+                            </div>
+
+                            <div class="col-md-5 col-sm-6">
+                                <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
+                            </div>
+
+                        </div>
+
+                    </Box>
+                </TabPage>
+                <TabPage Id="Tributacao" Title="Tributação">
+                    <Box Padding="3">
+
+                        <div class="row">
+
+                            <div class="col-md-5 col-sm-12">
+                                <DropDownList @ref="DplOrigem" _Label="Origem"></DropDownList>
+                            </div>
+
+                        </div>
+
+                    </Box>
+                </TabPage>
+                <TabPage Id="Fornecedores" Title="Fornecedores">
+                    <Box Padding="3">
+                        <ViewProdutoFornecedor @ref="ViewProdutoFornecedor"></ViewProdutoFornecedor>
+                    </Box>
+                </TabPage>
+            </TabSet>
+
+        </View>
+    </EditItemViewLayout>*@

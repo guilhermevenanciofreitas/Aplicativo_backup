@@ -1,14 +1,15 @@
 ﻿@page "/Estoque/Requisicao"
 
-@inherits ListRequisicaoPage
+@inherits IndexPage<Requisicao>
 
 <ListItemViewLayout @ref="ListItemViewLayout"
                     TValue="Requisicao"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnPesquisar="ViewLayout_Pesquisar"
                     OnItemView="ViewLayout_ItemView"
                     OnDelete="ViewLayout_Delete">
     <View>
-        <ViewRequisicao @ref="ViewRequisicao" ListItemViewLayout="ListItemViewLayout"></ViewRequisicao>
+        <ViewRequisicao @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewRequisicao>
     </View>
     <ItemView>
         @{
@@ -17,7 +18,7 @@
             <ListItemText Primary="@item.Observacao">
                 <SecondaryContent>
                     <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @*@item.Descricao*@
+                        @item.Observacao
                     </Typography>
                     — I'll be in your neighborhood
                 </SecondaryContent>
@@ -25,7 +26,8 @@
         }
     </ItemView>
     <GridView>
-        <GridColumn Field="RequisicaoID" HeaderText="Código" Width="50"></GridColumn>
-        <GridColumn Field="Status" HeaderText="Status" Width="50"></GridColumn>
+        <GridColumn Field="RequisicaoID" HeaderText="Número" Width="40"></GridColumn>
+        <GridColumn Field="Observacao" HeaderText="Observacao" Width="300"></GridColumn>
+        <GridColumn Field="Status" HeaderText="Status" Width="100"></GridColumn>
     </GridView>
 </ListItemViewLayout>

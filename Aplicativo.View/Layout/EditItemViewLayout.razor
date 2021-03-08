@@ -10,7 +10,7 @@
     }
 </style>
 
-<ViewModal @ref="ViewModal" FullScreen="true" Title="@Title" Width="@Width">
+<ViewModal @ref="ViewModal" Overlay="!Simples" FullScreen="true" Title="@Title" Width="@Width" ZIndex="Simples ? 8001 : 8000">
 
     @if (HelpParametros.Template == Template.Mobile)
     {
@@ -45,7 +45,7 @@
                     }
                     @if (ItemViewMode == ItemViewMode.Edit)
                     {
-                        @foreach (var item in ItemViewButtons)
+                        @foreach (var item in ItemViewButtons.Where(c => c.Visible))
                         {
                             <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); item.OnClick(); })">
                                 @item.Label
@@ -84,7 +84,7 @@
                     @BtnSalvar.Label
                 </ChildContent>
             </Button>
-            @if (ItemViewMode == ItemViewMode.Edit)
+            @if (ItemViewMode == ItemViewMode.Edit && BtnExcluir.Visible)
             {
                 <Button @ref="BtnExcluir.Button" Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Disabled="BtnExcluir.Disabled" Style=@("color: #fff; background-color: #df4759; width:" + BtnExcluir.Width)>
                     <StartIcon>
@@ -98,7 +98,7 @@
 
             @if (ItemViewMode == ItemViewMode.Edit)
             {
-                @foreach (var item in ItemViewButtons)
+                @foreach (var item in ItemViewButtons.Where(c => c.Visible))
                 {
                     <Button @ref="item.Button" Variant="@ButtonVariant.Contained" OnClick="@item.OnClick" Disabled="item.Disabled">
                         @*<StartIcon>

@@ -6,14 +6,14 @@
     <ToastPosition X="Center" Y="Bottom"></ToastPosition>
 </SfToast>
 
-<ViewModal @ref="ViewFiltro" FullScreen="false" Title="Filtro">
+<ViewModal @ref="ViewFiltro" FullScreen="false" Title="Filtro" Width="500px">
     @if (HelpParametros.Template == Template.Mobile)
     {
         <DialogTitle Style="marging: 0px; padding: 16px;" DisableTypography>
             <Typography Variant="@TypographyVariant.H6">
                 Filtro
             </Typography>
-            <IconButton aria-label="close" Style="top: 8px; color: #9e9e9e; right: 8px; position: absolute;" OnClick="ViewFiltro_Close">
+            <IconButton aria-label="close" Style="top: 8px; color: #9e9e9e; right: 8px; position: absolute;" OnClick="ViewFiltro.Hide">
                 <CloseIcon />
             </IconButton>
         </DialogTitle>
@@ -71,7 +71,7 @@
                     Marcar todos
                 </MenuItem>
 
-                @foreach (var item in ItemViewButtons)
+                @foreach (var item in ItemViewButtons.Where(c => c.Visible))
                 {
                     <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); item.OnClick(); })">
                         @item.Label
@@ -101,19 +101,22 @@
             }
             else
             {
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style="color: #fff; background-color: #df4759; width: 130px">
-                    <StartIcon>
-                        <DeleteIcon />
-                    </StartIcon>
-                    <ChildContent>
-                        Excluir
-                    </ChildContent>
-                </Button>
+                if (BtnExcluir.Visible)
+                {
+                    <Button @ref="BtnExcluir.Button" Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Disabled="BtnExcluir.Disabled" Style=@("color: #fff; background-color: #df4759; width:" + BtnExcluir.Width)>
+                        <StartIcon>
+                            <DeleteIcon />
+                        </StartIcon>
+                        <ChildContent>
+                            @BtnExcluir.Label
+                        </ChildContent>
+                    </Button>
+                }
             }
 
             @if (ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
             {
-                @foreach (var item in ItemViewButtons)
+                @foreach (var item in ItemViewButtons.Where(c => c.Visible))
                 {
                     <Button Variant="@ButtonVariant.Contained" OnClick="@item.OnClick">
                         @*<StartIcon>
@@ -210,7 +213,7 @@ else
         <GridColumns>
             <GridColumn Width="60" AllowSorting="false">
                 <HeaderTemplate>
-                    <Checkbox OnChange="ListItemViewHeeader_Change" Checked="@(ListItemView.Any() && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() != ListItemView.Count)" />
+                    <Checkbox OnChange="GridViewItemHeader_Change" Checked="@(ListItemView.Any() && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == ListItemView.Count)" Indeterminate="@(ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) && ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() != ListItemView.Count)" />
                 </HeaderTemplate>
                 <Template>
                     @{

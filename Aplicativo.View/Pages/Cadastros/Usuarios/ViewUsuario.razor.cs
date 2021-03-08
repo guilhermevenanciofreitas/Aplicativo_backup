@@ -1,69 +1,47 @@
-﻿using Aplicativo.Utils;
-using Aplicativo.Utils.Helpers;
+﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Skclusive.Material.Icon;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
-    public class ViewUsuarioPage : HelpComponent
+    public partial class ViewUsuarioPage<TValue> : HelpComponent
     {
 
         [Parameter]
-        public ListItemViewLayout<Usuario> ListItemViewLayout { get; set; }
+        public ListItemViewLayout<TValue> ListItemViewLayout { get; set; }
         public EditItemViewLayout<Usuario> EditItemViewLayout { get; set; }
 
+        #region Elements
+        public TextBox TxtCodigo { get; set; }
+        public TextBox TxtLogin { get; set; }
+        public TextBox TxtSenha { get; set; }
+        public TextBox TxtConfirmarSenha { get; set; }
 
-        protected TextBox TxtCodigo { get; set; }
-        protected TextBox TxtNome { get; set; }
-        protected TextBox TxtLogin { get; set; }
-        protected TextBox TxtSenha { get; set; }
-        protected TextBox TxtConfirmarSenha { get; set; }
+        public TabSet TabSet { get; set; }
 
-        protected DatePicker DtpInicio { get; set; }
+        public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
+        #endregion
 
-        protected TabSet TabSet { get; set; }
-
-        protected ViewUsuarioEmail ViewUsuarioEmail { get; set; }
-
-        private Usuario Usuario = new Usuario();
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected void ViewLayout_PageLoad()
         {
-            await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
-            {
-
-                //EditItemViewLayout.ItemViewButtons.Add(new ItemViewButton() { Icon = new FilterListIcon(), Label = "Teste", OnClick = Teste });
-                
-            }
         }
 
         protected async Task ViewLayout_Limpar()
         {
 
-            Usuario = new Usuario();
-
-            TxtCodigo.Text = null;
-            TxtNome.Text = null;
-            TxtLogin.Text = null;
-            TxtSenha.Text = null;
-            TxtConfirmarSenha.Text = null;
-
+            EditItemViewLayout.LimparCampos(this);
 
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
 
-
-            TxtNome.Focus();
+            TxtLogin.Focus();
 
             await TabSet.Active("Principal");
 
@@ -72,31 +50,27 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         protected async Task ViewLayout_Carregar(object args)
         {
 
-            var Request = new Request();
+            var Query = new HelpQuery(typeof(TValue).Name);
 
-            Request.Parameters.Add(new Parameters("UsuarioID", ((Usuario)args)?.UsuarioID));
+            Query.AddInclude("UsuarioEmail");
+            Query.AddWhere("UsuarioID == @0", ((Usuario)args)?.UsuarioID);
+            Query.AddTake(1);
 
-            Usuario = await HelpHttp.Send<Usuario>(Http, "api/Usuario/Get", Request);
+            EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<Usuario>(Query);
 
-            TxtCodigo.Text = Usuario.UsuarioID.ToStringOrNull();
-            TxtNome.Text = Usuario.Nome.ToStringOrNull();
-            TxtLogin.Text = Usuario.Login.ToStringOrNull();
-            TxtSenha.Text = Usuario.Senha.ToStringOrNull();
-            TxtConfirmarSenha.Text = Usuario.Senha.ToStringOrNull();
 
-            ViewUsuarioEmail.ListItemViewLayout.ListItemView = Usuario.UsuarioEmail.ToList();
+            TxtCodigo.Text = EditItemViewLayout.ViewModel.UsuarioID.ToStringOrNull();
+            TxtLogin.Text = EditItemViewLayout.ViewModel.Login.ToStringOrNull();
+            TxtSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
+            TxtConfirmarSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
+
+            ViewUsuarioEmail.ListItemViewLayout.ListItemView = EditItemViewLayout.ViewModel.UsuarioEmail.ToList();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
 
         }
 
         protected async Task ViewLayout_Salvar()
         {
-
-            if (string.IsNullOrEmpty(TxtNome.Text))
-            {
-                await TabSet.Active("Principal");
-                throw new EmptyException("Informe o nome!", TxtNome.Element);
-            }
 
             if (string.IsNullOrEmpty(TxtLogin.Text))
             {
@@ -110,46 +84,28 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
                 throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
             }
 
-            Usuario.UsuarioID = TxtCodigo.Text.ToIntOrNull();
-            Usuario.Nome = TxtNome.Text.ToStringOrNull();
-            Usuario.Login = TxtLogin.Text.ToStringOrNull();
-            Usuario.Senha = TxtSenha.Text.ToStringOrNull();
 
-            Usuario.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView;
+            EditItemViewLayout.ViewModel.UsuarioID = TxtCodigo.Text.ToIntOrNull();
+            EditItemViewLayout.ViewModel.Login = TxtLogin.Text.ToStringOrNull();
+            EditItemViewLayout.ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
 
-            var Request = new Request();
+            EditItemViewLayout.ViewModel.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView;
 
-            var Usuarios = new List<Usuario> { Usuario };
 
-            Request.Parameters.Add(new Parameters("Usuarios", Usuarios));
+            EditItemViewLayout.ViewModel = await EditItemViewLayout.Update(EditItemViewLayout.ViewModel);
 
-            Usuarios = await HelpHttp.Send<List<Usuario>>(Http, "api/Usuario/Save", Request);
-
-            Usuario = Usuarios.FirstOrDefault();
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
-            {
-                await EditItemViewLayout.Carregar(Usuario);
-            }
+                await EditItemViewLayout.Carregar(EditItemViewLayout.ViewModel);
             else
-            {
                 EditItemViewLayout.ViewModal.Hide();
-            }
+          
             
-
         }
 
         protected async Task ViewLayout_Excluir()
         {
-
-            var Request = new Request();
-
-            var Usuarios = new List<int?> { Usuario.UsuarioID };
-
-            Request.Parameters.Add(new Parameters("Usuarios", Usuarios));
-
-            await HelpHttp.Send(Http, "api/Usuario/Delete", Request);
-
+            await EditItemViewLayout.Delete(EditItemViewLayout.ViewModel);
         }
     }
 }

@@ -7,8 +7,6 @@ using Aplicativo.View.Layout;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros.Usuarios
@@ -19,38 +17,25 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public ListItemViewLayout<UsuarioEmail> ListItemViewLayout { get; set; }
         public EditItemViewLayout<UsuarioEmail> EditItemViewLayout { get; set; }
 
-        protected TextBox TxtSmtp { get; set; }
-        protected TextBox TxtPorta { get; set; }
-        protected TextBox TxtEmail { get; set; }
-        protected TextBox TxtSenha { get; set; }
-        protected TextBox TxtConfirmarSenha { get; set; }
+        public TextBox TxtSmtp { get; set; }
+        public TextBox TxtPorta { get; set; }
+        public TextBox TxtEmail { get; set; }
+        public TextBox TxtSenha { get; set; }
+        public TextBox TxtConfirmarSenha { get; set; }
 
-        protected CheckBox ChkSSL { get; set; }
-
-
-        protected UsuarioEmail UsuarioEmail { get; set; }
+        public CheckBox ChkSSL { get; set; }
 
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected void ViewLayout_PageLoad()
         {
-            await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
-            {
-
-            }
         }
 
         protected void ViewLayout_Limpar()
         {
 
-            UsuarioEmail = new UsuarioEmail();
+            EditItemViewLayout.LimparCampos(this);
 
-            TxtSmtp.Text = null;
-            TxtPorta.Text = null;
-            TxtEmail.Text = null;
-            TxtSenha.Text = null;
-            TxtConfirmarSenha.Text = null;
             ChkSSL.Checked = true;
 
         }
@@ -58,20 +43,19 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         protected async Task ViewLayout_ItemView(object args)
         {
             await EditItemViewLayout.Carregar((UsuarioEmail)args);
-            EditItemViewLayout.ViewModal.Show();
         }
 
         protected void ViewLayout_Carregar(object args)
         {
 
-            UsuarioEmail = (UsuarioEmail)args;
+            EditItemViewLayout.ViewModel = (UsuarioEmail)args;
 
-            TxtSmtp.Text = UsuarioEmail.Smtp.ToStringOrNull();
-            TxtPorta.Text = UsuarioEmail.Porta.ToStringOrNull();
-            TxtEmail.Text = UsuarioEmail.Email.ToStringOrNull();
-            TxtSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            TxtConfirmarSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            ChkSSL.Checked = UsuarioEmail.Ssl.ToBoolean();
+            TxtSmtp.Text = EditItemViewLayout.ViewModel.Smtp.ToStringOrNull();
+            TxtPorta.Text = EditItemViewLayout.ViewModel.Porta.ToStringOrNull();
+            TxtEmail.Text = EditItemViewLayout.ViewModel.Email.ToStringOrNull();
+            TxtSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
+            TxtConfirmarSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
+            ChkSSL.Checked = EditItemViewLayout.ViewModel.Ssl.ToBoolean();
 
         }
 
@@ -79,39 +63,30 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         {
 
             if (string.IsNullOrEmpty(TxtSmtp.Text))
-            {
                 throw new EmptyException("Informe o SMTP!", TxtSmtp.Element);
-            }
-
+            
             if (string.IsNullOrEmpty(TxtPorta.Text))
-            {
                 throw new EmptyException("Informe a porta!", TxtPorta.Element);
-            }
-
+           
             if (string.IsNullOrEmpty(TxtEmail.Text))
-            {
                 throw new EmptyException("Informe o email!", TxtEmail.Element);
-            }
 
             if (string.IsNullOrEmpty(TxtSenha.Text))
-            {
                 throw new EmptyException("Informe a senha!", TxtSenha.Element);
-            }
-
+            
             if (TxtSenha.Text != TxtConfirmarSenha.Text)
-            {
                 throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
-            }
+            
 
-            UsuarioEmail.Smtp = TxtSmtp.Text.ToStringOrNull();
-            UsuarioEmail.Porta = TxtPorta.Text.ToIntOrNull();
-            UsuarioEmail.Email = TxtEmail.Text.ToStringOrNull();
-            UsuarioEmail.Senha = TxtSenha.Text.ToStringOrNull();
-            UsuarioEmail.Ssl = ChkSSL.Checked;
+            EditItemViewLayout.ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
+            EditItemViewLayout.ViewModel.Porta = TxtPorta.Text.ToIntOrNull();
+            EditItemViewLayout.ViewModel.Email = TxtEmail.Text.ToStringOrNull();
+            EditItemViewLayout.ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
+            EditItemViewLayout.ViewModel.Ssl = ChkSSL.Checked;
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(UsuarioEmail);
+                ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
             }
             EditItemViewLayout.ViewModal.Hide();
 

@@ -26,6 +26,7 @@ namespace Aplicativo.View.Helpers
 
         protected Parametros Parametros { get; set; }
 
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);

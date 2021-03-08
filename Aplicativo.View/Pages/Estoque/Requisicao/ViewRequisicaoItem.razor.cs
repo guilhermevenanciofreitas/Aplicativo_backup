@@ -1,14 +1,10 @@
-﻿using Aplicativo.Utils;
-using Aplicativo.Utils.Helpers;
+﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
-using Microsoft.JSInterop;
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Mail;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Estoque.Requisicao
@@ -20,98 +16,71 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
         public EditItemViewLayout<RequisicaoItem> EditItemViewLayout { get; set; }
 
 
-        protected TextBox TxtQuantidade { get; set; }
-
-        protected TextBox TxtCodigoBarras { get; set; }
-
-        protected RequisicaoItem RequisicaoItem { get; set; }
+        public TextBox TxtQuantidade { get; set; }
+        public TextBox TxtCodigoBarras { get; set; }
 
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected void ViewLayout_PageLoad()
         {
-            await base.OnAfterRenderAsync(firstRender);
 
-            if (firstRender)
-            {
+            EditItemViewLayout.BtnSalvar.Label = "Confirmar";
+            EditItemViewLayout.BtnSalvar.Width = "140px";
 
-                EditItemViewLayout.BtnSalvar.Label = "Confirmar";
-                EditItemViewLayout.BtnSalvar.Width = "140px";
-
-            }
         }
-
+ 
         protected void ViewLayout_Limpar()
         {
 
-            RequisicaoItem = new RequisicaoItem();
+            EditItemViewLayout.LimparCampos(this);
 
             TxtQuantidade.Text = "1";
-            TxtCodigoBarras.Text = null;
-
-            //TxtSmtp.Text = null;
-            //TxtPorta.Text = null;
-            //TxtEmail.Text = null;
-            //TxtSenha.Text = null;
-            //TxtConfirmarSenha.Text = null;
-            //ChkSSL.Checked = true;
 
         }
 
         protected async Task ViewLayout_ItemView(object args)
         {
             await EditItemViewLayout.Carregar((RequisicaoItem)args);
-            EditItemViewLayout.ViewModal.Show();
         }
 
         protected void ViewLayout_Carregar(object args)
         {
 
-            RequisicaoItem = (RequisicaoItem)args;
+            EditItemViewLayout.ViewModel = (RequisicaoItem)args;
 
-            //TxtSmtp.Text = UsuarioEmail.Smtp.ToStringOrNull();
-            //TxtPorta.Text = UsuarioEmail.Porta.ToStringOrNull();
-            //TxtEmail.Text = UsuarioEmail.Email.ToStringOrNull();
-            //TxtSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            //TxtConfirmarSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            //ChkSSL.Checked = UsuarioEmail.Ssl.ToBoolean();
+            TxtCodigoBarras.Text = EditItemViewLayout.ViewModel.EstoqueMovimentoItemEntrada.CodigoBarra.ToStringOrNull();
 
         }
 
         protected async Task ViewLayout_Salvar()
         {
 
+            EditItemViewLayout.ViewModel.Quantidade = TxtQuantidade.Text.ToDecimalOrNull();
 
-            var Request = new Request();
+            var Query = new HelpQuery(typeof(EstoqueMovimentoItem).Name);
 
+            Query.AddInclude("Produto");
+            Query.AddInclude("EstoqueMovimentoItemEntrada");
+            Query.AddInclude("EstoqueMovimentoItemSaida");
+            Query.AddWhere("EstoqueMovimentoItemEntrada.CodigoBarra == @0", TxtCodigoBarras.Text);
+            Query.AddTake(1);
 
-            RequisicaoItem.Quantidade = TxtQuantidade.Text.ToDecimalOrNull();
-
-
-
-            var Where = new List<Where>();
-
-            Where.Add(new Where("EstoqueMovimentoItemEntrada.CodigoBarra = @0", TxtCodigoBarras.Text));
-
-            Request.Parameters.Add(new Parameters("Where", Where));
-
-            var EstoqueMovimentoItem = await HelpHttp.Send<EstoqueMovimentoItem>(Http, "api/Estoque/GetEstoqueMovimentoItem", Request);
-
+            var EstoqueMovimentoItem = (await HelpHttp.Query<EstoqueMovimentoItem>(Http, Query)).FirstOrDefault();
 
             if (EstoqueMovimentoItem == null)
             {
                 throw new EmptyException("Código de barras não encontrado!", TxtCodigoBarras.Element);
             }
 
-            RequisicaoItem.ProdutoID = EstoqueMovimentoItem.ProdutoID;
-            RequisicaoItem.Produto = EstoqueMovimentoItem.Produto;
-            RequisicaoItem.EstoqueMovimentoItemEntradaID = EstoqueMovimentoItem.EstoqueMovimentoItemEntradaID;
+            EditItemViewLayout.ViewModel.ProdutoID = EstoqueMovimentoItem.ProdutoID;
+            EditItemViewLayout.ViewModel.Produto = EstoqueMovimentoItem.Produto;
+            EditItemViewLayout.ViewModel.EstoqueMovimentoItemEntradaID = EstoqueMovimentoItem.EstoqueMovimentoItemEntradaID;
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(RequisicaoItem);
+                ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
             }
 
-            ListItemViewLayout.GridViewItem.Refresh();
+            ListItemViewLayout.GridViewItem?.Refresh();
             ListItemViewLayout.Refresh();
 
             EditItemViewLayout.ViewModal.Hide();
