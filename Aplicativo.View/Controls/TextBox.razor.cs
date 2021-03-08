@@ -33,6 +33,7 @@ namespace Aplicativo.View.Controls
         [Parameter] public string _Mask { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
+        [Parameter] public bool _AutoFocus { get; set; } = false;
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
 
         public string Label

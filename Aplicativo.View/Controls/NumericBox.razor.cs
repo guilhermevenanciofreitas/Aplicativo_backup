@@ -1,4 +1,5 @@
-﻿using Aplicativo.View.Helpers;
+﻿using Aplicativo.Utils.Helpers;
+using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Material.Text;
@@ -16,9 +17,10 @@ namespace Aplicativo.View.Controls
         public ElementReference Element;
 
         [Parameter] public string _Label { get; set; }
-        [Parameter] public decimal _Value { get; set; }
-        [Parameter] public int _Decimais { get; set; } = 2;
+        [Parameter] public decimal _Text { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
+        [Parameter] public string _Prefix { get; set; } = "";
+        [Parameter] public int _Digits { get; set; } = 2;
         [Parameter] public bool _ReadOnly { get; set; }
         
         public string Label
@@ -34,18 +36,37 @@ namespace Aplicativo.View.Controls
             }
         }
 
-        public decimal Value
+        public async Task<decimal> GetValue()
         {
-            get
+            try
             {
-                return _Value;
+                return (await JSRuntime.InvokeAsync<string>("ElementReference.GetValue", Element)).ToDecimal();
             }
-            set
+            catch (Exception)
             {
-                _Value = value;
-                StateHasChanged();
+                return 0M;
             }
         }
+
+        public async Task SetValue(decimal Value)
+        {
+            await JSRuntime.InvokeVoidAsync("ElementReference.SetValue", Element, Value);
+        }
+
+        //public decimal Text
+        //{
+        //    get
+        //    {
+        //        return _Text;
+        //    }
+        //    set
+        //    {
+        //        _Text = value;
+        //        StateHasChanged();
+        //    }
+        //}
+
+
 
         public string PlaceHolder
         {
@@ -81,10 +102,10 @@ namespace Aplicativo.View.Controls
                 try
                 {
 
-                    Value = _Value;
+                    //Text = _Text;
                     PlaceHolder = _PlaceHolder;
 
-                    await JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, "#,##0." + _Decimais.ToString().PadRight(_Decimais, '0'));
+                    await JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
 
                 }
                 catch (Exception ex)

@@ -1,6 +1,8 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
@@ -14,37 +16,131 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public bool FullScreen { get; set; } = true;
 
-        protected bool Open { get; set; } = false;
+        [Parameter] public int ZIndex { get; set; } = 8000;
 
-        public async void Show()
+        public bool Open { get; set; } = false;
+
+        private bool Confirmed { get; set; }
+
+        [Parameter] public bool Overlay { get; set; } = true;
+
+        public void Show()
         {
-            if (HelpParametros.Template == Template.Mobile)
+
+            ExecutingAsync = false;
+
+            Confirmed = false;
+            Open = true;
+            StateHasChanged();
+        }
+
+        public void Hide()
+        {
+            Confirmed = false;
+            Open = false;
+            if (ExecutingAsync) FinishConfirmToken();
+
+        }
+
+        public void Confirm()
+        {
+            Confirmed = true;
+            Open = false;
+            FinishConfirmToken();
+        }
+
+        private void FinishConfirmToken()
+        {
+
+            if (FinishConfirm.Token.CanBeCanceled)
             {
-                Open = true;
+                FinishConfirm.Cancel();
             }
-            else
-            {
-                await JSRuntime.InvokeVoidAsync("Modal.Show", DivModal);
-            }
+
+            RaiseChange();
 
             StateHasChanged();
 
         }
 
-        public async void Hide()
+
+
+
+
+        [Parameter]
+        public EventCallback OnStateChanged { get; set; }
+
+        internal async virtual void RaiseChange()
         {
-            if (HelpParametros.Template == Template.Mobile)
+            await OnStateChanged.InvokeAsync(null);
+        }
+
+
+        private CancellationTokenSource FinishConfirm;
+
+        private string _stationName;
+
+        public string StationName
+        {
+            get => _stationName;
+            set
             {
-                Open = false;
+                _stationName = value;
+                RaiseChange();
             }
-            else
+        }
+
+        public Worker Working() => new Worker(this);
+
+
+
+        private bool ExecutingAsync { get; set; } = false;
+
+        public async Task<bool> ShowAsync()
+        {
+            try
             {
-                await JSRuntime.InvokeVoidAsync("Modal.Hide", DivModal);
+
+                ExecutingAsync = true;
+
+                Confirmed = false;
+
+                Open = true;
+
+                using (FinishConfirm = new CancellationTokenSource())
+                {
+                    await Task.Delay(-1, FinishConfirm.Token);
+                }
+
+            }
+            catch (TaskCanceledException) 
+            {
+                
             }
 
-            StateHasChanged();
+            ExecutingAsync = false;
+
+            return Confirmed;
 
         }
 
     }
+
+
+    public sealed class Worker : IDisposable
+    {
+        private ViewModalControl _parent;
+
+        public Worker(ViewModalControl parent)
+        {
+            _parent = parent;
+            _parent.RaiseChange();
+        }
+
+        public void Dispose()
+        {
+            _parent.RaiseChange();
+        }
+    }
+
 }

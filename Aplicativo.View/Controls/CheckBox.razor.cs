@@ -15,6 +15,8 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public bool _Checked { get; set; }
 
+        [Parameter] public bool _ReadOnly { get; set; }
+
         [Parameter] public EventCallback Changed { get; set; }
 
         public string Label
@@ -40,6 +42,19 @@ namespace Aplicativo.View.Controls
             {
                 _Checked = value;
                 _Changed(value);
+                StateHasChanged();
+            }
+        }
+
+        public bool ReadOnly
+        {
+            get
+            {
+                return _ReadOnly;
+            }
+            set
+            {
+                _ReadOnly = value;
                 StateHasChanged();
             }
         }
