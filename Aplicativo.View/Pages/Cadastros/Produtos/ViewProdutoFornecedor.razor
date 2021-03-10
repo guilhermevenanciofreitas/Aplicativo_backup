@@ -9,43 +9,37 @@
     <View>
         <EditItemViewLayout @ref="EditItemViewLayout"
                             ListItemViewLayout="ListItemViewLayout"
-                            Title="Email"
+                            Title="Fornecedor"
                             Simples="true"
                             Width="650px"
                             OnLimpar="ViewLayout_Limpar"
                             OnCarregar="ViewLayout_Carregar"
                             OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<ProdutoFornecedor>() { ProdutoFornecedor }))">
+                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
             <View>
                 <Box Padding="3">
 
                     <div class="row">
-                        <div class="col-md-10 col-sm-10">
-                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                        <div class="col-md-3 col-sm-12">
+                            <TextBox @ref="TxtCodigo" _Label="Cód. Fornec."></TextBox>
+                        </div>
+                        <div class="col-md-9 col-sm-12">
+                            <TextBox @ref="TxtFornecedor" _Label="Fornecedor"></TextBox>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                            <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3"></NumericBox>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                        <div class="col-md-3 col-sm-12">
+                            <NumericBox @ref="TxtPreco" _Label="Preço Un."></NumericBox>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-10 col-sm-12">
-                            <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true"></CheckBox>
+                        <div class="col-md-3 col-sm-12">
+                            <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true"></NumericBox>
                         </div>
                     </div>
 
@@ -68,10 +62,11 @@
         }
     </ItemView>
     <GridView>
-        <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="220"></GridColumn>
-        <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="80"></GridColumn>
-        <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="80"></GridColumn>
-        <GridColumn Field="Contem" HeaderText="Contém" Width="70" TextAlign="TextAlign.Right"></GridColumn>
-        <GridColumn Field="Preco" HeaderText="Preço Un." Width="70" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
+        <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="100"></GridColumn>
+        <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="250"></GridColumn>
+        <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="140"></GridColumn>
+        <GridColumn Field="Contem" HeaderText="Contém" Width="80" Format="N3" TextAlign="TextAlign.Right"></GridColumn>
+        <GridColumn Field="Preco" HeaderText="Preço Un." Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
+        <GridColumn Field="Total" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
     </GridView>
 </ListItemViewLayout>

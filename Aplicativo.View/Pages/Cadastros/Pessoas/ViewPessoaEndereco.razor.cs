@@ -8,7 +8,7 @@ using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Cadastros.Pessoa
+namespace Aplicativo.View.Pages.Cadastros.Pessoas
 {
     public class ViewPessoaEnderecoPage : HelpComponent
     {

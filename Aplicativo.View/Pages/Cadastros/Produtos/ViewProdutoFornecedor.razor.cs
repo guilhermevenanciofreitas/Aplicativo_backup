@@ -19,16 +19,12 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         public ListItemViewLayout<ProdutoFornecedor> ListItemViewLayout { get; set; }
         public EditItemViewLayout<ProdutoFornecedor> EditItemViewLayout { get; set; }
 
-        protected TextBox TxtSmtp { get; set; }
-        protected TextBox TxtPorta { get; set; }
-        protected TextBox TxtEmail { get; set; }
-        protected TextBox TxtSenha { get; set; }
-        protected TextBox TxtConfirmarSenha { get; set; }
-
-        protected CheckBox ChkSSL { get; set; }
-
-
-        protected ProdutoFornecedor ProdutoFornecedor { get; set; }
+        public TextBox TxtCodigo { get; set; }
+        public TextBox TxtFornecedor { get; set; }
+        public DropDownList DplUnidadeMedida { get; set; }
+        public NumericBox TxtContem { get; set; }
+        public NumericBox TxtPreco { get; set; }
+        public NumericBox TxtTotal { get; set; }
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -41,52 +37,45 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             }
         }
 
-        protected void ViewLayout_Limpar()
+        protected async void ViewLayout_Limpar()
         {
-
-            ProdutoFornecedor = new ProdutoFornecedor();
-
-            //TxtSmtp.Text = null;
-            //TxtPorta.Text = null;
-            //TxtEmail.Text = null;
-            //TxtSenha.Text = null;
-            //TxtConfirmarSenha.Text = null;
-            //ChkSSL.Checked = true;
-
+            await EditItemViewLayout.LimparCampos(this);
         }
 
         protected async Task ViewLayout_ItemView(object args)
         {
             await EditItemViewLayout.Carregar((ProdutoFornecedor)args);
-            EditItemViewLayout.ViewModal.Show();
         }
 
-        protected void ViewLayout_Carregar(object args)
+        protected async void ViewLayout_Carregar(object args)
         {
 
-            ProdutoFornecedor = (ProdutoFornecedor)args;
+            EditItemViewLayout.ViewModel = (ProdutoFornecedor)args;
 
-            //TxtSmtp.Text = UsuarioEmail.Smtp.ToStringOrNull();
-            //TxtPorta.Text = UsuarioEmail.Porta.ToStringOrNull();
-            //TxtEmail.Text = UsuarioEmail.Email.ToStringOrNull();
-            //TxtSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            //TxtConfirmarSenha.Text = UsuarioEmail.Senha.ToStringOrNull();
-            //ChkSSL.Checked = UsuarioEmail.Ssl.ToBoolean();
+            TxtCodigo.Text = EditItemViewLayout.ViewModel.CodigoFornecedor.ToStringOrNull();
+            TxtFornecedor.Text = EditItemViewLayout.ViewModel.Fornecedor?.NomeFantasia.ToStringOrNull();
+
+            DplUnidadeMedida.SelectedValue = EditItemViewLayout.ViewModel.UnidadeMedidaID.ToStringOrNull();
+            await TxtContem.SetValue(EditItemViewLayout.ViewModel.Contem);
+            await TxtPreco.SetValue(EditItemViewLayout.ViewModel.Preco);
+            await TxtTotal.SetValue(EditItemViewLayout.ViewModel.Contem * EditItemViewLayout.ViewModel.Preco);
+
 
         }
 
-        protected void ViewLayout_Salvar()
+        protected async void ViewLayout_Salvar()
         {
 
-            //UsuarioEmail.Smtp = TxtSmtp.Text.ToStringOrNull();
-            //UsuarioEmail.Porta = TxtPorta.Text.ToIntOrNull();
-            //UsuarioEmail.Email = TxtEmail.Text.ToStringOrNull();
-            //UsuarioEmail.Senha = TxtSenha.Text.ToStringOrNull();
-            //UsuarioEmail.Ssl = ChkSSL.Checked;
+            EditItemViewLayout.ViewModel.CodigoFornecedor = TxtCodigo.Text.ToStringOrNull();
+
+            EditItemViewLayout.ViewModel.UnidadeMedidaID = DplUnidadeMedida.SelectedValue.ToIntOrNull();
+            EditItemViewLayout.ViewModel.Contem = await TxtContem.GetValue();
+            EditItemViewLayout.ViewModel.Preco = await TxtPreco.GetValue();
+
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(ProdutoFornecedor);
+                ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
             }
             EditItemViewLayout.ViewModal.Hide();
 

@@ -1,0 +1,61 @@
+﻿@inherits ViewPessoaContatoPage
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="PessoaContato"
+                    Simples="true"
+                    Height="300px"
+                    OnPageLoad="ViewLayout_PageLoad"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <EditItemViewLayout @ref="EditItemViewLayout"
+                            ListItemViewLayout="ListItemViewLayout"
+                            Title="Contato"
+                            Simples="true"
+                            Width="540px"
+                            OnLimpar="ViewLayout_Limpar"
+                            OnCarregar="ViewLayout_Carregar"
+                            OnSalvar="ViewLayout_Salvar"
+                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
+            <View>
+                <Box Padding="3">
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <TextBox @ref="TxtNome" _Label="Nome" _AutoFocus="true"></TextBox>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <TextBox @ref="TxtTelefone" _Label="Telefone"></TextBox>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <TextBox @ref="TxtEmail" _Label="E-mail" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                        </div>
+                    </div>
+
+                </Box>
+            </View>
+        </EditItemViewLayout>
+    </View>
+    <ItemView>
+        @{
+            var item = (PessoaContato)context;
+
+            <ListItemText Primary="@item.Contato.Nome">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Contato.Nome
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="Contato.Nome" HeaderText="Nome" Width="220"></GridColumn>
+        <GridColumn Field="Contato.Telefone" HeaderText="Telefone" Width="120"></GridColumn>
+        <GridColumn Field="Contato.Email" HeaderText="E-mail" Width="400"></GridColumn>
+    </GridView>
+</ListItemViewLayout>
