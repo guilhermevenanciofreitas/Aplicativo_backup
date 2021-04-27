@@ -1,0 +1,31 @@
+﻿@page "/Cadastros/FormaPagamento"
+
+@inherits IndexPage<FormaPagamento>
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="FormaPagamento"
+                    OnPageLoad="ViewLayout_PageLoad"
+                    OnPesquisar="ViewLayout_Pesquisar"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <ViewFormaPagamento @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewFormaPagamento>
+    </View>
+    <ItemView>
+        @{
+            var item = (FormaPagamento)context;
+
+            <ListItemText Primary="@item.Descricao">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Descricao
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

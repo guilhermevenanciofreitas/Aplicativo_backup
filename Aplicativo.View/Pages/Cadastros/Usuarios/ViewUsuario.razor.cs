@@ -31,7 +31,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         protected async Task ViewLayout_Limpar()
         {
 
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
 
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
@@ -70,13 +70,13 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (string.IsNullOrEmpty(TxtLogin.Text))
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe o login!", TxtLogin.Element);
+                await HelpEmptyException.New(JSRuntime, TxtLogin.Element, "Informe o login!");
             }
 
             if (TxtSenha.Text != TxtConfirmarSenha.Text)
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
+                await HelpEmptyException.New(JSRuntime, TxtConfirmarSenha.Element, "A confirmação da senha está diferente da senha informada!");
             }
 
 

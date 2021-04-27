@@ -59,23 +59,23 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
         }
 
-        protected void ViewLayout_Salvar()
+        protected async Task ViewLayout_Salvar()
         {
 
             if (string.IsNullOrEmpty(TxtSmtp.Text))
-                throw new EmptyException("Informe o SMTP!", TxtSmtp.Element);
+                await HelpEmptyException.New(JSRuntime, TxtSmtp.Element, "Informe o SMTP!");
             
             if (string.IsNullOrEmpty(TxtPorta.Text))
-                throw new EmptyException("Informe a porta!", TxtPorta.Element);
+                await HelpEmptyException.New(JSRuntime, TxtPorta.Element, "Informe a porta!");
            
             if (string.IsNullOrEmpty(TxtEmail.Text))
-                throw new EmptyException("Informe o email!", TxtEmail.Element);
+                await HelpEmptyException.New(JSRuntime, TxtEmail.Element, "Informe o email!");
 
             if (string.IsNullOrEmpty(TxtSenha.Text))
-                throw new EmptyException("Informe a senha!", TxtSenha.Element);
+                await HelpEmptyException.New(JSRuntime, TxtSenha.Element, "Informe a senha!");
             
             if (TxtSenha.Text != TxtConfirmarSenha.Text)
-                throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
+                await HelpEmptyException.New(JSRuntime, TxtConfirmarSenha.Element, "A confirmação da senha está diferente da senha informada!");
             
 
             EditItemViewLayout.ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();

@@ -57,7 +57,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task ViewLayout_Limpar()
         {
 
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
 
             DtpVencimento.Value = DateTime.Today;
             TxtParcelas.Value = 1;

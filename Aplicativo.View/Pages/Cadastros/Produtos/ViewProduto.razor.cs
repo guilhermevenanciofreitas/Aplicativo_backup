@@ -49,7 +49,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         protected async Task ViewLayout_Limpar()
         {
 
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
 
             ViewProdutoFornecedor.ListItemViewLayout.ListItemView = new List<ProdutoFornecedor>();
             ViewProdutoFornecedor.ListItemViewLayout.Refresh();
@@ -93,7 +93,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             if (string.IsNullOrEmpty(TxtDescricao.Text))
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe a descrição!", TxtDescricao.Element);
+                await HelpEmptyException.New(JSRuntime, TxtDescricao.Element, "Informe a descrição!");
             }
 
 

@@ -103,19 +103,19 @@ namespace Aplicativo.View.Pages.Estoque.Requisicoes
             if (DtpSaida.Value == null)
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe a data da saída!", DtpSaida.Element);
+                await HelpEmptyException.New(JSRuntime, DtpSaida.Element, "Informe a data da saída!");
             }
 
             if (DtpEntrada.Value != null)
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe a data da entrada somente ao finalizar!", DtpEntrada.Element);
+                await HelpEmptyException.New(JSRuntime, DtpEntrada.Element, "Informe a data da entrada somente ao finalizar!");
             }
 
             if (ViewRequisicaoItem.ListItemViewLayout.ListItemView.Count == 0)
             {
                 await TabSet.Active("Itens");
-                throw new EmptyException("Nenhum item inserido!");
+                await HelpEmptyException.New(JSRuntime, "Nenhum item inserido!");
             }
 
             EditItemViewLayout.ViewModel.RequisicaoID = TxtCodigo.Text.ToIntOrNull();

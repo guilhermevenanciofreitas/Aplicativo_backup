@@ -52,14 +52,16 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         }
 
-        protected void ViewLayout_Salvar()
+        protected async Task ViewLayout_Salvar()
         {
 
             //if (string.IsNullOrEmpty(TxtCEP.Text))
             //    throw new EmptyException("Informe o CEP!", TxtCEP.Element);
 
             if (string.IsNullOrEmpty(TxtLogradouro.Text))
-                throw new EmptyException("Informe o logradouro!", TxtLogradouro.Element);
+            {
+                await HelpEmptyException.New(JSRuntime, TxtLogradouro.Element, "Informe o logradouro!");
+            }
             
 
             if (EditItemViewLayout.ViewModel.Endereco == null)

@@ -71,7 +71,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
         protected async Task ViewLayout_Limpar()
         {
 
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
 
             DplTipo.SelectedValue = ((int)TipoPessoa.Juridica).ToString();
 
@@ -181,7 +181,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             if (string.IsNullOrEmpty(TxtRazaoSocial.Text))
             {
                 await TabSet.Active("Principal");
-                throw new EmptyException("Informe a razão social!", TxtRazaoSocial.Element);
+                await HelpEmptyException.New(JSRuntime, TxtRazaoSocial.Element, "Informe a razão social!");
             }
 
             EditItemViewLayout.ViewModel.PessoaID = TxtCodigo.Text.ToIntOrNull();

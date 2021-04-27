@@ -68,7 +68,7 @@ namespace Aplicativo.View.Pages.Estoque.Requisicoes
 
             if (EstoqueMovimentoItem == null)
             {
-                throw new EmptyException("Código de barras não encontrado!", TxtCodigoBarras.Element);
+                await HelpEmptyException.New(JSRuntime, TxtCodigoBarras.Element, "Código de barras não encontrado!");
             }
 
             EditItemViewLayout.ViewModel.ProdutoID = EstoqueMovimentoItem.ProdutoID;

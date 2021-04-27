@@ -1,0 +1,52 @@
+﻿@inherits ViewContaBancariaPage<ContaBancaria>
+
+<EditItemViewLayout @ref="EditItemViewLayout"
+                    ListItemViewLayout="ListItemViewLayout"
+                    Title="Conta bancária"
+                    Width="700px"
+                    OnLimpar="ViewLayout_Limpar"
+                    OnCarregar="ViewLayout_Carregar"
+                    OnSalvar="ViewLayout_Salvar"
+                    OnExcluir="ViewLayout_Excluir">
+    <View>
+
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <Box Padding="3">
+
+                    <div class="row">
+
+                        <div class="col-md-2 col-sm-12">
+                            <div class="form-group">
+                                <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                            </div>
+                        </div>
+
+                        <div class="col-md-10 col-sm-12">
+                            <div class="form-group">
+                                <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true"></TextBox>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @*<div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha"></TextBox>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha"></TextBox>
+                        </div>
+                    </div>*@
+
+                </Box>
+            </TabPage>
+            <TabPage Id="FormasPagamento" Title="Formas de pagamento">
+                <Box Padding="3">
+                    <ViewContaBancariaFormaPagamento @ref="ViewContaBancariaFormaPagamento"></ViewContaBancariaFormaPagamento>
+                </Box>
+            </TabPage>
+        </TabSet>
+
+    </View>
+</EditItemViewLayout>

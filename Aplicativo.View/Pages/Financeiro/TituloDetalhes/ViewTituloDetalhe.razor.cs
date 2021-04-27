@@ -4,8 +4,10 @@ using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
@@ -16,6 +18,10 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         [Parameter]
         public ListItemViewLayout<TValue> ListItemViewLayout { get; set; }
         public EditItemViewLayout<TituloDetalhe> EditItemViewLayout { get; set; }
+
+
+        private decimal pJuros = 0;
+        private decimal pMulta = 0;
 
         #region Elements
 
@@ -51,7 +57,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task ViewLayout_Limpar()
         {
 
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
 
             await TabSet.Active("Principal");
 
@@ -64,11 +70,21 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             var Query = new HelpQuery(typeof(TValue).Name);
 
+
+            Query.AddInclude("ContaBancaria");
+            Query.AddInclude("ContaBancaria.ContaBancariaFormaPagamento");
             Query.AddWhere("TituloDetalheID == @0", ((TituloDetalhe)args)?.TituloDetalheID);
             Query.AddTake(1);
 
             EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<TituloDetalhe>(Query);
 
+
+            var ContaBancariaFormaPagamento = EditItemViewLayout.ViewModel.ContaBancaria.ContaBancariaFormaPagamento.FirstOrDefault(c => c.ContaBancariaID == EditItemViewLayout.ViewModel.ContaBancariaID && c.FormaPagamentoID == EditItemViewLayout.ViewModel.FormaPagamentoID);
+
+            await JSRuntime.InvokeVoidAsync("console.log", ContaBancariaFormaPagamento);
+
+            pJuros = ContaBancariaFormaPagamento?.pJuros ?? 0;
+            pMulta = ContaBancariaFormaPagamento?.pMulta ?? 0;
 
             TxtCodigo.Text = EditItemViewLayout.ViewModel.TituloDetalheID.ToStringOrNull();
             TxtNumeroDocumento.Text = EditItemViewLayout.ViewModel.nDocumento.ToStringOrNull();
@@ -94,7 +110,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             TxtObservacao.Text = EditItemViewLayout.ViewModel.Observacao.ToStringOrNull();
 
-            await DtpVencimento_Change();
+            await DtpVencimento_Leave();
 
         }
 
@@ -139,8 +155,13 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         }
 
 
-        protected async Task DtpVencimento_Change()
+        protected async Task DtpVencimento_Leave()
         {
+
+            if (pJuros == 0 && pMulta == 0)
+            {
+                return;
+            }
 
             if (DtpVencimento.Value < DateTime.Today)
             {
@@ -153,12 +174,12 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                     if (r)
                     {
 
-                        TxtPercJuros.Value = 0.033M;
+                        TxtPercJuros.Value = pJuros;
                         TxtPercJuros_KeyUp();
 
                         TxtDiasAtrasados.Value = (decimal)((DateTime.Today - DtpVencimento.Value)?.TotalDays);
 
-                        TxtPercMulta.Value = 2M;
+                        TxtPercMulta.Value = pMulta;
                         TxtPercMulta_KeyUp();
 
                     }

@@ -24,9 +24,9 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         }
 
-        protected async Task ViewLayout_Limpar()
+        protected void ViewLayout_Limpar()
         {
-            await EditItemViewLayout.LimparCampos(this);
+            EditItemViewLayout.LimparCampos(this);
         }
 
         protected async Task ViewLayout_ItemView(object args)
@@ -45,14 +45,16 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             
         }
 
-        protected void ViewLayout_Salvar()
+        protected async Task ViewLayout_Salvar()
         {
 
             //if (string.IsNullOrEmpty(TxtCEP.Text))
             //    throw new EmptyException("Informe o CEP!", TxtCEP.Element);
 
             if (string.IsNullOrEmpty(TxtNome.Text))
-                throw new EmptyException("Informe o nome!", TxtNome.Element);
+            {
+                await HelpEmptyException.New(JSRuntime, TxtNome.Element, "Informe o nome!");
+            }
             
 
             if (EditItemViewLayout.ViewModel.Contato == null)
