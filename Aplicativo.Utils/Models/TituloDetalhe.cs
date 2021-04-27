@@ -36,6 +36,9 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("Pessoa")]
         public int? PessoaID { get; set; }
 
+        [ForeignKey("ContaBancaria")]
+        public int? ContaBancariaID { get; set; }
+
         [ForeignKey("FormaPagamento")]
         public int? FormaPagamentoID { get; set; }
 
@@ -74,7 +77,9 @@ namespace Aplicativo.Utils.Models
 
         public virtual Pessoa Pessoa { get; set; }
 
-        //public virtual FormaPagamento FormaPagamento { get; set; }
+        public virtual ContaBancaria ContaBancaria { get; set; }
+
+        public virtual FormaPagamento FormaPagamento { get; set; }
 
         //public virtual PlanoConta PlanoConta { get; set; }
 
