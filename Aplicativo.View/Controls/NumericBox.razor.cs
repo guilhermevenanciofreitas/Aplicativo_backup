@@ -52,7 +52,7 @@ namespace Aplicativo.View.Controls
 
                 if (string.IsNullOrEmpty(_Prefix))
                 {
-                    return Value.ToDecimal();
+                    return Value.ToDecimalOrNull() ?? 0;
                 }
                 else
                 {

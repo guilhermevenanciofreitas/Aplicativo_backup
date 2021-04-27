@@ -1,5 +1,6 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Aplicativo.View.Controls
         [Parameter] public bool _ReadOnly { get; set; }
 
         [Parameter] public EventCallback<ChangeEventArgs> OnChange { get; set; }
+        [Parameter] public EventCallback<FocusEventArgs> OnEnter { get; set; }
+        [Parameter] public EventCallback<FocusEventArgs> OnLeave { get; set; }
 
         public string Label
         {
@@ -107,9 +110,17 @@ namespace Aplicativo.View.Controls
 
         }
 
-        protected void DatePicker_FocusIn()
+        protected void DatePicker_Enter(FocusEventArgs args)
         {
             //JSRuntime.InvokeVoidAsync("ElementReference.SetSelectionRange", Element, 0, 2);
+
+            OnEnter.InvokeAsync(args);
+
+        }
+
+        protected void DatePicker_Leave(FocusEventArgs args)
+        {
+            OnLeave.InvokeAsync(args);
         }
 
     }

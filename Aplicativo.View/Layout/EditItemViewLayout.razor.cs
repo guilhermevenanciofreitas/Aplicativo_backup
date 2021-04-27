@@ -75,7 +75,7 @@ namespace Aplicativo.View.Layout
             OnHide.InvokeAsync(null);
         }
 
-        public async Task LimparCampos(object Page)
+        public void LimparCampos(object Page)
         {
 
             var TextBox = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(TextBox)).ToList();
@@ -247,10 +247,9 @@ namespace Aplicativo.View.Layout
                 StateHasChanged();
 
             }
-            catch (EmptyException ex)
+            catch (HelpEmptyException)
             {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-                if (ex.Focus) ex.Element.Focus(JSRuntime);
+                //await JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {
