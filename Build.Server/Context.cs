@@ -48,9 +48,11 @@ namespace Aplicativo.Server
 
         //public DbSet<CompraStatusWorkflow> CompraStatusWorkflow { get; set; }
 
-        //public DbSet<ContaBancaria> ContaBancaria { get; set; }
+        public DbSet<ContaBancaria> ContaBancaria { get; set; }
 
-        //public DbSet<ContaBancariaHistorico> ContaBancariaHistorico { get; set; }
+        public DbSet<ContaBancariaFechamento> ContaBancariaFechamento { get; set; }
+
+        public DbSet<ContaBancariaFormaPagamento> ContaBancariaFormaPagamento { get; set; }
 
         public DbSet<Contato> Contato { get; set; }
 
@@ -92,7 +94,7 @@ namespace Aplicativo.Server
 
         public DbSet<EstoqueMovimentoItemSaida> EstoqueMovimentoItemSaida { get; set; }
 
-        //public DbSet<FormaPagamento> FormaPagamento { get; set; }
+        public DbSet<FormaPagamento> FormaPagamento { get; set; }
 
         //public DbSet<Motivo> Motivo { get; set; }
 
@@ -215,6 +217,11 @@ namespace Aplicativo.Server
             modelBuilder.Entity<TituloDetalhe>().Property(c => c.vMulta).HasPrecision(18, 3);
 
             modelBuilder.Entity<TituloDetalhe>().Property(c => c.vLiquido).HasPrecision(18, 3);
+
+
+
+            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.pJuros).HasPrecision(18, 3);
+            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.pMulta).HasPrecision(18, 3);
 
 
         }
