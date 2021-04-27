@@ -64,14 +64,14 @@
     {
         <div class="box-header with-border">
 
-            @if (!Simples)
+            @if (!Simples && BtnLimpar.Visible)
             {
-                <Button Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click">
+                <Button @ref="BtnLimpar.Button" Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click" Disabled="BtnLimpar.Disabled">
                     <StartIcon>
                         <FileCopyIcon />
                     </StartIcon>
                     <ChildContent>
-                        Limpar
+                        @BtnLimpar.Label
                     </ChildContent>
                 </Button>
             }
@@ -84,6 +84,7 @@
                     @BtnSalvar.Label
                 </ChildContent>
             </Button>
+
             @if (ItemViewMode == ItemViewMode.Edit && BtnExcluir.Visible)
             {
                 <Button @ref="BtnExcluir.Button" Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Disabled="BtnExcluir.Disabled" Style=@("color: #fff; background-color: #df4759; width:" + BtnExcluir.Width)>

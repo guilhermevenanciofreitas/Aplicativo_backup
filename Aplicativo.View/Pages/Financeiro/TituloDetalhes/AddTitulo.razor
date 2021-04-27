@@ -1,9 +1,9 @@
-﻿@inherits AddTituloPage<Titulo>
+﻿@inherits AddTituloPage<TituloDetalhe>
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
-                    Title="Título"
-                    Width="900px"
+                    Title="Adicionar parcelas"
+                    Width="870px"
                     OnLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <TextBox @ref="TxtDocumento" _Label="Número Doc."></TextBox>
+                                <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" _AutoFocus="true"></TextBox>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -90,9 +90,10 @@
                                 <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
                                 <GridPageSettings PageSize="30"></GridPageSettings>
                                 <GridColumns>
-                                    <GridColumn Width="50" Field="nParcela" HeaderText="Parcela"></GridColumn>
-                                    <GridColumn Width="100" Field="vTotal" HeaderText="Valor" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
-                                    <GridColumn Width="150" AllowSorting="false" HeaderText="Vencimento">
+                                    <GridColumn Width="55" Field="nParcela" HeaderText="Parcela"></GridColumn>
+                                    <GridColumn Width="110" Field="nDocumentoParcela" HeaderText="Número Doc."></GridColumn>
+                                    <GridColumn Width="85" Field="vTotal" HeaderText="Valor" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
+                                    <GridColumn Width="110" AllowSorting="false" HeaderText="Vencimento">
                                         <Template>
                                             @{
                                                 var item = (TituloDetalhe)context;

@@ -56,7 +56,7 @@ namespace Aplicativo.View.Controls
                 }
                 else
                 {
-                    return Value.Replace(_Prefix, "").ToDecimal();
+                    return Value.Replace(_Prefix, "").ToDecimalOrNull() ?? 0;
                 }
 
             }

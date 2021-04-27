@@ -2,8 +2,9 @@
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
-                    Title="Título"
+                    Title="Editar parcela"
                     Width="1150px"
+                    OnLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -18,40 +19,48 @@
                         <div class="col-md-8 col-sm-12">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                                    <div class="form-group">
+                                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <TextBox @ref="TxtNumeroDocumento" _Label="Nº Documento"></TextBox>
+                                    <div class="form-group">
+                                        <TextBox @ref="TxtNumeroDocumento" _Label="Nº Documento"></TextBox>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <DatePicker @ref="DtpEmissao" _Label="Emissão"></DatePicker>
+                                    <div class="form-group">
+                                        <DatePicker @ref="DtpEmissao" _Label="Emissão"></DatePicker>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change"></DatePicker>
+                                    <div class="form-group">
+                                        <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change"></DatePicker>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-sm-9">
+                            <div class="row">
+                                <div class="col-md-9">
                                     @*<label>@(PlanoContaTipoID == 1 ? "Pagador" : "Recebedor")</label>
                                     <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>*@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-sm-9">
+                            <div class="row">
+                                <div class="col-md-9">
                                     @*<ViewPesquisa @ref="ViewPesquisaFormaPagamento" Label="Forma de pagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>*@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-sm-9">
+                            <div class="row">
+                                <div class="col-md-9">
                                     @*<ViewPesquisa @ref="ViewPesquisaPlanoConta" Label="Plano de conta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>*@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-sm-9">
+                            <div class="row">
+                                <div class="col-md-9">
                                     @*<ViewPesquisa @ref="ViewPesquisaCentroCusto" Label="Centro de custo" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>*@
                                 </div>
                             </div>
@@ -143,8 +152,8 @@
                     </div>
 
                     <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-12 col-sm-12">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
                                 <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
                             </div>
                         </div>
@@ -153,7 +162,7 @@
 
                 </Box>
             </TabPage>
-            <TabPage Id="Email" Title="Email">
+            <TabPage Id="Parcelas" Title="Outras parcelas">
                 
 
             </TabPage>

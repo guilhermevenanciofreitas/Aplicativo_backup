@@ -19,6 +19,9 @@ namespace Aplicativo.Utils.Models
         [StringLength(60)]
         public string nDocumento { get; set; }
 
+        [NotMapped]
+        public string nDocumentoParcela => string.IsNullOrEmpty(nDocumento) ? null : nDocumento + "-" + nParcela;
+
         public DateTime? DataEmissao { get; set; } = DateTime.Now;
 
         public DateTime? DataVencimento { get; set; }
@@ -66,8 +69,6 @@ namespace Aplicativo.Utils.Models
         [StringLength(200)]
         public string Observacao { get; set; }
         
-        public bool? Ativo { get; set; } = true;
-
 
         public virtual Titulo Titulo { get; set; }
 

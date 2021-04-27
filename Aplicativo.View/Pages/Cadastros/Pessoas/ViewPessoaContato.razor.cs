@@ -24,9 +24,9 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         }
 
-        protected void ViewLayout_Limpar()
+        protected async Task ViewLayout_Limpar()
         {
-            EditItemViewLayout.LimparCampos(this);
+            await EditItemViewLayout.LimparCampos(this);
         }
 
         protected async Task ViewLayout_ItemView(object args)

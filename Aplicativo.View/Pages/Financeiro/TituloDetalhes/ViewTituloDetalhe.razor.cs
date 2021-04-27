@@ -42,6 +42,12 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         #endregion
 
+
+        protected void ViewLayout_PageLoad()
+        {
+            EditItemViewLayout.BtnLimpar.Visible = false;
+        }
+
         protected async Task ViewLayout_Limpar()
         {
 

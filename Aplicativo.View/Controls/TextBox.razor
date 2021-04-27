@@ -23,6 +23,6 @@ else
         <label for="@Element.Id">@_Label</label>
     }
 
-    <input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" autofocus="@_AutoFocus" />
+    <input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" autofocus="@_AutoFocus" @oninput="TextBox_Input" @onkeyup="TextBox_KeyUp" />
 
 }

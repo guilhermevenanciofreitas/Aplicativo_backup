@@ -1,5 +1,6 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Skclusive.Material.Text;
 using System;
@@ -35,6 +36,9 @@ namespace Aplicativo.View.Controls
         [Parameter] public bool _ReadOnly { get; set; }
         [Parameter] public bool _AutoFocus { get; set; } = false;
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
+
+        [Parameter] public EventCallback OnInput { get; set; }
+        [Parameter] public EventCallback OnKeyUp { get; set; }
 
         public string Label
         {
@@ -149,6 +153,32 @@ namespace Aplicativo.View.Controls
             Element.Focus(JSRuntime);
             //StateHasChanged();
         }
+
+        protected async Task TextBox_Input(ChangeEventArgs args)
+        {
+            try
+            {
+                Text = args.Value.ToString();
+                await OnInput.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
+        }
+
+        protected async Task TextBox_KeyUp(KeyboardEventArgs args)
+        {
+            try
+            {
+                await OnKeyUp.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
+        }
+
 
     }
 }

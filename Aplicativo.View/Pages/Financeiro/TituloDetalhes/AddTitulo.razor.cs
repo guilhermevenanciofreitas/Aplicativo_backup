@@ -14,22 +14,12 @@ using System.Threading.Tasks;
 namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 {
 
-    //public class TituloView
-    //{
-
-    //    public int nParcela { get; set; }
-
-    //    public NumericBox TxtValorParcela { get; set; }
-    //    public DatePicker DtpVencimento { get; set; }
-
-    //}
-
     public partial class AddTituloPage<TValue> : HelpComponent
     {
 
         [Parameter]
-        public ListItemViewLayout<TValue> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<Titulo> EditItemViewLayout { get; set; }
+        public ListItemViewLayout<TituloDetalhe> ListItemViewLayout { get; set; }
+        public EditItemViewLayout<TituloDetalhe> EditItemViewLayout { get; set; }
 
         #region Elements
 
@@ -48,8 +38,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         public SfGrid<TituloDetalhe> GridViewTituloDetalhe { get; set; }
         public List<TituloDetalhe> ListTituloDetalhe { get; set; } = new List<TituloDetalhe>();
-
-        //public List<TituloView> ListTituloView { get; set; } = new List<TituloView>();
 
         #endregion
 
@@ -77,6 +65,8 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             await TabSet.Active("Principal");
 
+            TxtDocumento.Focus();
+
         }
 
         protected void ViewLayout_Carregar(object args)
@@ -85,15 +75,29 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         protected async Task ViewLayout_Salvar()
         {
+           
+            var Titulo = new Titulo();
+
             foreach(var item in ListTituloDetalhe)
             {
-                await JSRuntime.InvokeVoidAsync("alert", item.vTotal);
-                await JSRuntime.InvokeVoidAsync("alert", item.DataVencimento);
+                await JSRuntime.InvokeVoidAsync("console.log", item.DataVencimento);
+                Titulo.TituloDetalhe.Add(item);
             }
+
+            await EditItemViewLayout.Update(Titulo);
+
+            EditItemViewLayout.ViewModal.Hide();
+
         }
 
-        protected async Task ViewLayout_Excluir()
+        protected void ViewLayout_Excluir()
         {
+        }
+
+
+        protected void TxtDocumento_Input()
+        {
+            CarregarGrid();
         }
 
         protected void TxtValor_KeyUp()
@@ -128,7 +132,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             ListTituloDetalhe.Clear();
 
-            DateTime DataVencimento = DateTime.Now;
+            DateTime DataVencimento = DateTime.Today;
 
             for (var i = 1; i <= Convert.ToInt32(TxtParcelas.Value); i++)
             {
@@ -160,7 +164,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                     vTotal = Math.Round(TxtValor.Value - ListTituloDetalhe.Sum(c => c.vTotal ?? 0), 2);
                 }
 
-                ListTituloDetalhe.Add(new TituloDetalhe() { nParcela = i, vTotal = vTotal, DataVencimento = DataVencimento });
+                ListTituloDetalhe.Add(new TituloDetalhe() { DataEmissao = DtpEmissao.Value, nDocumento = TxtDocumento.Text, nParcela = i, vTotal = vTotal, vLiquido = vTotal, DataVencimento = DataVencimento.ToUniversalTime() });
 
             }
 

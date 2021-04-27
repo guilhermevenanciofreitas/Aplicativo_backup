@@ -57,6 +57,7 @@ namespace Aplicativo.View.Layout
         [Parameter] public EventCallback OnSalvar { get; set; }
         [Parameter] public EventCallback OnExcluir { get; set; }
 
+        public BtnView BtnLimpar { get; set; } = new BtnView() { Label = "Limpar" };
         public BtnView BtnSalvar { get; set; } = new BtnView() { Label = "Salvar" };
         public BtnView BtnExcluir { get; set; } = new BtnView() { Label = "Excluir" };
 
@@ -104,7 +105,7 @@ namespace Aplicativo.View.Layout
 
             foreach (var item in NumericBox)
             {
-                //await ((NumericBox)item.GetValue(Page)).SetValue(0);
+                ((NumericBox)item.GetValue(Page)).Value = 0;
             }
 
             foreach (var item in CheckBox)
@@ -323,14 +324,18 @@ namespace Aplicativo.View.Layout
 
         public async Task<T> Update<T>(T Object) where T : class
         {
+            return (await Update(new List<T> { Object })).FirstOrDefault();
+        }
+
+        public async Task<List<T>> Update<T>(List<T> Object) where T : class
+        {
 
             var Request = new Request();
 
-            Request.Parameters.Add(new Parameters("Table", Object.GetType().Name));
-            Request.Parameters.Add(new Parameters(Object.GetType().Name, new List<T> { Object }));
+            Request.Parameters.Add(new Parameters("Table", Object.FirstOrDefault().GetType().Name));
+            Request.Parameters.Add(new Parameters(Object.FirstOrDefault().GetType().Name, Object));
 
-            return (await HelpHttp.Send<List<T>>(Http, "api/Default/Save", Request)).FirstOrDefault();
-
+            return (await HelpHttp.Send<List<T>>(Http, "api/Default/Save", Request));
         }
 
         public async Task Delete(object Object)
