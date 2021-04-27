@@ -4,6 +4,7 @@
                     ListItemViewLayout="ListItemViewLayout"
                     Title="Conta bancária"
                     Width="700px"
+                    OnPageLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -29,15 +30,6 @@
                         </div>
 
                     </div>
-
-                    @*<div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha"></TextBox>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha"></TextBox>
-                        </div>
-                    </div>*@
 
                 </Box>
             </TabPage>

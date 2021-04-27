@@ -17,16 +17,22 @@
 
                     <div class="row">
                         <div class="col-md-1 col-sm-6">
-                            <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
+                            <div class="form-group">
+                                <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
+                            </div>
                         </div>
                         <div class="col-md-5 col-sm-6">
-                            <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
+                            <div class="form-group">
+                                <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-3 col-sm-12">
-                            <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
+                            <div class="form-group">
+                                <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
+                            </div>
                         </div>
                     </div>
 
@@ -36,18 +42,24 @@
                 <Box Padding="3">
 
                     <div class="row">
-
                         <div class="col-md-5 col-sm-12">
-                            <DropDownList @ref="DplOrigem" _Label="Origem"></DropDownList>
+                            <div class="form-group">
+                                <DropDownList @ref="DplOrigem" _Label="Origem"></DropDownList>
+                            </div>
                         </div>
-
                     </div>
 
                 </Box>
             </TabPage>
             <TabPage Id="Fornecedores" Title="Fornecedores">
                 <Box Padding="3">
-                    <ViewProdutoFornecedor @ref="ViewProdutoFornecedor"></ViewProdutoFornecedor>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <ViewProdutoFornecedor @ref="ViewProdutoFornecedor"></ViewProdutoFornecedor>
+                            </div>
+                        </div>
+                    </div>
                 </Box>
             </TabPage>
         </TabSet>

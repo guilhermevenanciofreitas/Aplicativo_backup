@@ -28,6 +28,11 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         public ViewContaBancariaFormaPagamento ViewContaBancariaFormaPagamento { get; set; }
         #endregion
 
+        protected void ViewLayout_PageLoad()
+        {
+
+        }
+
         protected async Task ViewLayout_Limpar()
         {
 
@@ -72,6 +77,9 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
                 await TabSet.Active("Principal");
                 await HelpEmptyException.New(JSRuntime, TxtDescricao.Element, "Informe a descrição!");
             }
+
+            EditItemViewLayout.ViewModel.ContaBancariaID = TxtCodigo.Text.ToIntOrNull();
+            EditItemViewLayout.ViewModel.Descricao = TxtDescricao.Text.ToStringOrNull();
 
             EditItemViewLayout.ViewModel.ContaBancariaFormaPagamento = ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView;
 

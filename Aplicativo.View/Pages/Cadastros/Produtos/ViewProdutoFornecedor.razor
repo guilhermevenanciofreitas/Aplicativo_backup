@@ -21,25 +21,37 @@
 
                     <div class="row">
                         <div class="col-md-3 col-sm-12">
-                            <TextBox @ref="TxtCodigo" _Label="Cód. Fornec."></TextBox>
+                            <div class="form-group">
+                                <TextBox @ref="TxtCodigo" _Label="Cód. Fornec."></TextBox>
+                            </div>
                         </div>
                         <div class="col-md-9 col-sm-12">
-                            <TextBox @ref="TxtFornecedor" _Label="Fornecedor"></TextBox>
+                            <div class="form-group">
+                                <TextBox @ref="TxtFornecedor" _Label="Fornecedor"></TextBox>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
-                            <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
+                            <div class="form-group">
+                                <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
+                            </div>
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3"></NumericBox>
+                            <div class="form-group">
+                                <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3"></NumericBox>
+                            </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
-                            <NumericBox @ref="TxtPreco" _Label="Preço Un."></NumericBox>
+                            <div class="form-group">
+                                <NumericBox @ref="TxtPreco" _Label="Preço Un."></NumericBox>
+                            </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
-                            <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true"></NumericBox>
+                            <div class="form-group">
+                                <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true"></NumericBox>
+                            </div>
                         </div>
                     </div>
 

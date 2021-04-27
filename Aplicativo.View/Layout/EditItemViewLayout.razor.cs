@@ -49,8 +49,8 @@ namespace Aplicativo.View.Layout
         [Parameter] public string Width { get; set; }
         [Parameter] public bool Simples { get; set; } = false;
 
-        [Parameter] public EventCallback OnLoad { get; set; }
-        [Parameter] public EventCallback OnHide { get; set; }
+        [Parameter] public EventCallback OnPageLoad { get; set; }
+        [Parameter] public EventCallback OnPageHide { get; set; }
 
         [Parameter] public EventCallback OnLimpar { get; set; }
         [Parameter] public EventCallback<object> OnCarregar { get; set; }
@@ -67,12 +67,12 @@ namespace Aplicativo.View.Layout
 
         protected void ViewModal_PageLoad()
         {
-            OnLoad.InvokeAsync(null);
+            OnPageLoad.InvokeAsync(null);
         }
 
         protected void ViewModal_PageHide()
         {
-            OnHide.InvokeAsync(null);
+            OnPageHide.InvokeAsync(null);
         }
 
         public void LimparCampos(object Page)
@@ -197,6 +197,8 @@ namespace Aplicativo.View.Layout
 
             await OnLimpar.InvokeAsync(null);
 
+            ViewModal.Show();
+
             if (args == null)
             {
                 BtnLimpar_Click();
@@ -207,7 +209,6 @@ namespace Aplicativo.View.Layout
                 await OnCarregar.InvokeAsync(args);
             }
             
-            ViewModal.Show();
             ListItemViewLayout.Refresh();
             StateHasChanged();
 

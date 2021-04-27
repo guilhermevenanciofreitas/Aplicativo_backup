@@ -67,7 +67,6 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         }
        
-
         protected async Task ViewLayout_Limpar()
         {
 

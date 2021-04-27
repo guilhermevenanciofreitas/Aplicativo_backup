@@ -68,8 +68,4 @@
       <DependentUpon>ViewUsuarioEmail.razor.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Financeiro\Receber\" />
-  </ItemGroup>
 </Project>

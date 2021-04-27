@@ -4,7 +4,6 @@ using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Linq;
@@ -80,8 +79,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
 
             var ContaBancariaFormaPagamento = EditItemViewLayout.ViewModel.ContaBancaria.ContaBancariaFormaPagamento.FirstOrDefault(c => c.ContaBancariaID == EditItemViewLayout.ViewModel.ContaBancariaID && c.FormaPagamentoID == EditItemViewLayout.ViewModel.FormaPagamentoID);
-
-            await JSRuntime.InvokeVoidAsync("console.log", ContaBancariaFormaPagamento);
 
             pJuros = ContaBancariaFormaPagamento?.pJuros ?? 0;
             pMulta = ContaBancariaFormaPagamento?.pMulta ?? 0;
@@ -169,6 +166,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
                 if (DiasAtrasados != Convert.ToDouble(TxtDiasAtrasados.Value))
                 {
+
                     var r = await JSRuntime.InvokeAsync<bool>("confirm", "Documento vai ficar com data de vencimento atrasado, com isso e aplicado juros e multa!\n\nDeseja atualizar os valores?");
 
                     if (r)

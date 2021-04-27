@@ -18,7 +18,7 @@ namespace Aplicativo.Utils.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? ContaBancariaHistoricoID { get; set; }
+        public int? ContaBancariaFechamentoID { get; set; }
 
         [ForeignKey("ContaBancaria")]
         public int? ContaBancariaID { get; set; }

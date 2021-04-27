@@ -24,6 +24,11 @@ namespace Aplicativo.View.Pages.Cadastros.FormaPagamentos
         
         #endregion
 
+        protected void ViewLayout_PageLoad()
+        {
+
+        }
+
         protected async Task ViewLayout_Limpar()
         {
 

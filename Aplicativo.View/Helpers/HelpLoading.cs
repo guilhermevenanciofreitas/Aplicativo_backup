@@ -7,15 +7,14 @@ namespace Aplicativo.View.Helpers
     public class HelpLoading
     {
 
-        public static async Task Show(HelpComponent helpComponent, string text = null) 
+        public static async Task Show(HelpComponent HelpComponent, string text = null) 
         {
-            await Show(helpComponent.JSRuntime, text);
-            //helpComponent.Refresh();
+            await Show(HelpComponent.JSRuntime, text);
         }
-        public static async Task Hide(HelpComponent helpComponent) 
+        public static async Task Hide(HelpComponent HelpComponent) 
         {
-            await Hide(helpComponent.JSRuntime);
-            //helpComponent.Refresh();
+            await Hide(HelpComponent.JSRuntime);
+            HelpComponent.Refresh();
         }
 
         public static async Task Show(IJSRuntime JSRuntime, string text = null)

@@ -28,6 +28,10 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
         #endregion
 
+        protected void ViewLayout_PageLoad()
+        {
+        }
+
         protected async Task ViewLayout_Limpar()
         {
 
@@ -36,9 +40,9 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();
 
-            TxtLogin.Focus();
-
             await TabSet.Active("Principal");
+
+            TxtLogin.Focus();
 
         }
 

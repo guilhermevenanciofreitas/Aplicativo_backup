@@ -18,7 +18,7 @@ namespace Aplicativo.Utils.Helpers
             if (string.IsNullOrEmpty(value))
                 return null;
             else
-                return value.ToString();
+                return value.ToString().Trim();
         }
 
         public static string ToStringOrNull(this object value)
@@ -26,7 +26,7 @@ namespace Aplicativo.Utils.Helpers
             if (string.IsNullOrEmpty(value?.ToString()))
                 return null;
             else
-                return value.ToString();
+                return value.ToString().Trim();
         }
 
         public static bool ToBoolean(this bool? value)

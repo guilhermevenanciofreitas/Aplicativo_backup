@@ -35,5 +35,11 @@ namespace Aplicativo.View.Helpers
         {
             return true;
         }
+
+        public void Refresh()
+        {
+            StateHasChanged();
+        }
+
     }
 }
