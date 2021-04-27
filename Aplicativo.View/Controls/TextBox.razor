@@ -8,7 +8,7 @@
 
 @if (HelpParametros.Template == Template.Mobile)
 {
-    <TextField @ref="TextField" 
+    <TextField @ref="TextField"
                @bind-Value="@_Text"
                Label="@_Label"
                Margin="@Margin.Normal"
@@ -18,7 +18,6 @@
 else
 {
 
-<div class="form-group">
     @if (_Label != null)
     {
         <label for="@Element.Id">@_Label</label>
@@ -26,6 +25,4 @@ else
 
     <input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" autofocus="@_AutoFocus" />
 
-</div>
-    
 }

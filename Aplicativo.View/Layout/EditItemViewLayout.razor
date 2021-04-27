@@ -10,7 +10,7 @@
     }
 </style>
 
-<ViewModal @ref="ViewModal" Overlay="!Simples" FullScreen="true" Title="@Title" Width="@Width" ZIndex="Simples ? 8001 : 8000">
+<ViewModal @ref="ViewModal" Overlay="!Simples" FullScreen="true" Title="@Title" Width="@Width" ZIndex="Simples ? 8001 : 8000" OnLoad="ViewModal_PageLoad" OnHide="ViewModal_PageHide">
 
     @if (HelpParametros.Template == Template.Mobile)
     {

@@ -17,7 +17,7 @@ namespace Aplicativo.View.Controls
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
 
-        [Parameter] public EventCallback OnChange { get; set; }
+        [Parameter] public EventCallback<ChangeEventArgs> OnChange { get; set; }
 
         public string Label
         {
@@ -81,6 +81,8 @@ namespace Aplicativo.View.Controls
                     Value = _Value;
                     PlaceHolder = _PlaceHolder;
 
+                    StateHasChanged();
+
                 }
                 catch (Exception ex)
                 {
@@ -103,6 +105,11 @@ namespace Aplicativo.View.Controls
 
             OnChange.InvokeAsync(args);
 
+        }
+
+        protected void DatePicker_FocusIn()
+        {
+            //JSRuntime.InvokeVoidAsync("ElementReference.SetSelectionRange", Element, 0, 2);
         }
 
     }

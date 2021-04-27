@@ -4,7 +4,6 @@
                     ListItemViewLayout="ListItemViewLayout"
                     Title="Usuário"
                     Width="1250px"
-                    OnPageLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -22,7 +21,7 @@
                         </div>
 
                         <div class="col-md-5 col-sm-6">
-                            <TextBox @ref="TxtLogin" _Label="Login"></TextBox>
+                            <TextBox @ref="TxtLogin" _Label="Login" _AutoFocus="true"></TextBox>
                         </div>
 
                     </div>

@@ -1,0 +1,33 @@
+﻿@inherits IndexPage<TituloDetalhe>
+
+<ListItemViewLayout @ref="ListItemViewLayout"
+                    TValue="TituloDetalhe"
+                    OnPageLoad="ViewLayout_PageLoad"
+                    OnPesquisar="ViewLayout_Pesquisar"
+                    OnItemView="ViewLayout_ItemView"
+                    OnDelete="ViewLayout_Delete">
+    <View>
+        <AddTitulo @ref="Add"></AddTitulo>
+        <ViewTituloDetalhe @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewTituloDetalhe>
+    </View>
+    <ItemView>
+        @{
+            var item = (TituloDetalhe)context;
+
+            <ListItemText Primary="@item.Observacao">
+                <SecondaryContent>
+                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                        @item.Observacao
+                    </Typography>
+                    — I'll be in your neighborhood
+                </SecondaryContent>
+            </ListItemText>
+        }
+    </ItemView>
+    <GridView>
+        <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="40"></GridColumn>
+        <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="40"></GridColumn>
+        <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="40"></GridColumn>
+        <GridColumn Field="vLiquido" HeaderText="Valor" Width="40" Format="C2"></GridColumn>
+    </GridView>
+</ListItemViewLayout>

@@ -54,13 +54,6 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
         protected void ViewLayout_PageLoad()
         {
 
-        }
-        
-        protected async Task ViewLayout_Limpar()
-        {
-
-            await EditItemViewLayout.LimparCampos(this);
-
             DplTipo.Items.Clear();
             DplTipo.Add(((int)TipoPessoa.Fisica).ToString(), "Fisíca");
             DplTipo.Add(((int)TipoPessoa.Juridica).ToString(), "Jurídica");
@@ -68,11 +61,19 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             DplTipo.SelectedValue = ((int)TipoPessoa.Juridica).ToString();
 
             DplSexo.Items.Clear();
-            DplSexo.Add("", "[Selecione]");
+            DplSexo.Add(null, "[Selecione]");
             DplSexo.Add(((int)Sexo.Masculino).ToString(), "Masculino");
             DplSexo.Add(((int)Sexo.Feminino).ToString(), "Feminino");
 
-            DplSexo.SelectedValue = ""; //((int)Sexo.Masculino).ToString();
+        }
+       
+
+        protected async Task ViewLayout_Limpar()
+        {
+
+            await EditItemViewLayout.LimparCampos(this);
+
+            DplTipo.SelectedValue = ((int)TipoPessoa.Juridica).ToString();
 
             switch (Tipo)
             {
@@ -108,8 +109,10 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         protected void DplTipo_Change(ChangeEventArgs args)
         {
+
             if ((TipoPessoa)args?.Value.ToIntOrNull() == TipoPessoa.Fisica)
             {
+                TxtCNPJ.SetMask("999.999.999-99");
                 TxtRazaoSocial.Label = "Nome completo";
                 TxtNomeFantasia.Label = "Apelido";
                 TxtInscricaoEstadual.Label = "RG";
@@ -117,12 +120,14 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             }
             else
             {
+                TxtCNPJ.SetMask("99.999.999/9999");
                 TxtRazaoSocial.Label = "Razão social";
                 TxtNomeFantasia.Label = "Nome fantasia";
                 TxtInscricaoEstadual.Label = "Insc. Estadual";
                 DtpAbertura.Label = "Data abertura";
             }
 
+            TxtCNPJ.Text = null;
             TxtCNPJ.Focus();
 
         }
@@ -178,7 +183,6 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
                 await TabSet.Active("Principal");
                 throw new EmptyException("Informe a razão social!", TxtRazaoSocial.Element);
             }
-
 
             EditItemViewLayout.ViewModel.PessoaID = TxtCodigo.Text.ToIntOrNull();
             EditItemViewLayout.ViewModel.TipoPessoaID = (TipoPessoa?)DplTipo.SelectedValue.ToIntOrNull();

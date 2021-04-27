@@ -19,18 +19,19 @@ namespace Aplicativo.Utils.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? UsuarioID { get; set; }
-        
+
+        [ForeignKey("Pessoa")]
+        public int? PessoaID { get; set; }
+
         [StringLength(30)]
         public string Login { get; set; }
 
         [StringLength(40)]
         public string Senha { get; set; }
 
-        [StringLength(30)]
-        public string Nome { get; set; }
-
         public bool Ativo { get; set; } = true;
 
+        public virtual Pessoa Pessoa { get; set; }
 
         public ICollection<UsuarioEmail> UsuarioEmail { get; set; }
 

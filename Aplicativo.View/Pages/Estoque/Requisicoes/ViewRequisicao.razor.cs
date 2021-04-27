@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Estoque.Requisicao
+namespace Aplicativo.View.Pages.Estoque.Requisicoes
 {
     public partial class ViewRequisicaoPage<TValue> : HelpComponent
     {
@@ -20,8 +20,8 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
         public DateTimePicker DtpFinalizarEntrada { get; set; }
 
         [Parameter]
-        public ListItemViewLayout<Utils.Models.Requisicao> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<Utils.Models.Requisicao> EditItemViewLayout { get; set; }
+        public ListItemViewLayout<Requisicao> ListItemViewLayout { get; set; }
+        public EditItemViewLayout<Requisicao> EditItemViewLayout { get; set; }
 
         #region Elements
 
@@ -73,10 +73,10 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
             Query.AddInclude("RequisicaoItem");
             Query.AddInclude("RequisicaoItem.Produto");
             Query.AddInclude("RequisicaoItem.EstoqueMovimentoItemEntrada");
-            Query.AddWhere("RequisicaoID == @0", ((Utils.Models.Requisicao)args)?.RequisicaoID);
+            Query.AddWhere("RequisicaoID == @0", ((Requisicao)args)?.RequisicaoID);
             Query.AddTake(1);
 
-            EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<Utils.Models.Requisicao>(Query);
+            EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<Requisicao>(Query);
 
 
             EditItemViewLayout.BtnSalvar.Disabled = EditItemViewLayout.ViewModel.DataEntrada != null;
@@ -132,9 +132,9 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
 
             var Request = new Request();
 
-            Request.Parameters.Add(new Parameters(typeof(Utils.Models.Requisicao).Name, new List<object> { EditItemViewLayout.ViewModel }));
+            Request.Parameters.Add(new Parameters(typeof(Requisicao).Name, new List<object> { EditItemViewLayout.ViewModel }));
 
-            EditItemViewLayout.ViewModel = (await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Salvar", Request)).FirstOrDefault();
+            EditItemViewLayout.ViewModel = (await HelpHttp.Send<List<Requisicao>>(Http, "api/Requisicao/Salvar", Request)).FirstOrDefault();
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
                 await EditItemViewLayout.Carregar(EditItemViewLayout.ViewModel);
@@ -208,7 +208,7 @@ namespace Aplicativo.View.Pages.Estoque.Requisicao
 
                 Request.Parameters.Add(new Parameters("Requisicao", List));
 
-                List = await HelpHttp.Send<List<Utils.Models.Requisicao>>(Http, "api/Requisicao/Finalizar", Request);
+                List = await HelpHttp.Send<List<Requisicao>>(Http, "api/Requisicao/Finalizar", Request);
 
                 EditItemViewLayout.ViewModel = List.FirstOrDefault();
 

@@ -61,8 +61,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\Cadastros\Pessoas\ViewPessoaContato - Cópia.razor.cs">
+      <DependentUpon>ViewPessoaContato.razor.cs</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Cadastros\Usuarios\ViewUsuarioEmail - Cópia.razor.cs">
       <DependentUpon>ViewUsuarioEmail.razor.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Financeiro\Receber\" />
   </ItemGroup>
 </Project>

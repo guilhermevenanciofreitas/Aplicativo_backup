@@ -24,6 +24,12 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public bool Overlay { get; set; } = true;
 
+        [Parameter] public EventCallback OnLoad { get; set; }
+
+        [Parameter] public EventCallback OnHide { get; set; }
+
+        [Parameter] public EventCallback OnConfirm { get; set; }
+
         public void Show()
         {
 
@@ -32,6 +38,9 @@ namespace Aplicativo.View.Controls
             Confirmed = false;
             Open = true;
             StateHasChanged();
+
+            OnLoad.InvokeAsync(null);
+
         }
 
         public void Hide()
@@ -40,6 +49,8 @@ namespace Aplicativo.View.Controls
             Open = false;
             if (ExecutingAsync) FinishConfirmToken();
 
+            OnHide.InvokeAsync(null);
+
         }
 
         public void Confirm()
@@ -47,6 +58,9 @@ namespace Aplicativo.View.Controls
             Confirmed = true;
             Open = false;
             FinishConfirmToken();
+
+            OnConfirm.InvokeAsync(null);
+
         }
 
         private void FinishConfirmToken()

@@ -21,7 +21,6 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         [Parameter] public Tipo Tipo { get; set; }
 
-        [Parameter] public string TitleList { get; set; }
         [Parameter] public string TitleView { get; set; }
 
         protected ListItemViewLayout<TValue> ListItemViewLayout { get; set; }

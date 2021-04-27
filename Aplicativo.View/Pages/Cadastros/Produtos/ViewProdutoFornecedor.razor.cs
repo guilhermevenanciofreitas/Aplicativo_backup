@@ -56,9 +56,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             TxtFornecedor.Text = EditItemViewLayout.ViewModel.Fornecedor?.NomeFantasia.ToStringOrNull();
 
             DplUnidadeMedida.SelectedValue = EditItemViewLayout.ViewModel.UnidadeMedidaID.ToStringOrNull();
-            await TxtContem.SetValue(EditItemViewLayout.ViewModel.Contem);
-            await TxtPreco.SetValue(EditItemViewLayout.ViewModel.Preco);
-            await TxtTotal.SetValue(EditItemViewLayout.ViewModel.Contem * EditItemViewLayout.ViewModel.Preco);
+            //await TxtContem.SetValue(EditItemViewLayout.ViewModel.Contem);
+            //await TxtPreco.SetValue(EditItemViewLayout.ViewModel.Preco);
+            //await TxtTotal.SetValue(EditItemViewLayout.ViewModel.Contem * EditItemViewLayout.ViewModel.Preco);
 
 
         }
@@ -69,8 +69,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             EditItemViewLayout.ViewModel.CodigoFornecedor = TxtCodigo.Text.ToStringOrNull();
 
             EditItemViewLayout.ViewModel.UnidadeMedidaID = DplUnidadeMedida.SelectedValue.ToIntOrNull();
-            EditItemViewLayout.ViewModel.Contem = await TxtContem.GetValue();
-            EditItemViewLayout.ViewModel.Preco = await TxtPreco.GetValue();
+            //EditItemViewLayout.ViewModel.Contem = await TxtContem.GetValue();
+            //EditItemViewLayout.ViewModel.Preco = await TxtPreco.GetValue();
 
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)

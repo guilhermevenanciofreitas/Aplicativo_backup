@@ -4,7 +4,7 @@ using Aplicativo.View.Layout;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Estoque.Requisicao
+namespace Aplicativo.View.Pages.Estoque.Requisicoes
 {
     public class IndexPage<TValue> : HelpComponent
     {

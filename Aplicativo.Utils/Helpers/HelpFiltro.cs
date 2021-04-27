@@ -27,17 +27,4 @@ namespace Aplicativo.Utils.Helpers
 
     }
 
-    public class Where
-    {
-
-        public Where(string Predicate, params object[] Args)
-        {
-            this.Predicate = Predicate;
-            this.Args = Args;
-        }
-
-        public string Predicate { get; set; }
-        public object[] Args { get; set; }
-    }
-
 }

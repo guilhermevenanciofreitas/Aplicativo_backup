@@ -4,7 +4,7 @@
                     ListItemViewLayout="ListItemViewLayout"
                     Title="@Title"
                     Width="1280px"
-                    OnPageLoad="ViewLayout_PageLoad"
+                    OnLoad="ViewLayout_PageLoad"
                     OnLimpar="ViewLayout_Limpar"
                     OnCarregar="ViewLayout_Carregar"
                     OnSalvar="ViewLayout_Salvar"
@@ -23,7 +23,7 @@
                             <DropDownList @ref="DplTipo" _Label="Tipo" Change="DplTipo_Change"></DropDownList>
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtCNPJ" _Label="CNPJ"></TextBox>
+                            <TextBox @ref="TxtCNPJ" _Label="CNPJ" _AutoFocus="true"></TextBox>
                         </div>
                         <div class="col-md-4 col-sm-12">
                             <TextBox @ref="TxtRazaoSocial" _Label="Razão social"></TextBox>
@@ -45,6 +45,7 @@
                     </div>
 
                     <br />
+
                     <div class="row">
                         <div class="col-md-2 col-sm-12">
                             <TextBox @ref="TxtInscricaoEstadual" _Label="Insc. Estadual"></TextBox>

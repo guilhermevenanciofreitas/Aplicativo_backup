@@ -1,6 +1,8 @@
 ﻿using Aplicativo.Utils.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Linq;
 
 namespace Aplicativo.Server
 {
@@ -126,6 +128,8 @@ namespace Aplicativo.Server
 
         public DbSet<PessoaSegmento> PessoaSegmento { get; set; }
 
+        public DbSet<PessoaVendedor> PessoaVendedor { get; set; }
+
         //public DbSet<PlanoConta> PlanoConta { get; set; }
 
         public DbSet<Preco> Preco { get; set; }
@@ -152,9 +156,9 @@ namespace Aplicativo.Server
 
         public DbSet<RequisicaoItem> RequisicaoItem { get; set; }
 
-        //public DbSet<Titulo> Titulo { get; set; }
+        public DbSet<Titulo> Titulo { get; set; }
 
-        //public DbSet<TituloDetalhe> TituloDetalhe { get; set; }
+        public DbSet<TituloDetalhe> TituloDetalhe { get; set; }
 
         public DbSet<Tributacao> Tributacao { get; set; }
 
@@ -184,10 +188,41 @@ namespace Aplicativo.Server
 
         //public DbSet<ViagemGrupoCTe> ViagemGrupoCTe { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<PessoaVendedor>()
+                .HasOne(x => x.Pessoa)
+                .WithMany(e => e.Vendedor)
+                .HasForeignKey(x => x.PessoaID);
+
+            modelBuilder.Entity<PessoaVendedor>()
+                .HasOne(x => x.Vendedor)
+                .WithMany(e => e.Clientes)
+                .HasForeignKey(x => x.VendedorID);
+
+
+
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.vTotal).HasPrecision(18, 3);
+
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.pDesconto).HasPrecision(18, 3);
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.vDesconto).HasPrecision(18, 3);
+
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.pJuros).HasPrecision(18, 3);
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.vJuros).HasPrecision(18, 3);
+
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.pMulta).HasPrecision(18, 3);
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.vMulta).HasPrecision(18, 3);
+
+            modelBuilder.Entity<TituloDetalhe>().Property(c => c.vLiquido).HasPrecision(18, 3);
+
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString);
         }
     }
+
 }

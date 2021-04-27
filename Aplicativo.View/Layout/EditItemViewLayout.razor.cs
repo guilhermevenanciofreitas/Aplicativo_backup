@@ -49,7 +49,9 @@ namespace Aplicativo.View.Layout
         [Parameter] public string Width { get; set; }
         [Parameter] public bool Simples { get; set; } = false;
 
-        [Parameter] public EventCallback OnPageLoad { get; set; }
+        [Parameter] public EventCallback OnLoad { get; set; }
+        [Parameter] public EventCallback OnHide { get; set; }
+
         [Parameter] public EventCallback OnLimpar { get; set; }
         [Parameter] public EventCallback<object> OnCarregar { get; set; }
         [Parameter] public EventCallback OnSalvar { get; set; }
@@ -62,32 +64,24 @@ namespace Aplicativo.View.Layout
 
         [Parameter] public RenderFragment View { get; set; }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected void ViewModal_PageLoad()
         {
-            try
-            {
-
-                await base.OnAfterRenderAsync(firstRender);
-
-                if (firstRender)
-                {
-                    await OnPageLoad.InvokeAsync(null);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
-            }
+            OnLoad.InvokeAsync(null);
         }
 
+        protected void ViewModal_PageHide()
+        {
+            OnHide.InvokeAsync(null);
+        }
 
-        public void LimparCampos(object Page)
+        public async Task LimparCampos(object Page)
         {
 
             var TextBox = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(TextBox)).ToList();
 
             var TextArea = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(TextArea)).ToList();
+
+            var NumericBox = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(NumericBox)).ToList();
 
             var CheckBox = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(CheckBox)).ToList();
 
@@ -106,6 +100,11 @@ namespace Aplicativo.View.Layout
             foreach (var item in TextArea)
             {
                 ((TextArea)item.GetValue(Page)).Text = null;
+            }
+
+            foreach (var item in NumericBox)
+            {
+                //await ((NumericBox)item.GetValue(Page)).SetValue(0);
             }
 
             foreach (var item in CheckBox)

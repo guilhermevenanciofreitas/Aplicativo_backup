@@ -28,15 +28,10 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
         #endregion
 
-        protected void ViewLayout_PageLoad()
-        {
-
-        }
-
         protected async Task ViewLayout_Limpar()
         {
 
-            EditItemViewLayout.LimparCampos(this);
+            await EditItemViewLayout.LimparCampos(this);
 
             ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
             ViewUsuarioEmail.ListItemViewLayout.Refresh();

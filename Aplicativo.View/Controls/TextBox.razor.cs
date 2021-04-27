@@ -107,6 +107,11 @@ namespace Aplicativo.View.Controls
             }
         }
 
+        public void SetMask(string Mask)
+        {
+            JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, Mask);
+        }
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

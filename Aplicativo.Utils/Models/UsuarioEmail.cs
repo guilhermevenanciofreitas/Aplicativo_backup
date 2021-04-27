@@ -30,6 +30,8 @@ namespace Aplicativo.Utils.Models
 
         public bool? Ssl { get; set; }
 
+        public string Ssl_Habilitado => (Ssl ?? false) ? "Sim" : "Não";
+
         public virtual Usuario Usuario { get; set; }
 
     }

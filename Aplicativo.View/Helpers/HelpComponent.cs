@@ -10,13 +10,6 @@ namespace Aplicativo.View.Helpers
     public class HelpComponent : ComponentBase
     {
 
-        //public HelpComponent()
-        //{
-        //    Http = new HttpClient() { BaseAddress = new Uri("http://192.168.0.6:7070/") };
-        //}
-
-        //[Inject] private ISessionStorageService Session { get; set; }
-
         [Inject] public HttpClient Http { get; set; }
 
         [Inject] public IJSRuntime JSRuntime { get; set; }
@@ -41,7 +34,6 @@ namespace Aplicativo.View.Helpers
         public async Task<bool> VerificarUsuarioLogado()
         {
             return true;
-            //return await HelpParametros.VerificarUsuarioLogado(Session, JSRuntime);
         }
     }
 }

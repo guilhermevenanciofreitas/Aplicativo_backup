@@ -1,14 +1,27 @@
-<Navigation Items="@Items" />
+@*<Navigation Items="@Items" />*@
+
+<Syncfusion.Blazor.Navigations.SfAccordion>
+    <Syncfusion.Blazor.Navigations.AccordionItems>
+
+        <Syncfusion.Blazor.Navigations.AccordionItem>
+            <HeaderTemplate>
+                Cadastros
+            </HeaderTemplate>
+            <ContentTemplate>
+                <Navigation Items="@Cadastros" />
+            </ContentTemplate>
+        </Syncfusion.Blazor.Navigations.AccordionItem>
+    </Syncfusion.Blazor.Navigations.AccordionItems>
+</Syncfusion.Blazor.Navigations.SfAccordion>
 
 @code
-{
-    private static List<NavigationItem> Items = new List<NavigationItem>
+{private static List<NavigationItem> Cadastros = new List<NavigationItem>
     {
 
         new NavigationItem
         {
             Title = "Usuarios",
-            Path = "",
+            Path = "Cadastros/Usuarios",
             Icon = @<HomeIcon />,
             Prefix = false
         },
@@ -23,11 +36,27 @@
 
         new NavigationItem
         {
-            Title = "Requisição",
-            Path = "Estoque/Requisicao",
+            Title = "Clientes",
+            Path = "Cadastros/Clientes",
             Icon = @<HomeIcon />,
             Prefix = false
         },
+
+     new NavigationItem
+        {
+            Title = "Fornecedores",
+            Path = "Cadastros/Fornecedores",
+            Icon = @<HomeIcon />,
+            Prefix = false
+        },
+
+@*new NavigationItem
+    {
+        Title = "Requisicao",
+        Path = "Estoque/Requisicao",
+        Icon = @<HomeIcon />,
+        Prefix = false
+    },*@
 
     };
 

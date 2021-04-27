@@ -5,6 +5,14 @@ namespace Aplicativo.Utils.Helpers
     public static class HelpExtensions
     {
 
+
+        public static string Juntar(this string value, string texto, char separador = '-')
+        {
+            if (string.IsNullOrEmpty(texto))
+                return value;
+            return string.Format("{0} {1} {2}", value.Trim(), separador, texto.Trim());
+        }
+
         public static string ToStringOrNull(this string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -64,6 +72,11 @@ namespace Aplicativo.Utils.Helpers
         public static int? ToIntOrNull(this string value)
         {
             return TryParse<int>(value, int.TryParse);
+        }
+
+        public static int? ToIntOrNull(this object value)
+        {
+            return ToIntOrNull(value.ToStringOrNull());
         }
 
         public static int ToInt(this string value, int returnIfNull)

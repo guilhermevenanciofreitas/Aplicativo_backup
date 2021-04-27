@@ -1,6 +1,7 @@
 ﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Skclusive.Material.Text;
 using System;
@@ -17,12 +18,18 @@ namespace Aplicativo.View.Controls
         public ElementReference Element;
 
         [Parameter] public string _Label { get; set; }
-        [Parameter] public decimal _Text { get; set; }
+        [Parameter] public decimal _Value { get; set; }
+        [Parameter] public int? _MaxLength { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public string _Prefix { get; set; } = "";
         [Parameter] public int _Digits { get; set; } = 2;
         [Parameter] public bool _ReadOnly { get; set; }
-        
+
+        [Parameter] public EventCallback OnLeave { get; set; }
+        [Parameter] public EventCallback OnKeyPress { get; set; }
+        [Parameter] public EventCallback OnKeyUp { get; set; }
+        [Parameter] public EventCallback OnKeyDown { get; set; }
+
         public string Label
         {
             get
@@ -36,35 +43,41 @@ namespace Aplicativo.View.Controls
             }
         }
 
-        public async Task<decimal> GetValue()
+        private async Task<decimal> GetValue()
         {
             try
             {
-                return (await JSRuntime.InvokeAsync<string>("ElementReference.GetValue", Element)).ToDecimal();
+
+                var Value = (await JSRuntime.InvokeAsync<string>("ElementReference.GetValue", Element));
+
+                if (string.IsNullOrEmpty(_Prefix))
+                {
+                    return Value.ToDecimal();
+                }
+                else
+                {
+                    return Value.Replace(_Prefix, "").ToDecimal();
+                }
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return 0M;
+                throw new Exception("Error in Controls/NumericBox.razor.cs in function GetValue.\n" + ex.Message);
             }
         }
 
-        public async Task SetValue(decimal Value)
+        public decimal Value
         {
-            await JSRuntime.InvokeVoidAsync("ElementReference.SetValue", Element, Value);
+            get
+            {
+                return _Value;
+            }
+            set
+            {
+                _Value = value;
+                JSRuntime.InvokeVoidAsync("ElementReference.SetValue", Element, value);
+            }
         }
-
-        //public decimal Text
-        //{
-        //    get
-        //    {
-        //        return _Text;
-        //    }
-        //    set
-        //    {
-        //        _Text = value;
-        //        StateHasChanged();
-        //    }
-        //}
 
 
 
@@ -102,7 +115,7 @@ namespace Aplicativo.View.Controls
                 try
                 {
 
-                    //Text = _Text;
+                    Value = _Value;
                     PlaceHolder = _PlaceHolder;
 
                     await JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
@@ -118,7 +131,55 @@ namespace Aplicativo.View.Controls
         public void Focus()
         {
             Element.Focus(JSRuntime);
-            //StateHasChanged();
+        }
+
+        protected async Task NumericBox_OnLeave(FocusEventArgs args)
+        {
+            try
+            {
+                await OnLeave.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
+        }
+
+        protected async Task NumericBox_OnKeyDown(KeyboardEventArgs args)
+        {
+            try
+            {
+                await OnKeyDown.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
+        }
+
+        protected async Task NumericBox_OnKeyPress(KeyboardEventArgs args)
+        {
+            try
+            {
+                await OnKeyPress.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
+        }
+
+        protected async Task NumericBox_OnKeyUp(KeyboardEventArgs args)
+        {
+            try
+            {
+                _Value = await GetValue();
+                await OnKeyUp.InvokeAsync(_Value);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(this, ex);
+            }
         }
 
     }

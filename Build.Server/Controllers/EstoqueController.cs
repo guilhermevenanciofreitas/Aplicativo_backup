@@ -1,7 +1,6 @@
 ﻿using Aplicativo.Server;
 using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
-using Build.Server.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -41,7 +40,7 @@ namespace Sistema.Server.Controllers
 
                 foreach (var item in Where)
                 {
-                    Query = Query.Where(item.Predicate, item.Args);
+                    //Query = Query.Where(item.Predicate, item.Args);
                 }
 
                 //Query = HelpQuery.Filtro(Query, Request);

@@ -29,6 +29,9 @@ window.ElementReference = {
     Focus: function (element) {
         element.focus();
     },
+    SetSelectionRange: function (element, start, end) {
+        element.setSelectionRange(start, end);
+    },
     Mask: function (element, mask) {
         $(element).mask(mask);
     },
@@ -42,7 +45,7 @@ window.ElementReference = {
             radixPoint: ',',
 
             rightAlign: true,
-            
+
         });
     },
     MaskPlaca: function (element) {

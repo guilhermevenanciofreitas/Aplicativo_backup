@@ -1,4 +1,5 @@
-﻿using Aplicativo.View.Helpers;
+﻿using Aplicativo.Utils.Helpers;
+using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -18,7 +19,7 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public List<DropDownListItem> _Items { get; set; } = new List<DropDownListItem>();
 
-        [Parameter] public EventCallback Changed { get; set; }
+        [Parameter] public EventCallback<ChangeEventArgs> Change { get; set; }
 
         public string SelectedValue
         {
@@ -28,8 +29,8 @@ namespace Aplicativo.View.Controls
             }
             set
             {
-                _SelectedValue = value;
-                _Changed(value);
+                _SelectedValue = value ?? "";
+                _Changed(value ?? "");
                 StateHasChanged();
             }
         }
@@ -103,39 +104,13 @@ namespace Aplicativo.View.Controls
             Element.Focus(JSRuntime);
         }
 
-        //public void LoadDropDownList<T>(string valueField, string textField, DropDownListItem First = null, Expression<Func<T, bool>> Condition = null, string OrderBy = null) where T : class
-        //{
-
-        //    using var db = new Context();
-        //    var query = db.Set<T>().AsQueryable();
-
-        //    if (Condition != null)
-        //    {
-        //        query = query.Where(Condition);
-        //    }
-
-        //    if (OrderBy != null)
-        //    {
-        //        query = query.OrderBy(OrderBy);
-        //    }
-
-        //    var Items = query.Select(c => new DropDownListItem()
-        //    {
-        //        Value = c.GetType().GetProperty(valueField).GetValue(c).ToString(),
-        //        Text = c.GetType().GetProperty(textField).GetValue(c).ToString(),
-        //    }).ToList();
-
-        //    LoadDropDownList(First, Items);
-
-        //}
-
         public void LoadDropDownList<T>(string valueField, string textField, DropDownListItem First = null, List<T> List = null) where T : class
         {
 
             var Items = List.Select(c => new DropDownListItem()
             {
-                Value = c.GetType().GetProperty(valueField).GetValue(c).ToString(),
-                Text = c.GetType().GetProperty(textField).GetValue(c).ToString(),
+                Value = c.GetType().GetProperty(valueField).GetValue(c).ToStringOrNull() ?? "",
+                Text = c.GetType().GetProperty(textField).GetValue(c).ToStringOrNull(),
             }).ToList();
 
 
@@ -166,13 +141,13 @@ namespace Aplicativo.View.Controls
 
         public void Add(string Value, string Text)
         {
-            _Items.Add(new DropDownListItem(Value, Text));
+            _Items.Add(new DropDownListItem(Value ?? "", Text));
             StateHasChanged();
         }
 
         public void Insert(int Index, string Value, string Text)
         {
-            _Items.Insert(Index, new DropDownListItem(Value, Text));
+            _Items.Insert(Index, new DropDownListItem(Value ?? "", Text));
             StateHasChanged();
         }
 
@@ -180,7 +155,7 @@ namespace Aplicativo.View.Controls
         {
             if (args != string.Empty)
             {
-                Changed.InvokeAsync(args);
+                Change.InvokeAsync(new ChangeEventArgs() { Value = args });
             }
         }
 
@@ -198,7 +173,7 @@ namespace Aplicativo.View.Controls
 
         public DropDownListItem(string Value, string Text)
         {
-            this.Value = Value;
+            this.Value = Value ?? "";
             this.Text = Text;
         }
 

@@ -21,6 +21,8 @@ namespace Aplicativo.View.Helpers
 
         public static Template Template { get; set; } = Template.Desktop;
 
+        public static Parametros Parametros = new Parametros();
+
         public static void GetParametros(int UsuarioID, int EmpresaID)
         {
 
@@ -124,7 +126,7 @@ namespace Aplicativo.View.Helpers
 
         //public List<ContatoTipo> ContatoTipo { get; set; } = new List<ContatoTipo>();
 
-        //public List<UnidadeMedida> UnidadeMedida { get; set; } = new List<UnidadeMedida>();
+        public List<UnidadeMedida> UnidadeMedida { get; set; } = new List<UnidadeMedida>();
 
         //public List<CompraStatus> CompraStatus { get; set; } = new List<CompraStatus>();
 

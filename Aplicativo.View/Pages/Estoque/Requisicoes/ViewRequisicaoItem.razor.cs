@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Estoque.Requisicao
+namespace Aplicativo.View.Pages.Estoque.Requisicoes
 {
     public class ViewRequisicaoItemPage : HelpComponent
     {

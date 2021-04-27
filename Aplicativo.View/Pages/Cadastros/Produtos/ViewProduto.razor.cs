@@ -25,6 +25,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         public TextBox TxtCodigo { get; set; }
         public TextBox TxtDescricao { get; set; }
 
+        public DropDownList DplUnidadeMedida { get; set; }
+
         public DropDownList DplOrigem { get; set; }
 
         public ViewProdutoFornecedor ViewProdutoFornecedor { get; set; }
@@ -34,27 +36,20 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         protected void ViewLayout_PageLoad()
         {
 
-        }
-
-        private void Initialize()
-        {
-
             DplOrigem.Items.Clear();
-            DplOrigem.Add("9", "[Selecione]");
+            DplOrigem.Add(null, "[Selecione]");
             DplOrigem.Add("0", "0 - Nacional");
             DplOrigem.Add("1", "1 - Estrangeira (Importação direta)");
             DplOrigem.Add("2", "2 - Estrangeira (Adquirida no mercado interno)");
+
+            DplUnidadeMedida.LoadDropDownList("UnidadeMedidaID", "Descricao", new DropDownListItem(null, "[Selecione]"), HelpParametros.Parametros.UnidadeMedida);
 
         }
 
         protected async Task ViewLayout_Limpar()
         {
 
-            Initialize();
-
-            EditItemViewLayout.LimparCampos(this);
-
-            DplOrigem.SelectedValue = "0";
+            await EditItemViewLayout.LimparCampos(this);
 
             ViewProdutoFornecedor.ListItemViewLayout.ListItemView = new List<ProdutoFornecedor>();
             ViewProdutoFornecedor.ListItemViewLayout.Refresh();
@@ -81,8 +76,10 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             TxtCodigo.Text = EditItemViewLayout.ViewModel.Codigo.ToStringOrNull();
             TxtDescricao.Text = EditItemViewLayout.ViewModel.Descricao.ToStringOrNull();
 
+            DplUnidadeMedida.SelectedValue = EditItemViewLayout.ViewModel.UnidadeMedidaID.ToStringOrNull();
+
             //Tributação
-            DplOrigem.SelectedValue = EditItemViewLayout.ViewModel.Origem.ToStringOrNull() ?? "9";
+            DplOrigem.SelectedValue = EditItemViewLayout.ViewModel.Origem.ToStringOrNull();
 
             //Fornecedores
             ViewProdutoFornecedor.ListItemViewLayout.ListItemView = EditItemViewLayout.ViewModel.ProdutoFornecedor.ToList();
@@ -103,6 +100,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             //Principal
             EditItemViewLayout.ViewModel.Codigo = TxtCodigo.Text.ToStringOrNull();
             EditItemViewLayout.ViewModel.Descricao = TxtDescricao.Text.ToStringOrNull();
+
+            EditItemViewLayout.ViewModel.UnidadeMedidaID = DplUnidadeMedida.SelectedValue.ToIntOrNull();
 
             //Tributação
             EditItemViewLayout.ViewModel.Origem = DplOrigem.SelectedValue.ToIntOrNull();
