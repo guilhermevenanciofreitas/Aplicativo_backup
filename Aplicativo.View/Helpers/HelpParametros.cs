@@ -1,4 +1,5 @@
 ﻿using Aplicativo.Utils;
+using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 //using Aplicativo.View.Utils;
 //using Blazored.SessionStorage;
@@ -70,35 +71,59 @@ namespace Aplicativo.View.Helpers
                 
         }
 
-        //public static async Task<bool> VerificarUsuarioLogado(ISessionStorageService Session, IJSRuntime JSRuntime)
-        //{
+        public static async Task<bool> VerificarUsuarioLogado(IJSRuntime JSRuntime)
+        {
 
-        //    var Parametros = await Session.GetItemAsync<Parametros>("Parametros");
+            if (Parametros.UsuarioLogado != null)
+            {
+                return true;
+            }
 
-        //    if (Parametros == null)
-        //    {
+            var ManterConectado = await HelpCookie.Get(JSRuntime, "ManterConectado");
 
-        //        var ManterConectado = await HelpCookie.Get(JSRuntime, "ManterConectado");
+            if (!string.IsNullOrEmpty(ManterConectado))
+            {
 
-        //        if (ManterConectado != "")
-        //        {
-        //            var Dados = ManterConectado.Split('§');
+                var Dados = ManterConectado.Split('§');
 
-        //            var UsuarioID = HelpCriptografia.Descriptografar(Dados[0]).ToInt();
-        //            var EmpresaID = Dados[1].ToInt();
+                var UsuarioID = Dados[0].ToInt(); //HelpCriptografia.Descriptografar(Dados[0]).ToInt();
+                var EmpresaID = Dados[1].ToInt(); //HelpCriptografia.Descriptografar(Dados[1]).ToInt();
 
-        //            await Session.SetItemAsync("Parametros", GetParametros(UsuarioID, EmpresaID));
+                Parametros.UsuarioLogado = new Usuario() { UsuarioID = UsuarioID };
 
-        //            return true;
-        //        }
+                return true;
 
-        //        return false;
+            }
 
-        //    }
+            return false;
 
-        //    return true;
+            //var Parametros = await Session.GetItemAsync<Parametros>("Parametros");
 
-        //}
+            //if (Parametros == null)
+            //{
+
+            //    var ManterConectado = await HelpCookie.Get(JSRuntime, "ManterConectado");
+
+            //    if (ManterConectado != "")
+            //    {
+            //        var Dados = ManterConectado.Split('§');
+
+            //        var UsuarioID = HelpCriptografia.Descriptografar(Dados[0]).ToInt();
+            //        var EmpresaID = Dados[1].ToInt();
+
+            //        await Session.SetItemAsync("Parametros", GetParametros(UsuarioID, EmpresaID));
+
+            //        return true;
+            //    }
+
+            //    return false;
+
+            //}
+
+            //return true;
+
+
+        }
 
     }
 

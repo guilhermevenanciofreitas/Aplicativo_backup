@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <DatePicker @ref="DtpEmissao" _Label="Emissão"></DatePicker>
+                                <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change"></DatePicker>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,8 @@
                                 <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
                                 <GridPageSettings PageSize="30"></GridPageSettings>
                                 <GridColumns>
-                                    <GridColumn Width="55" Field="nParcela" HeaderText="Parcela"></GridColumn>
+                                    <GridColumn Width="65" Field="nParcela" HeaderText="Parcela"></GridColumn>
+                                    <GridColumn Width="90" Field="DataEmissao" HeaderText="Emissão" Format="dd/MM/yyyy"></GridColumn>
                                     <GridColumn Width="110" Field="nDocumentoParcela" HeaderText="Número Doc."></GridColumn>
                                     <GridColumn Width="85" Field="vTotal" HeaderText="Valor" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
                                     <GridColumn Width="110" AllowSorting="false" HeaderText="Vencimento">

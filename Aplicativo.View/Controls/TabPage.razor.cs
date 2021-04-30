@@ -28,9 +28,9 @@ namespace Aplicativo.View.Controls
             });
         }
 
-        protected void Active()
+        protected async Task Active()
         {
-            ContainerTabSet.Active(Id);
+            await ContainerTabSet.Active(Id);
         }
 
     }

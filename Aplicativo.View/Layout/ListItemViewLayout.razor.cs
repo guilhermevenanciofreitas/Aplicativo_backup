@@ -70,6 +70,23 @@ namespace Aplicativo.View.Layout
 
         [Parameter] public bool Simples { get; set; } = false;
 
+        protected override async Task OnInitializedAsync()
+        {
+            try
+            {
+
+                await base.OnInitializedAsync();
+
+                //await OnPageLoad.InvokeAsync(null);
+
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+            }
+            
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             try

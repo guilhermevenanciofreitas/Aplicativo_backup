@@ -15,8 +15,11 @@
 }
 
 <select class="form-control" id="@Element.Id" @ref="Element" @bind="@SelectedValue">
-    @foreach (var item in @_Items)
+    @if (@_Items != null)
     {
-        <option value="@item.Value">@item.Text</option>
+        @foreach (var item in @_Items)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
     }
 </select>

@@ -1,0 +1,214 @@
+@layout SmallLayout
+
+@page "/Login/Conexao"
+
+@inject DomHelpers DomHelpers
+
+@inherits ViewIndexPage
+
+<style>
+
+    .auth-logo-image {
+        margin-left: 32px;
+    }
+
+    .auth-form-root {
+        flex-basis: 720px;
+        padding-left: 90px;
+        padding-right: 90px;
+        padding-bottom: 125px;
+    }
+
+    @*@media (max-width: 959.95px) {
+        .auth-form-root {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }*@
+
+    .auth-form-title {
+        margin-top: 24px;
+    }
+
+    .auth-form-social-buttons {
+        margin-top: 24px;
+    }
+
+    .auth-form-social-icon {
+        margin-right: 8px;
+    }
+
+    .auth-form-sugestion {
+        margin-top: 16px;
+    }
+
+    .auth-form-text-field {
+        margin-top: 16px;
+    }
+
+    .auth-form-submit-button {
+        margin: 16px 0px;
+    }
+
+    .auth-form-policy-field {
+        display: flex;
+        margin-top: 8px;
+        align-items: center;
+    }
+
+    .auth-form-policy-checkbox {
+        margin-left: -14px;
+    }
+
+
+    .auth-layout-root {
+        height: 100%;
+    }
+
+    .auth-layout-grid {
+        height: 100%;
+    }
+
+    @*@media (max-width: 1279.95px) {
+        .auth-layout-quote-container {
+            display: none;
+        }
+    }*@
+
+    .auth-layout-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auth-layout-content-header {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+    }
+
+    .auth-layout-content-body {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+    }
+
+    @*@media (max-width: 1279.95px) {
+        .auth-layout-content-body {
+            justify-content: center;
+        }
+    }*@
+
+
+    .auth-quote-root {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        background-size: cover;
+        justify-content: center;
+        background-image: url(./_content/Aplicativo.View/images/auth.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .auth-quote-inner {
+        flex-basis: 600px;
+        text-align: center;
+    }
+
+    .auth-quote-text {
+        color: #ffffff;
+        font-weight: 300;
+    }
+
+    .auth-quote-name {
+        color: #ffffff;
+        margin-top: 24px;
+    }
+
+    .auth-quote-bio {
+        color: #ffffff;
+    }
+</style>
+
+<div class="auth-layout-root">
+    <Grid Class="auth-layout-grid" Container>
+        <Grid Class="auth-layout-quote-container" Item Large="@GridSize.Six">
+            <div class="auth-quote-root">
+                <div class="auth-quote-inner">
+                    <Typography Class="auth-quote-text" Variant="@TypographyVariant.H5">
+                        Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
+                        they sold out High Life.
+                    </Typography>
+                    <div class="auth-quote-person">
+                        <Typography Class="auth-quote-name" Variant="@TypographyVariant.Body1">
+                            Takamaru Ayako
+                        </Typography>
+                        <Typography Class="auth-quote-bio" Variant="@TypographyVariant.Body2">
+                            Manager at inVision
+                        </Typography>
+                    </div>
+                </div>
+            </div>
+        </Grid>
+        <Grid Class="auth-layout-content" Item Large="@GridSize.Six">
+            <div class="auth-layout-content">
+                <div class="auth-layout-content-body">
+
+                    <div class="auth-form-root">
+
+                        
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <Typography Class="auth-form-title" Variant="TypographyVariant.H3">Domínio</Typography>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @foreach (var item in HelpConexao.Dominio?.Conexao)
+                            {
+                            <div class="col-md-4 col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Name</h5>
+                                        <button class="btn btn-outline-secondary" type="button" @onclick="@(() => BtnSelecionar_Click(item.Name))">[Selecionar]</button>
+                                        <button class="btn btn-outline-secondary" type="button" @onclick="@(() => BtnExcluir_Click(item.Name))">[Excluir]</button>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+
+                        <hr />
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-group">
+                                    <Options @ref="OptTipo" _Name="Tipo" OnChange="OptTipo_Change">
+                                        <Option Label="Dominio" Value="Dominio"></Option>
+                                        <Option Label="Conexão" Value="Conexao"></Option>
+                                    </Options>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div style="display: @(OptTipo?.Value == "Dominio" ? "block" : "none")">
+                            <ViewDominio @ref="ViewDominio"></ViewDominio>
+                        </div>
+                        <div style="display: @(OptTipo?.Value == "Conexao" ? "block" : "none")">
+                            <ViewConexao @ref="ViewConexao"></ViewConexao>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </Grid>
+    </Grid>
+</div>

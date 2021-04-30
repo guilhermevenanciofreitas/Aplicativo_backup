@@ -17,7 +17,9 @@ namespace Aplicativo.View.Controls
     public class TabSetControl : HelpComponent
     {
 
-        public string Id { get; set; }
+        public string Id => _Id;
+
+        private string _Id { get; set; }
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -61,7 +63,7 @@ namespace Aplicativo.View.Controls
 
             Tab.Visible = true;
 
-            this.Id = Id;
+            _Id = Id;
 
             await Changed.InvokeAsync(null);
             StateHasChanged();

@@ -42,26 +42,35 @@
 
                             <div class="row">
                                 <div class="col-md-9">
+                                    <div class="form-group">
+
+                                    </div>
                                     @*<label>@(PlanoContaTipoID == 1 ? "Pagador" : "Recebedor")</label>
-                                    <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>*@
+        <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>*@
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    @*<ViewPesquisa @ref="ViewPesquisaFormaPagamento" Label="Forma de pagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    <div class="form-group">
+                                        @*<ViewPesquisa @ref="ViewPesquisaFormaPagamento" Label="Forma de pagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    @*<ViewPesquisa @ref="ViewPesquisaPlanoConta" Label="Plano de conta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>*@
+                                    <div class="form-group">
+                                        @*<ViewPesquisa @ref="ViewPesquisaPlanoConta" Label="Plano de conta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>*@
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    @*<ViewPesquisa @ref="ViewPesquisaCentroCusto" Label="Centro de custo" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    <div class="form-group">
+                                        @*<ViewPesquisa @ref="ViewPesquisaCentroCusto" Label="Centro de custo" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    </div>
                                 </div>
                             </div>
                         </div>

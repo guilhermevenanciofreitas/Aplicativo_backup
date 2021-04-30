@@ -80,7 +80,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             foreach(var item in ListTituloDetalhe)
             {
-                await JSRuntime.InvokeVoidAsync("console.log", item.DataVencimento);
                 Titulo.TituloDetalhe.Add(item);
             }
 
@@ -96,6 +95,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
 
         protected void TxtDocumento_Input()
+        {
+            CarregarGrid();
+        }
+
+        protected void DtpEmissao_Change()
         {
             CarregarGrid();
         }
@@ -172,7 +176,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         }
 
-
         protected async Task GridViewTituloDetalheDtpVencimento_Change(object args, TituloDetalhe TituloDetalhe)
         {
             try
@@ -184,8 +187,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                 await JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
         }
-
-
 
     }
 }

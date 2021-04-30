@@ -197,8 +197,6 @@ namespace Aplicativo.View.Layout
 
             await OnLimpar.InvokeAsync(null);
 
-            ViewModal.Show();
-
             if (args == null)
             {
                 BtnLimpar_Click();
@@ -208,7 +206,9 @@ namespace Aplicativo.View.Layout
                 ItemViewMode = ItemViewMode.Edit;
                 await OnCarregar.InvokeAsync(args);
             }
-            
+
+            ViewModal.Show();
+
             ListItemViewLayout.Refresh();
             StateHasChanged();
 
