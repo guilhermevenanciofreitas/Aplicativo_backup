@@ -1,0 +1,78 @@
+﻿@attribute [Page("Login/Entrar")]
+
+@layout SmallLayout;
+
+@inherits IndexPage;
+
+<ComponentLayout OnLoad="Component_Load">
+    <LoginLayout>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <Typography Class="auth-form-title" Variant="TypographyVariant.H3">Login</Typography>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Domínio</label>
+                    <div class="input-group">
+                        <TextBox @ref="TxtName" _ReadOnly="true"></TextBox>
+                        <button class="btn btn-outline-secondary" type="button" @onclick="BtnAlterarDominio_Click"><EditIcon /> Alterar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <DropDownList @ref="DplEmpresa" _Label="Empresa"></DropDownList>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <TextBox @ref="TxtUsuario" _Label="Usuário"></TextBox>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <TextBox @ref="TxtSenha" _Label="Senha" _Type="TextBoxType.Password"></TextBox>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <CheckBox @ref="ChkManterConectado" _Label="Manter conectado"></CheckBox>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <Grid Container Spacing="@Spacing.Three" AlignItems="AlignItems.Center">
+            <Grid Item ExtraSmall="@GridSize.Six">
+                <center><NavLink href="Login/Recuperar" Match="NavLinkMatch.Prefix">Esqueci minha senha</NavLink></center>
+            </Grid>
+            <Grid Item ExtraSmall="@GridSize.Six">
+                <Button Color="@Color.Primary" FullWidth Size="@Size.Large" Variant="@ButtonVariant.Contained" OnClick="BtnEntrar_Click">Entrar</Button>
+            </Grid>
+        </Grid>
+
+    </LoginLayout>
+
+</ComponentLayout>

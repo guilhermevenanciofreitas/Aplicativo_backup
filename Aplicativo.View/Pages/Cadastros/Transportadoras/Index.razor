@@ -1,3 +1,4 @@
-﻿@page "/Cadastros/Transportadoras"
+﻿@attribute [Page("Cadastros/Transportadoras")]
+@attribute [LoginRequired(true)]
 
-<Aplicativo.View.Pages.Cadastros.Pessoa.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoa.Tipo.Transportadora" TitleView="Transportadora"></Aplicativo.View.Pages.Cadastros.Pessoa.Index>
+<Aplicativo.View.Pages.Cadastros.Pessoas.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoas.Tipo.Transportadora" TitleList="Transportadoras" TitleView="Transportadora"></Aplicativo.View.Pages.Cadastros.Pessoas.Index>

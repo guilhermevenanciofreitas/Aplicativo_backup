@@ -1,3 +1,4 @@
-﻿@page "/Cadastros/Fornecedores"
+﻿@attribute [Page("Cadastros/Fornecedores")]
+@attribute [LoginRequired(true)]
 
-<Aplicativo.View.Pages.Cadastros.Pessoas.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoas.Tipo.Fornecedor" TitleView="Fornecedor"></Aplicativo.View.Pages.Cadastros.Pessoas.Index>
+<Aplicativo.View.Pages.Cadastros.Pessoas.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoas.Tipo.Fornecedor" TitleList="Fornecedores" TitleView="Fornecedor"></Aplicativo.View.Pages.Cadastros.Pessoas.Index>

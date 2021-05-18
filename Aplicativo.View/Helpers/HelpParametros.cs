@@ -4,8 +4,10 @@ using Aplicativo.Utils.Models;
 //using Aplicativo.View.Utils;
 //using Blazored.SessionStorage;
 using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Helpers
@@ -22,26 +24,14 @@ namespace Aplicativo.View.Helpers
 
         public static Template Template { get; set; } = Template.Desktop;
 
+
+
+
+
         public static Parametros Parametros = new Parametros();
 
         public static void GetParametros(int UsuarioID, int EmpresaID)
         {
-
-            //var cert = new ConfiguracaoCertificado
-            //{
-            //    TipoCertificado = TipoCertificado.A1Arquivo,
-            //    Arquivo = "C:\\Certificado.pfx",
-            //    Senha = "tcl@04058687"
-            //};
-
-            //var cfg = new ConfiguracaoServico
-            //{
-            //    DiretorioSchemas = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Schemas"),
-            //    Certificado = cert,
-            //    tpAmb = TipoAmbiente.Producao,
-            //    cUF = DFe.Classes.Entidades.Estado.GO,
-            //};
-
 
             //using (var db = new Context())
             //{
@@ -71,60 +61,61 @@ namespace Aplicativo.View.Helpers
                 
         }
 
-        public static async Task<bool> VerificarUsuarioLogado(IJSRuntime JSRuntime)
+        public static async Task<bool> VerificarUsuarioLogado()
         {
-
-            if (Parametros.UsuarioLogado != null)
-            {
-                return true;
-            }
-
-            var ManterConectado = await HelpCookie.Get(JSRuntime, "ManterConectado");
-
-            if (!string.IsNullOrEmpty(ManterConectado))
+            try
             {
 
-                var Dados = ManterConectado.Split('§');
+                HelpConexao.Dominio = await HelpConexao.GetDominio();
 
-                var UsuarioID = Dados[0].ToInt(); //HelpCriptografia.Descriptografar(Dados[0]).ToInt();
-                var EmpresaID = Dados[1].ToInt(); //HelpCriptografia.Descriptografar(Dados[1]).ToInt();
+                if (string.IsNullOrEmpty(HelpConexao.Dominio.Name))
+                {
+                    return false;
+                }
 
-                Parametros.UsuarioLogado = new Usuario() { UsuarioID = UsuarioID };
+                if (Parametros.UsuarioLogado != null)
+                {
+                    return true;
+                }
 
-                return true;
+                var ManterConectado = await HelpCookie.Get("ManterConectado");
+
+
+                if (!string.IsNullOrEmpty(ManterConectado))
+                {
+
+                    var Dados = ManterConectado.Split('§');
+
+                    var UsuarioID = Dados[0].ToInt();
+                    var EmpresaID = Dados[1].ToInt();
+
+                    var QueryUsuario = new HelpQuery<Usuario>();
+                    QueryUsuario.AddInclude("Pessoa");
+                    QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
+
+                    var Usuario = await QueryUsuario.FirstOrDefault();
+
+
+                    var QueryEmpresa = new HelpQuery<Empresa>();
+                    QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
+
+                    var Empresa = await QueryEmpresa.FirstOrDefault();
+
+                    Parametros.UsuarioLogado = Usuario;
+                    Parametros.EmpresaLogada = Empresa;
+
+                    return true;
+
+                }
+
+                return false;
 
             }
-
-            return false;
-
-            //var Parametros = await Session.GetItemAsync<Parametros>("Parametros");
-
-            //if (Parametros == null)
-            //{
-
-            //    var ManterConectado = await HelpCookie.Get(JSRuntime, "ManterConectado");
-
-            //    if (ManterConectado != "")
-            //    {
-            //        var Dados = ManterConectado.Split('§');
-
-            //        var UsuarioID = HelpCriptografia.Descriptografar(Dados[0]).ToInt();
-            //        var EmpresaID = Dados[1].ToInt();
-
-            //        await Session.SetItemAsync("Parametros", GetParametros(UsuarioID, EmpresaID));
-
-            //        return true;
-            //    }
-
-            //    return false;
-
-            //}
-
-            //return true;
-
-
+            catch (Exception)
+            {
+                return false;
+            }
         }
-
     }
 
     public class Parametros
@@ -134,7 +125,6 @@ namespace Aplicativo.View.Helpers
 
         public Empresa EmpresaLogada { get; set; }
 
-        //public ConfiguracaoServico CfgServico { get; set; }
 
 
         //public List<AgendaTipo> AgendaTipo { get; set; } = new List<AgendaTipo>();

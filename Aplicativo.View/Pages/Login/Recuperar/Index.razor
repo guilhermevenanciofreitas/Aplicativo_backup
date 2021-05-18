@@ -1,0 +1,46 @@
+﻿@attribute [Page("Login/Recuperar")]
+
+@layout SmallLayout;
+
+@inherits IndexPage;
+
+<ComponentLayout OnLoad="Component_Load">
+    <LoginLayout>
+
+        <div class="form-group">
+            <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="BtnVoltar_Click">
+                <ArrowBackIcon />
+            </IconButton>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <Typography Class="auth-form-title" Variant="TypographyVariant.H3">Recuperar senha</Typography>
+                    <Typography Color="@Color.TextSecondary" GutterBottom>
+                        Use seu e-mail para recuperar sua senha
+                    </Typography>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <TextBox @ref="TxtEmail" _Label="E-mail" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                </div>
+            </div>
+        </div>
+
+        <Grid Container Spacing="@Spacing.Three" AlignItems="AlignItems.Center">
+            <Grid Item ExtraSmall="@GridSize.Six">
+                <div class="form-group">
+                    <Button Color="@Color.Primary" FullWidth Size="@Size.Large" Variant="@ButtonVariant.Contained" OnClick="BtnConfirmar_Click">Confirmar</Button>
+                </div>
+            </Grid>
+        </Grid>
+
+    </LoginLayout>
+</ComponentLayout>

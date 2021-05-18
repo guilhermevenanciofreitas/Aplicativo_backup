@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
-    public class TabPageControl : HelpComponent
+    public class TabPageControl : ComponentBase
     {
 
         [CascadingParameter] public TabSet ContainerTabSet { get; set; }

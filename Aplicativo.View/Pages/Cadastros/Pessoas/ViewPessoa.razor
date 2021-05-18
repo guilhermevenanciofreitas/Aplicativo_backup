@@ -1,86 +1,165 @@
-﻿@inherits ViewPessoaPage<Pessoa>
+﻿@inherits ViewPessoaPage
 
-<EditItemViewLayout @ref="EditItemViewLayout"
-                    ListItemViewLayout="ListItemViewLayout"
-                    Title="@Title"
-                    Width="1280px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnLimpar="ViewLayout_Limpar"
-                    OnCarregar="ViewLayout_Carregar"
-                    OnSalvar="ViewLayout_Salvar"
-                    OnExcluir="ViewLayout_Excluir">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="@Title" OnLoad="ViewLayout_Load" Width="1250px">
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+    </BtnLimpar>
+    <BtnSalvar>
+        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+    </BtnSalvar>
+    <BtnExcluir>
+        <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
+    </BtnExcluir>
     <View>
-
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
 
-                    <div class="row">
-                        <div class="col-md-1 col-sm-6">
-                            <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
-                        </div>
-                        <div class="col-md-1 col-sm-12">
-                            <DropDownList @ref="DplTipo" _Label="Tipo" Change="DplTipo_Change"></DropDownList>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtCNPJ" _Label="CNPJ" _AutoFocus="true"></TextBox>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <TextBox @ref="TxtRazaoSocial" _Label="Razão social"></TextBox>
-                        </div>
-                        <div class="col-md-4 col-sm-12">
-                            <TextBox @ref="TxtNomeFantasia" _Label="Nome fantasia"></TextBox>
+                <div class="row">
+                    <div class="col-md-1 col-sm-6">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-1 col-sm-12">
+                        <DropDownList @ref="DplTipo" _Label="Tipo" OnChange="DplTipo_Change" />
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <TextBox @ref="TxtCNPJ" _Label="CNPJ" />
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <TextBox @ref="TxtRazaoSocial" _Label="Razão social" />
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <TextBox @ref="TxtNomeFantasia" _Label="Nome fantasia" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="form-inline">
+                            <CheckBox @ref="ChkCliente" _Label="Cliente" Changed="StateHasChanged" />
+                            <CheckBox @ref="ChkFornecedor" _Label="Fornecedor" />
+                            <CheckBox @ref="ChkTransportadora" _Label="Transportadora" />
+                            <CheckBox @ref="ChkFuncionario" _Label="Funcionário" />
                         </div>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="form-inline">
-                                <CheckBox @ref="ChkCliente" _Label="Cliente" Changed="StateHasChanged"></CheckBox>
-                                <CheckBox @ref="ChkFornecedor" _Label="Fornecedor"></CheckBox>
-                                <CheckBox @ref="ChkTransportadora" _Label="Transportadora"></CheckBox>
-                                <CheckBox @ref="ChkFuncionario" _Label="Funcionário"></CheckBox>
-                            </div>
-                        </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                        <TextBox @ref="TxtInscricaoEstadual" _Label="Insc. Estadual" />
                     </div>
-
-                    <br />
-
-                    <div class="row">
-                        <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtInscricaoEstadual" _Label="Insc. Estadual"></TextBox>
-                        </div>
-                        <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Juridica ? "block" : "none")">
-                            <TextBox @ref="TxtInscricaoMunicipal" _Label="Insc. Municipal"></TextBox>
-                        </div>
-                        <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Fisica ? "block" : "none")">
-                            <DropDownList @ref="DplSexo" _Label="Sexo"></DropDownList>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <DatePicker @ref="DtpAbertura" _Label="Abertura"></DatePicker>
-                        </div>
+                    <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Juridica ? "block" : "none")">
+                        <TextBox @ref="TxtInscricaoMunicipal" _Label="Insc. Municipal" />
                     </div>
+                    <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Fisica ? "block" : "none")">
+                        <DropDownList @ref="DplSexo" _Label="Sexo" />
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <DatePicker @ref="DtpAbertura" _Label="Abertura" />
+                    </div>
+                </div>
 
-                </Box>
             </TabPage>
             <div style="display: @((ChkCliente?.Checked ?? false) ? "block" : "none")">
                 <TabPage Id="Vendedor" Title="Vendedor">
-                    <Box Padding="3">
-                        <ViewPessoaVendedor @ref="ViewPessoaVendedor"></ViewPessoaVendedor>
-                    </Box>
+                    <ViewPessoaVendedor @ref="ViewPessoaVendedor" />
                 </TabPage>
             </div>
             <TabPage Id="Endereco" Title="Endereço">
-                <Box Padding="3">
-                    <ViewPessoaEndereco @ref="ViewPessoaEndereco"></ViewPessoaEndereco>
-                </Box>
+                <ViewPessoaEndereco @ref="ViewPessoaEndereco" />
             </TabPage>
             <TabPage Id="Contato" Title="Contato">
-                <Box Padding="3">
-                    <ViewPessoaContato @ref="ViewPessoaContato"></ViewPessoaContato>
-                </Box>
+                <ViewPessoaContato @ref="ViewPessoaContato" />
             </TabPage>
         </TabSet>
-
     </View>
 </EditItemViewLayout>
+
+
+@*@inherits ViewPessoaPage<Pessoa>
+
+    <EditItemViewLayout @ref="EditItemViewLayout"
+                        ListItemViewLayout="ListItemViewLayout"
+                        Title="@Title"
+                        Width="1280px"
+                        OnPageLoad="ViewLayout_PageLoad"
+                        OnLimpar="ViewLayout_Limpar"
+                        OnCarregar="ViewLayout_Carregar"
+                        OnSalvar="ViewLayout_Salvar"
+                        OnExcluir="ViewLayout_Excluir">
+        <View>
+
+            <TabSet @ref="TabSet" Changed="StateHasChanged">
+                <TabPage Id="Principal" Title="Principal">
+                    <Box Padding="3">
+
+                        <div class="row">
+                            <div class="col-md-1 col-sm-6">
+                                <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                            </div>
+                            <div class="col-md-1 col-sm-12">
+                                <DropDownList @ref="DplTipo" _Label="Tipo" Change="DplTipo_Change"></DropDownList>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <TextBox @ref="TxtCNPJ" _Label="CNPJ" _AutoFocus="true"></TextBox>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <TextBox @ref="TxtRazaoSocial" _Label="Razão social"></TextBox>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <TextBox @ref="TxtNomeFantasia" _Label="Nome fantasia"></TextBox>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-inline">
+                                    <CheckBox @ref="ChkCliente" _Label="Cliente" Changed="StateHasChanged"></CheckBox>
+                                    <CheckBox @ref="ChkFornecedor" _Label="Fornecedor"></CheckBox>
+                                    <CheckBox @ref="ChkTransportadora" _Label="Transportadora"></CheckBox>
+                                    <CheckBox @ref="ChkFuncionario" _Label="Funcionário"></CheckBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-2 col-sm-12">
+                                <TextBox @ref="TxtInscricaoEstadual" _Label="Insc. Estadual"></TextBox>
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Juridica ? "block" : "none")">
+                                <TextBox @ref="TxtInscricaoMunicipal" _Label="Insc. Municipal"></TextBox>
+                            </div>
+                            <div class="col-md-2 col-sm-12" style="display: @((TipoPessoa?)DplTipo?.SelectedValue.ToIntOrNull() == TipoPessoa.Fisica ? "block" : "none")">
+                                <DropDownList @ref="DplSexo" _Label="Sexo"></DropDownList>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <DatePicker @ref="DtpAbertura" _Label="Abertura"></DatePicker>
+                            </div>
+                        </div>
+
+                    </Box>
+                </TabPage>
+                <div style="display: @((ChkCliente?.Checked ?? false) ? "block" : "none")">
+                    <TabPage Id="Vendedor" Title="Vendedor">
+                        <Box Padding="3">
+                            <ViewPessoaVendedor @ref="ViewPessoaVendedor"></ViewPessoaVendedor>
+                        </Box>
+                    </TabPage>
+                </div>
+                <TabPage Id="Endereco" Title="Endereço">
+                    <Box Padding="3">
+                        <ViewPessoaEndereco @ref="ViewPessoaEndereco"></ViewPessoaEndereco>
+                    </Box>
+                </TabPage>
+                <TabPage Id="Contato" Title="Contato">
+                    <Box Padding="3">
+                        <ViewPessoaContato @ref="ViewPessoaContato"></ViewPessoaContato>
+                    </Box>
+                </TabPage>
+            </TabSet>
+
+        </View>
+    </EditItemViewLayout>*@

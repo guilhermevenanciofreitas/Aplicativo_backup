@@ -1,4 +1,27 @@
-﻿@inherits MaterialLayoutComponent
+﻿@inherits AppLayoutComponent
+
+<style>
+    .Account-Image {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        background-color: white;
+        border-radius: 50%;
+        background-size: cover;
+        background-image: url(./_content/Aplicativo.View/images/avatars/avatar_11.png);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .Account-Setting {
+        position: absolute;
+        bottom: -4px;
+        right: -4px;
+        background-color: rgba(0,0,0,0.6);
+        border-radius: 50%;
+    }
+</style>
+
+<Aplicativo.View.Pages.Cadastros.Usuarios.ViewUsuario @ref="ViewUsuario" BtnLimpar="false" BtnExcluir="false" />
 
 <MainLayout
     TopbarClass="App-Topbar">
@@ -11,14 +34,34 @@
         </Typography>
     </TitleContent>
     <ActionsContent>
-        <ToggleTheme />
+        <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="BtnSair_Click">
+            <ArrowBackIcon OnClick="BtnSair_Click"></ArrowBackIcon>
+        </IconButton>
     </ActionsContent>
     <BodyContent>
         <Box Padding="3" Class="App-Body">
             @Body
         </Box>
     </BodyContent>
-     <SidebarContent>
+    <SidebarContent>
+
+        <br />
+
+        <center>
+            <div class="Account-Image">
+                <div class="Account-Setting">
+                    <IconButton OnClick="BtnSetting_Click"><SettingsIcon Style="color: #fff" /></IconButton>
+                </div>
+            </div>
+            <br />
+            <p class="Typography-Root Typography-Body2" style="color: #fff">@HelpParametros.Parametros?.UsuarioLogado?.Pessoa?.NomeFantasia</p>
+        </center>
+        
+        <br />
+
+        <Divider />
+
         <Aplicativo.View.Layout.Menu />
+
     </SidebarContent>
 </MainLayout>

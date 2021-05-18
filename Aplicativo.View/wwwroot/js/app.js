@@ -1,4 +1,16 @@
-﻿window.LongPress = {
+﻿window.Loading =
+{
+    Show: function (text) {
+        document.getElementsByClassName("loading")[0].style.display = "block";
+        document.getElementsByClassName("loading-text")[0].innerHTML = text;
+    },
+    Hide: function () {
+        document.getElementsByClassName("loading")[0].style.display = "none";
+        document.getElementsByClassName("loading-text")[0].innerHTML = "";
+    },
+}
+
+window.LongPress = {
     Timer: null,
     MouseUp: function () {
         clearTimeout(Timer);
@@ -74,10 +86,22 @@ window.ElementReference = {
 window.Cookie =
 {
     set: function (cname, cvalue, minutes) {
-        var d = new Date();
-        d.setTime(d.getTime() + (minutes * 60 * 1000));
-        var expires = "expires=" + d.toUTCString();
+
+        var expires = "";
+
+        if (minutes == 0)
+        {
+            expires = "expires=" + new Date(2147483647 * 1000).toUTCString();
+        }
+        else
+        {
+            var d = new Date();
+            d.setTime(d.getTime() + (minutes * 60 * 1000));
+            expires = "expires=" + d.toUTCString();
+        }
+
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
     },
     get: function (cname) {
         var name = cname + "=";
@@ -95,6 +119,34 @@ window.Cookie =
         return "";
     },
     delete: function (cname) {
-        document.cookie = cname + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = cname + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;';
     },
+}
+
+window.Location =
+{
+    getPathName: function () {
+        return window.location.pathname;
+    },
+}
+
+window.Menu =
+{
+    AfterRender: function () {
+
+        var accordions = document.getElementsByClassName("Menu-Accordion");
+        var i;
+
+        for (i = 0; i < accordions.length; i++) {
+            accordions[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    }
 }

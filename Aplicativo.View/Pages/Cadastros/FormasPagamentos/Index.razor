@@ -1,0 +1,81 @@
+﻿@attribute [Page("Cadastros/FormasPagamentos")]
+@attribute [LoginRequired(true)]
+
+@inherits IndexPage
+
+<ComponentLayout OnLoad="Component_Load">
+    <ListItemViewLayout @ref="ListItemViewLayout" Title="Formas de pagamentos">
+
+        <ViewPages>
+            <ViewFormaPagamento @ref="View" />
+        </ViewPages>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
+                <ListViewBtnFiltro>
+                    <ViewFiltro />
+                </ListViewBtnFiltro>
+            </ListViewBtnPesquisa>
+        </BtnPesquisa>
+
+        <BtnNovo>
+            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+        </BtnExcluir>
+
+        <!--<View>-->
+        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
+        <!--</View>-->
+        @*<ItemView>
+                @{
+                    var item = (Usuario)context;
+
+                    <ListItemText Primary="@item.Login">
+                        <SecondaryContent>
+                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                @item.Login
+                            </Typography>
+                            — I'll be in your neighborhood
+                        </SecondaryContent>
+                    </ListItemText>
+                }
+            </ItemView>*@
+
+        <GridView>
+            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+                <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
+            </GridViewItem>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>
+
+@*<ListItemViewLayout @ref="ListItemViewLayout"
+                        TValue="FormaPagamento"
+                        OnPageLoad="ViewLayout_PageLoad"
+                        OnPesquisar="ViewLayout_Pesquisar"
+                        OnItemView="ViewLayout_ItemView"
+                        OnDelete="ViewLayout_Delete">
+        <View>
+            <ViewFormaPagamento @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewFormaPagamento>
+        </View>
+        <ItemView>
+            @{
+                var item = (FormaPagamento)context;
+
+                <ListItemText Primary="@item.Descricao">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Descricao
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>
+        <GridView>
+            <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
+        </GridView>
+    </ListItemViewLayout>*@

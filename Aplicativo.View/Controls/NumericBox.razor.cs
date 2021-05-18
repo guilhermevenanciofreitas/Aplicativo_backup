@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Skclusive.Material.Text;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
 
-    public class NumericBoxComponent : HelpComponent
+    public class NumericBoxComponent : ComponentBase
     {
 
         protected TextField TextField;
@@ -48,7 +49,7 @@ namespace Aplicativo.View.Controls
             try
             {
 
-                var Value = (await JSRuntime.InvokeAsync<string>("ElementReference.GetValue", Element));
+                var Value = (await App.JSRuntime.InvokeAsync<string>("ElementReference.GetValue", Element));
 
                 if (string.IsNullOrEmpty(_Prefix))
                 {
@@ -75,7 +76,7 @@ namespace Aplicativo.View.Controls
             set
             {
                 _Value = value;
-                JSRuntime.InvokeVoidAsync("ElementReference.SetValue", Element, value);
+                App.JSRuntime.InvokeVoidAsync("ElementReference.SetValue", Element, value);
             }
         }
 
@@ -118,19 +119,19 @@ namespace Aplicativo.View.Controls
                     Value = _Value;
                     PlaceHolder = _PlaceHolder;
 
-                    await JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
+                    await App.JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
 
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
 
         public void Focus()
         {
-            Element.Focus(JSRuntime);
+            Element.Focus();
         }
 
         protected async Task NumericBox_OnLeave(FocusEventArgs args)
@@ -141,7 +142,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 
@@ -153,7 +154,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 
@@ -165,7 +166,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 
@@ -178,7 +179,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 

@@ -1,0 +1,19 @@
+﻿@inherits ViewDominioPage;
+
+<ComponentLayout OnLoad="Component_Load">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="form-group">
+                <TextBox @ref="TxtName" _Label="Nome"></TextBox>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+                <Button Color="@Color.Primary" FullWidth Size="@Size.Large" Variant="@ButtonVariant.Contained" OnClick="BtnConfirmar_Click">Confirmar</Button>
+            </div>
+        </div>
+    </div>
+</ComponentLayout>

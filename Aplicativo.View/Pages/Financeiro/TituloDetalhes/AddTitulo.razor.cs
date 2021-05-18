@@ -2,7 +2,7 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Aplicativo.View.Layout;
+using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Syncfusion.Blazor.Grids;
@@ -14,12 +14,10 @@ using System.Threading.Tasks;
 namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 {
 
-    public partial class AddTituloPage<TValue> : HelpComponent
+    public partial class AddTituloPage : ComponentBase
     {
 
-        [Parameter]
-        public ListItemViewLayout<TituloDetalhe> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<TituloDetalhe> EditItemViewLayout { get; set; }
+        public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
 
@@ -41,16 +39,16 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         #endregion
 
-        protected async Task ViewLayout_PageLoad()
+        protected async Task ViewLayout_Load(object args)
         {
+
+            await ViewLayout_Limpar();
 
             DplPeriodo.Items.Clear();
             DplPeriodo.Add("30", "Mensalmente");
             DplPeriodo.Add("15", "A cada 15 dias");
             DplPeriodo.Add("7", "Semanalmente");
             DplPeriodo.Add("0", "Personalizado");
-
-            await ViewLayout_Limpar();
 
         }
 
@@ -69,30 +67,23 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         }
 
-        protected void ViewLayout_Carregar(object args)
-        {
-        }
-
         protected async Task ViewLayout_Salvar()
         {
-           
+
             var Titulo = new Titulo();
 
-            foreach(var item in ListTituloDetalhe)
+            foreach (var item in ListTituloDetalhe)
             {
                 Titulo.TituloDetalhe.Add(item);
             }
 
-            await EditItemViewLayout.Update(Titulo);
+            var Query = new HelpQuery<Titulo>();
+
+            await Query.Update(Titulo);
 
             EditItemViewLayout.ViewModal.Hide();
 
         }
-
-        protected void ViewLayout_Excluir()
-        {
-        }
-
 
         protected void TxtDocumento_Input()
         {
@@ -184,7 +175,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             }
             catch (Exception ex)
             {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
         }
 

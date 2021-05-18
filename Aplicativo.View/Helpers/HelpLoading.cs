@@ -1,5 +1,4 @@
-﻿using Aplicativo.View.Helpers;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Helpers
@@ -7,24 +6,14 @@ namespace Aplicativo.View.Helpers
     public class HelpLoading
     {
 
-        public static async Task Show(HelpComponent HelpComponent, string text = null) 
-        {
-            await Show(HelpComponent.JSRuntime, text);
-        }
-        public static async Task Hide(HelpComponent HelpComponent) 
-        {
-            await Hide(HelpComponent.JSRuntime);
-            HelpComponent.Refresh();
-        }
-
-        public static async Task Show(IJSRuntime JSRuntime, string text = null)
+        public static async Task Show(string text = null) 
         {
             if (text == null) text = "Carregando...";
-            await JSRuntime.InvokeVoidAsync("Loading", "block", text);
+            await App.JSRuntime.InvokeVoidAsync("Loading.Show", text);
         }
-        public static async Task Hide(IJSRuntime JSRuntime)
+        public static async Task Hide() 
         {
-            await JSRuntime.InvokeVoidAsync("Loading", "none", "");
+            await App.JSRuntime.InvokeVoidAsync("Loading.Hide");
         }
 
     }

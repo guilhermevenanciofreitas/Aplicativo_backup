@@ -1,0 +1,24 @@
+﻿@inherits GridViewItemComponent;
+
+<SfGrid @ref="GridViewItem" DataSource="ListItemViewLayout.ListItemView" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" AllowGrouping="AllowGrouping" AllowPaging="true" RowHeight="30" Height="100%" onselectstart='return false'>
+    <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
+    <GridEvents TValue="object" OnRecordDoubleClick="GridViewItem_DoubleClick"></GridEvents>
+    <GridPageSettings PageSize="30"></GridPageSettings>
+    <GridColumns>
+        <GridColumn Width="60" AllowSorting="false">
+            <HeaderTemplate>
+                <Checkbox OnChange="GridViewItemHeader_Change" Checked="@(ListItemViewLayout.ListItemView.Any() && ListItemViewLayout.ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == ListItemViewLayout.ListItemView.Count)" Indeterminate="@(ListItemViewLayout.ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) && ListItemViewLayout.ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() != ListItemViewLayout.ListItemView.Count)" />
+            </HeaderTemplate>
+            <Template>
+                @{
+                    <LongPress OnPress="@(c => GridViewItem_Chcked(context))">
+                        <Checkbox Checked="@(Convert.ToBoolean(context.GetType().GetProperty("Selected").GetValue(context)))" />
+                    </LongPress>
+                }
+            </Template>
+        </GridColumn>
+
+        @ChildContent
+
+    </GridColumns>
+</SfGrid>

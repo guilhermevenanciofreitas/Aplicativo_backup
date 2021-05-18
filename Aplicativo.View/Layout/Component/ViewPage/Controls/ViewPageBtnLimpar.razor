@@ -1,0 +1,23 @@
+﻿@inherits ViewPageBtnLimparComponent;
+
+@if (Visible)
+{
+
+    @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+    {
+
+    }
+
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+        <Button Variant="@ButtonVariant.Contained" OnClick="BtnLimpar_Click" Style=@("width:" + Width)>
+            <StartIcon>
+                <FileCopyIcon />
+            </StartIcon>
+            <ChildContent>
+                @Text
+            </ChildContent>
+        </Button>
+    }
+
+}

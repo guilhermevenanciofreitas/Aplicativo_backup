@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
-    public class ViewModalControl : HelpComponent
+    public class ViewModalControl : ComponentBase
     {
 
         protected ElementReference DivModal { get; set; }

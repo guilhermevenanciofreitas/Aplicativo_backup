@@ -1,0 +1,21 @@
+﻿@inherits ListViewBtnExcluirComponent;
+
+@if (Visible)
+{
+    @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+    {
+
+    }
+
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+        <Button Variant="@ButtonVariant.Contained" OnClick="ButtonExcluir_Click" Disabled="!Enabled" Style=@("color: #fff; background-color: #df4759; width:" + Width)>
+            <StartIcon>
+                <DeleteIcon />
+            </StartIcon>
+            <ChildContent>
+                @Text
+            </ChildContent>
+        </Button>
+    }
+}

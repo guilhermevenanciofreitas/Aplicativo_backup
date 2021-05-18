@@ -1,0 +1,22 @@
+﻿@inherits ViewPageBtnSalvarComponent;
+
+@*<SfToast ID="toast_default" @ref="Toast" Timeout="5000" ShowCloseButton="true">
+    <ToastPosition X="Center" Y="Bottom"></ToastPosition>
+</SfToast>*@
+
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+{
+
+}
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
+    <Button Variant="@ButtonVariant.Contained" OnClick="BtnSalvar_Click" Style=@("color: #fff; background-color: #5cb85c; width:" + Width)>
+        <StartIcon>
+            <SaveIcon />
+        </StartIcon>
+        <ChildContent>
+            @Text
+        </ChildContent>
+    </Button>
+}

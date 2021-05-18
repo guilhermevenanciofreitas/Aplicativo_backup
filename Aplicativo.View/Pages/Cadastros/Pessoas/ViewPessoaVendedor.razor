@@ -1,50 +1,115 @@
 ﻿@inherits ViewPessoaVendedorPage
 
-<ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="PessoaVendedor"
-                    Simples="true"
-                    Height="300px"
-                    OnItemView="ViewLayout_ItemView"
-                    OnDelete="ViewLayout_Delete">
-    <View>
-        <EditItemViewLayout @ref="EditItemViewLayout"
-                            ListItemViewLayout="ListItemViewLayout"
-                            Title="Vendedor"
-                            Simples="true"
-                            Width="650px"
-                            OnLimpar="ViewLayout_Limpar"
-                            OnCarregar="ViewLayout_Carregar"
-                            OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
-            <View>
-                <Box Padding="3">
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListItemViewLayout">
 
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtVendedor" _Label="Vendedor"></TextBox>
+        <BtnNovo>
+            <ListViewBtnNovo Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+        </BtnExcluir>
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Vendedor" Width="650px" ZIndex="8001">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir OnClick="@(() => ViewLayout_Excluir(new List<object>() { ViewModel }))" />
+                </BtnExcluir>
+
+                <View>
+                    <Box Padding="2">
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <TextBox @ref="TxtVendedor" _Label="Vendedor"></TextBox>
+                            </div>
                         </div>
-                    </div>
 
-                </Box>
-            </View>
-        </EditItemViewLayout>
-    </View>
-    <ItemView>
-        @{
-            var item = (PessoaVendedor)context;
+                    </Box>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
 
-            <ListItemText Primary="@item.Vendedor.NomeFantasia">
-                <SecondaryContent>
-                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Vendedor.NomeFantasia
-                    </Typography>
-                    — I'll be in your neighborhood
-                </SecondaryContent>
-            </ListItemText>
-        }
-    </ItemView>
-    <GridView>
-        <GridColumn Field="VendedorID" HeaderText="Cód. Fornec." Width="90"></GridColumn>
-        <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Fornecedor" Width="400"></GridColumn>
-    </GridView>
-</ListItemViewLayout>
+        <!--<View>-->
+        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
+        <!--</View>-->
+        @*<ItemView>
+                @{
+                    var item = (Usuario)context;
+
+                    <ListItemText Primary="@item.Login">
+                        <SecondaryContent>
+                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                @item.Login
+                            </Typography>
+                            — I'll be in your neighborhood
+                        </SecondaryContent>
+                    </ListItemText>
+                }
+            </ItemView>*@
+
+        <GridView>
+            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+                <GridColumn Field="VendedorID" HeaderText="Cód. Fornec." Width="90"></GridColumn>
+                <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Fornecedor" Width="400"></GridColumn>
+            </GridViewItem>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>
+
+@*@inherits ViewPessoaVendedorPage
+
+    <ListItemViewLayout @ref="ListItemViewLayout"
+                        TValue="PessoaVendedor"
+                        Simples="true"
+                        Height="300px"
+                        OnItemView="ViewLayout_ItemView"
+                        OnDelete="ViewLayout_Delete">
+        <View>
+            <EditItemViewLayout @ref="EditItemViewLayout"
+                                ListItemViewLayout="ListItemViewLayout"
+                                Title="Vendedor"
+                                Simples="true"
+                                Width="650px"
+                                OnLimpar="ViewLayout_Limpar"
+                                OnCarregar="ViewLayout_Carregar"
+                                OnSalvar="ViewLayout_Salvar"
+                                OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
+                <View>
+                    <Box Padding="3">
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <TextBox @ref="TxtVendedor" _Label="Vendedor"></TextBox>
+                            </div>
+                        </div>
+
+                    </Box>
+                </View>
+            </EditItemViewLayout>
+        </View>
+        <ItemView>
+            @{
+                var item = (PessoaVendedor)context;
+
+                <ListItemText Primary="@item.Vendedor.NomeFantasia">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Vendedor.NomeFantasia
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>
+        <GridView>
+            <GridColumn Field="VendedorID" HeaderText="Cód. Fornec." Width="90"></GridColumn>
+            <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Fornecedor" Width="400"></GridColumn>
+        </GridView>
+    </ListItemViewLayout>*@

@@ -1,0 +1,21 @@
+﻿@inherits ListViewBtnNovoComponent;
+
+@if (Visible)
+{
+    @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+    {
+
+    }
+
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+        <Button Variant="@ButtonVariant.Contained" OnClick="ButtonNovo_Click" Style=@("color: #fff; background-color: #5cb85c; width: " + Width)>
+            <StartIcon>
+                <AddCircleIcon />
+            </StartIcon>
+            <ChildContent>
+                @Text
+            </ChildContent>
+        </Button>
+    }
+}

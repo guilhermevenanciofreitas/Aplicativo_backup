@@ -14,7 +14,7 @@ namespace Aplicativo.View.Controls
         public RenderFragment ChildContent { get; set; }
     }
 
-    public class TabSetControl : HelpComponent
+    public class TabSetControl : ComponentBase
     {
 
         public string Id => _Id;

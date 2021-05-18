@@ -1,0 +1,23 @@
+﻿@inherits ViewPageBtnExcluirComponent;
+
+@if (Visible)
+{
+
+    @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+    {
+
+    }
+
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+        <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style=@("color: #fff; background-color: #df4759; width: " + Width)>
+            <StartIcon>
+                <SaveIcon />
+            </StartIcon>
+            <ChildContent>
+                @Text
+            </ChildContent>
+        </Button>
+    }
+
+}

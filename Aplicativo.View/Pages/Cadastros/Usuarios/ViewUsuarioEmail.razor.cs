@@ -3,19 +3,26 @@ using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Aplicativo.View.Layout;
+using Aplicativo.View.Helpers.Exceptions;
+using Aplicativo.View.Layout.Component.ListView;
+using Aplicativo.View.Layout.Component.ViewPage;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
-    public class ViewUsuarioEmailPage : HelpComponent
+    public class ViewUsuarioEmailPage : ComponentBase
     {
 
-        public ListItemViewLayout<UsuarioEmail> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<UsuarioEmail> EditItemViewLayout { get; set; }
+        public UsuarioEmail ViewModel { get; set; } = new UsuarioEmail();
+
+        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public EditItemViewLayout EditItemViewLayout { get; set; }
 
         public TextBox TxtSmtp { get; set; }
         public TextBox TxtPorta { get; set; }
@@ -26,13 +33,18 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public CheckBox ChkSSL { get; set; }
 
 
-        protected void ViewLayout_PageLoad()
+        #region ListView
+        protected async Task ViewLayout_ItemView(object args)
         {
-
+            await ViewLayout_Carregar(args);
         }
+        #endregion
 
+        #region ViewPage
         protected void ViewLayout_Limpar()
         {
+
+            ViewModel = new UsuarioEmail();
 
             EditItemViewLayout.LimparCampos(this);
 
@@ -40,62 +52,77 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
         }
 
-        protected async Task ViewLayout_ItemView(object args)
-        {
-            await EditItemViewLayout.Carregar((UsuarioEmail)args);
-        }
-
-        protected void ViewLayout_Carregar(object args)
+        protected async Task ViewLayout_Carregar(object args)
         {
 
-            EditItemViewLayout.ViewModel = (UsuarioEmail)args;
+            ViewLayout_Limpar();
 
-            TxtSmtp.Text = EditItemViewLayout.ViewModel.Smtp.ToStringOrNull();
-            TxtPorta.Text = EditItemViewLayout.ViewModel.Porta.ToStringOrNull();
-            TxtEmail.Text = EditItemViewLayout.ViewModel.Email.ToStringOrNull();
-            TxtSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
-            TxtConfirmarSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
-            ChkSSL.Checked = EditItemViewLayout.ViewModel.Ssl.ToBoolean();
+            await EditItemViewLayout.Show(args);
+
+            if (args == null) return;
+
+            ViewModel = (UsuarioEmail)args;
+
+            TxtSmtp.Text = ViewModel.Smtp.ToStringOrNull();
+            TxtPorta.Text = ViewModel.Porta.ToStringOrNull();
+            TxtEmail.Text = ViewModel.Email.ToStringOrNull();
+            TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
+            TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
+            ChkSSL.Checked = ViewModel.Ssl.ToBoolean();
 
         }
 
-        protected async Task ViewLayout_Salvar()
+        protected void ViewLayout_Salvar()
         {
 
             if (string.IsNullOrEmpty(TxtSmtp.Text))
-                await HelpEmptyException.New(JSRuntime, TxtSmtp.Element, "Informe o SMTP!");
-            
+                throw new EmptyException("Informe o SMTP!", TxtSmtp.Element);
+
             if (string.IsNullOrEmpty(TxtPorta.Text))
-                await HelpEmptyException.New(JSRuntime, TxtPorta.Element, "Informe a porta!");
-           
+                throw new EmptyException("Informe a porta!", TxtPorta.Element);
+
             if (string.IsNullOrEmpty(TxtEmail.Text))
-                await HelpEmptyException.New(JSRuntime, TxtEmail.Element, "Informe o email!");
+                throw new EmptyException("Informe o email!", TxtEmail.Element);
 
             if (string.IsNullOrEmpty(TxtSenha.Text))
-                await HelpEmptyException.New(JSRuntime, TxtSenha.Element, "Informe a senha!");
-            
-            if (TxtSenha.Text != TxtConfirmarSenha.Text)
-                await HelpEmptyException.New(JSRuntime, TxtConfirmarSenha.Element, "A confirmação da senha está diferente da senha informada!");
-            
+                throw new EmptyException("Informe a senha!", TxtSenha.Element);
 
-            EditItemViewLayout.ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Porta = TxtPorta.Text.ToIntOrNull();
-            EditItemViewLayout.ViewModel.Email = TxtEmail.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Ssl = ChkSSL.Checked;
+            if (TxtSenha.Text != TxtConfirmarSenha.Text)
+                throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
+
+            var ListItemView = ListItemViewLayout.ListItemView;
+
+            ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
+            ViewModel.Porta = TxtPorta.Text.ToIntOrNull();
+            ViewModel.Email = TxtEmail.Text.ToStringOrNull();
+            ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
+            ViewModel.Ssl = ChkSSL.Checked;
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
+                ListItemView.Add(ViewModel);
             }
+
+            ListItemViewLayout.ListItemView = ListItemView;
+
             EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void ViewLayout_Delete(object args)
+        protected void ViewLayout_Excluir(object args)
         {
-            foreach(var item in (List<UsuarioEmail>)args) ListItemViewLayout.ListItemView.Remove(item);
+
+            var ListItemView = ListItemViewLayout.ListItemView;
+
+            foreach (var item in ((IEnumerable)args).Cast<UsuarioEmail>().ToList())
+            {
+                ListItemView.Remove(item);
+            }
+
+            ListItemViewLayout.ListItemView = ListItemView;
+
             EditItemViewLayout.ViewModal.Hide();
+
         }
 
         protected async Task BtnTestar_Click()
@@ -103,7 +130,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             try
             {
 
-                await HelpLoading.Show(this, "Testando configurações...");
+                await HelpLoading.Show("Testando configurações...");
 
                 var Request = new Request();
 
@@ -116,19 +143,21 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
                 Request.Parameters.Add(new Parameters("Assunto", "Configuração de email"));
                 Request.Parameters.Add(new Parameters("Mensagem", "Se você recebeu esse e-mail, isso significa que está funcionando normalmente!"));
 
-                await HelpHttp.Send(Http, "api/Email/Send", Request);
+                //await HelpHttp.Send(Http, "api/Email/Send", Request);
 
-                await JSRuntime.InvokeVoidAsync("alert", "Email enviado com sucesso!");
+                await App.JSRuntime.InvokeVoidAsync("alert", "Email enviado com sucesso!");
 
             }
             catch (Exception ex)
             {
-                await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             finally
             {
-                await HelpLoading.Hide(this);
+                await HelpLoading.Hide();
             }
         }
+        #endregion
+
     }
 }

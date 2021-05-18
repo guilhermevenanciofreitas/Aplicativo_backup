@@ -8,17 +8,17 @@ namespace Aplicativo.View.Helpers
 {
     public class HelpCookie
     {
-        public static async Task Set(IJSRuntime JSRuntime, string Name, string Value, int Minutes)
+        public static async Task Set(string Name, string Value, int Minutes)
         {
-            await JSRuntime.InvokeVoidAsync("Cookie.set", Name, Value, Minutes);
+            await App.JSRuntime.InvokeVoidAsync("Cookie.set", Name, Value, Minutes);
         }
-        public static async Task<string> Get(IJSRuntime JSRuntime, string Name)
+        public static async Task<string> Get(string Name)
         {
-            return await JSRuntime.InvokeAsync<string>("Cookie.get", Name);
+            return await App.JSRuntime.InvokeAsync<string>("Cookie.get", Name);
         }
-        public static async Task Delete(IJSRuntime JSRuntime, string Name)
+        public static async Task Delete(string Name)
         {
-            await JSRuntime.InvokeVoidAsync("Cookie.delete", Name);
+            await App.JSRuntime.InvokeVoidAsync("Cookie.delete", Name);
         }
     }
 }

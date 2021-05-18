@@ -1,120 +1,74 @@
-﻿@inherits AddTituloPage<TituloDetalhe>
+﻿@inherits AddTituloPage
 
-<EditItemViewLayout @ref="EditItemViewLayout"
-                    ListItemViewLayout="ListItemViewLayout"
-                    Title="Adicionar parcelas"
-                    Width="870px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnLimpar="ViewLayout_Limpar"
-                    OnCarregar="ViewLayout_Carregar"
-                    OnSalvar="ViewLayout_Salvar"
-                    OnExcluir="ViewLayout_Excluir">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Título" OnLoad="ViewLayout_Load" Width="870px">
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+    </BtnLimpar>
+    <BtnSalvar>
+        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+    </BtnSalvar>
     <View>
-
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" _AutoFocus="true"></TextBox>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change"></DatePicker>
-                            </div>
-                        </div>
+         
+                <div class="row">
+                    <div class="col-md-3">
+                        <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" _AutoFocus="true" />
                     </div>
-
-                    @*<div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label>@(PlanoContaTipoID == 1 ? "Pagador" : "Recebedor")</label>
-                            <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label>Forma de pagamento</label>
-                            <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>
-                        </div>
+                    <div class="col-md-3">
+                        <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change" />
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label>Plano de conta</label>
-                            <ViewPesquisa @ref="ViewPesquisaPlanoConta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label>Centro de custo</label>
-                            <ViewPesquisa @ref="ViewPesquisaCentroCusto" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>
-                        </div>
-                    </div>*@
-
+                </div>
+              
                 <div class="row">
 
                     <div class="col-md-2">
-                        <div class="form-group">
-                            <NumericBox @ref="TxtValor" _Label="Valor" OnKeyUp="TxtValor_KeyUp"></NumericBox>
-                        </div>
+                        <NumericBox @ref="TxtValor" _Label="Valor" OnKeyUp="TxtValor_KeyUp" />
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group">
-                            <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change"></DatePicker>
-                        </div>
+                        <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change" />
                     </div>
 
                     <div class="col-md-2">
-                        <div class="form-group">
-                            <NumericBox @ref="TxtParcelas" _Label="Parcelas" _Digits="0" OnKeyUp="TxtParcelas_KeyUp"></NumericBox>
-                        </div>
+                        <NumericBox @ref="TxtParcelas" _Label="Parcelas" _Digits="0" OnKeyUp="TxtParcelas_KeyUp" />
                     </div>
 
                     <div class="col-md-3" style="display: @(TxtParcelas?.Value > 1 ? "block" : "none")">
-                        <div class="form-group">
-                            <DropDownList @ref="DplPeriodo" _Label="Período" Change="DplPeriodo_Change"></DropDownList>
-                        </div>
+                        <DropDownList @ref="DplPeriodo" _Label="Período" OnChange="DplPeriodo_Change" />
                     </div>
 
                     <div class="col-md-2" style="display: @(TxtParcelas?.Value > 1 && DplPeriodo?.SelectedValue == "0" ? "block" : "none")">
-                        <div class="form-group">
-                            <NumericBox @ref="TxtPeriodo" _Label="Repetir a cada" _Digits="0" OnKeyUp="TxtPeriodo_KeyUp"></NumericBox>
-                        </div>
+                        <NumericBox @ref="TxtPeriodo" _Label="Repetir a cada" _Digits="0" OnKeyUp="TxtPeriodo_KeyUp" />
                     </div>
 
                 </div>
+
+                <br />
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <SfGrid @ref="GridViewTituloDetalhe" DataSource="ListTituloDetalhe" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
-                                <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
-                                <GridPageSettings PageSize="30"></GridPageSettings>
-                                <GridColumns>
-                                    <GridColumn Width="65" Field="nParcela" HeaderText="Parcela"></GridColumn>
-                                    <GridColumn Width="90" Field="DataEmissao" HeaderText="Emissão" Format="dd/MM/yyyy"></GridColumn>
-                                    <GridColumn Width="110" Field="nDocumentoParcela" HeaderText="Número Doc."></GridColumn>
-                                    <GridColumn Width="85" Field="vTotal" HeaderText="Valor" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
-                                    <GridColumn Width="110" AllowSorting="false" HeaderText="Vencimento">
-                                        <Template>
-                                            @{
-                                                var item = (TituloDetalhe)context;
-                                                <DatePicker _Value="item.DataVencimento" OnChange="@(c => GridViewTituloDetalheDtpVencimento_Change(c, item))"></DatePicker>
-                                            }
-                                        </Template>
-                                    </GridColumn>
-                                </GridColumns>
-                            </SfGrid>
-                        </div>
+                        <SfGrid @ref="GridViewTituloDetalhe" DataSource="ListTituloDetalhe" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
+                            <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
+                            <GridPageSettings PageSize="30"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Width="65" Field="nParcela" HeaderText="Parcela" />
+                                <GridColumn Width="90" Field="DataEmissao" HeaderText="Emissão" Format="dd/MM/yyyy" />
+                                <GridColumn Width="110" Field="nDocumentoParcela" HeaderText="Número Doc." />
+                                <GridColumn Width="85" Field="vTotal" HeaderText="Valor" Format="C2" TextAlign="TextAlign.Right" />
+                                <GridColumn Width="110" AllowSorting="false" HeaderText="Vencimento">
+                                    <Template>
+                                        @{
+                                            var item = (TituloDetalhe)context;
+                                            <DatePicker _Value="item.DataVencimento" OnChange="@(c => GridViewTituloDetalheDtpVencimento_Change(c, item))"></DatePicker>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
-
-                </Box>
-            </TabPage>
-            <TabPage Id="Email" Title="Email">
-                
-
+                    
             </TabPage>
         </TabSet>
-
     </View>
 </EditItemViewLayout>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
-    public class CheckBoxControl : HelpComponent
+    public class CheckBoxControl : ComponentBase
     {
 
         public ElementReference Element;
@@ -72,7 +72,7 @@ namespace Aplicativo.View.Controls
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }

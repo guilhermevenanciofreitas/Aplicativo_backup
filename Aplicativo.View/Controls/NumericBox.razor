@@ -22,7 +22,7 @@ else
         <label for="@Element.Id">@_Label</label>
     }
 
-    <input type="text" id="@Element.Id" class="form-control" @ref="@Element" maxlength="@_MaxLength" placeholder="@_PlaceHolder" readonly="@_ReadOnly" @onfocusout="NumericBox_OnLeave" @onkeydown="NumericBox_OnKeyDown" @onkeypress="NumericBox_OnKeyPress" @onkeyup="NumericBox_OnKeyUp" />
+    <input type="text" id="@Element.Id" class="form-control" @ref="@Element" maxlength="@_MaxLength" placeholder="@_PlaceHolder" readonly="@_ReadOnly" @onfocusout="NumericBox_OnLeave" @onkeydown="NumericBox_OnKeyDown" @onkeypress="NumericBox_OnKeyPress" @onkeyup="NumericBox_OnKeyUp" autocomplete="off" />
 
 
 }

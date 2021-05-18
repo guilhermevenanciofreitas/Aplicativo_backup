@@ -1,31 +1,85 @@
-﻿@page "/Cadastros/ContaBancaria"
+﻿@attribute [Page("Cadastros/ContaBancaria")]
+@attribute [LoginRequired(true)]
 
-@inherits IndexPage<ContaBancaria>
+@inherits IndexPage
 
-<ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="ContaBancaria"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnPesquisar="ViewLayout_Pesquisar"
-                    OnItemView="ViewLayout_ItemView"
-                    OnDelete="ViewLayout_Delete">
-    <View>
-        <ViewContaBancaria @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewContaBancaria>
-    </View>
-    <ItemView>
-        @{
-            var item = (ContaBancaria)context;
+<ComponentLayout OnLoad="Component_Load">
+    <ListItemViewLayout @ref="ListItemViewLayout">
 
-            <ListItemText Primary="@item.Descricao">
-                <SecondaryContent>
-                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Descricao
-                    </Typography>
-                    — I'll be in your neighborhood
-                </SecondaryContent>
-            </ListItemText>
-        }
-    </ItemView>
-    <GridView>
-        <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
-    </GridView>
-</ListItemViewLayout>
+        <ViewPages>
+            <ViewContaBancaria @ref="View"></ViewContaBancaria>
+        </ViewPages>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
+                <ListViewBtnFiltro>
+                    <ViewFiltro />
+                </ListViewBtnFiltro>
+            </ListViewBtnPesquisa>
+        </BtnPesquisa>
+
+        <BtnNovo>
+            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+        </BtnExcluir>
+
+        <!--<View>-->
+        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
+        <!--</View>-->
+        @*<ItemView>
+                @{
+                    var item = (Usuario)context;
+
+                    <ListItemText Primary="@item.Login">
+                        <SecondaryContent>
+                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                @item.Login
+                            </Typography>
+                            — I'll be in your neighborhood
+                        </SecondaryContent>
+                    </ListItemText>
+                }
+            </ItemView>*@
+
+        <GridView>
+            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+                <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
+            </GridViewItem>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>
+
+@*@page "/Cadastros/ContaBancaria"
+
+    @inherits IndexPage<ContaBancaria>
+
+    <ListItemViewLayout @ref="ListItemViewLayout"
+                        TValue="ContaBancaria"
+                        OnPageLoad="ViewLayout_PageLoad"
+                        OnPesquisar="ViewLayout_Pesquisar"
+                        OnItemView="ViewLayout_ItemView"
+                        OnDelete="ViewLayout_Delete">
+        <View>
+            <ViewContaBancaria @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewContaBancaria>
+        </View>
+        <ItemView>
+            @{
+                var item = (ContaBancaria)context;
+
+                <ListItemText Primary="@item.Descricao">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Descricao
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>
+        <GridView>
+            <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
+        </GridView>
+    </ListItemViewLayout>*@

@@ -1,0 +1,51 @@
+﻿.row {
+    --bs-gutter-x: 0.5rem !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-top: 12px !important;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+/* Style the form - display items horizontally */
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.auth-container {
+    height: 100vh;
+}
+
+.auth-image {
+    height: 100%;
+    background-size: cover;
+    background-image: url(../images/auth.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.auth-body {
+    height: 100%;
+    padding: 60px 60px 60px 60px;
+}
+
+.auth-quote-inner {
+    padding-top: 75vh;
+    text-align: center;
+}
+
+.auth-quote-text {
+    color: #ffffff;
+    font-weight: 300;
+}
+
+.auth-quote-name {
+    color: #ffffff;
+    margin-top: 24px;
+}
+
+.auth-quote-bio {
+    color: #ffffff;
+}

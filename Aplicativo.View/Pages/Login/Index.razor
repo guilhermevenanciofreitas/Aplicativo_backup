@@ -1,0 +1,104 @@
+@attribute [Page("Login")]
+
+@layout SmallLayout;
+
+@inherits IndexPage;
+
+<style>
+    body
+    {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>
+
+<ComponentLayout OnLoad="Component_Load">
+    <LoginLayout>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <Typography Class="auth-form-title" Variant="TypographyVariant.H3">Acesso</Typography>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <Options @ref="OptTipo" _Name="Tipo" OnChange="StateHasChanged">
+                    <Option Label="Domínio" Value="Dominio"></Option>
+                    <Option Label="Database" Value="Database"></Option>
+                </Options>
+            </div>
+        </div>
+
+        <br />
+
+        @if (OptTipo?.Value == "Dominio")
+        {
+            <ViewDominio @ref="ViewDominio"></ViewDominio>
+        }
+
+        @if (OptTipo?.Value == "Database")
+        {
+            <ViewConexao @ref="ViewConexao"></ViewConexao>
+        }
+
+        <style>
+            .zoom {
+                margin-left: -4px;
+                margin-right: -4px;
+                transition: transform .2s;
+                background-size: cover;
+                background-image: url(_content/Aplicativo.View/images/auth.jpg);
+                background-repeat: no-repeat;
+                background-position: center;
+                opacity: 0.85;
+                border-radius: 12px;
+            }
+
+                .zoom:hover {
+                    transform: scale(1.1);
+                }
+        </style>
+
+        @if (HelpConexao.Dominio?.Conexao?.Count >= 1)
+        {
+            <br />
+
+            <div class="row">
+                @foreach (var item in HelpConexao.Dominio?.Conexao)
+                {
+                    <div class="col-md-4 col-sm-6" style="padding: 12px 12px 12px 12px">
+                        <div class="card zoom">
+                            <div class="card-body" style="height: 90px;">
+                                <center style="background-color: rgba(0, 0, 0, 0.7); margin-left: -16px; margin-right: -16px; padding-top: 6px; padding-bottom: 4px; ">
+                                    <font color="@item.Color">@item.Status</font>
+                                    <h5 class="card-title" style="color: white;">@item.Name</h5>
+                                </center>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <center>
+                                            <button class="btn btn-success btn-sm" style="width: 100%" type="button" @onclick="@(() => BtnSelecionar_Click(item.Name))"><font size="2">Entrar</font></button>
+                                        </center>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <center>
+                                            <button class="btn btn-danger btn-sm" style="width: 100%" type="button" @onclick="@(() => BtnExcluir_Click(item.Name))"><font size="2">Excluir</font></button>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+
+    </LoginLayout>
+</ComponentLayout>

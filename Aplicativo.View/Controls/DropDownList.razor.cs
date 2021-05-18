@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
-    public class DropDownListComponent : HelpComponent
+    public class DropDownListComponent : ComponentBase
     {
 
         public ElementReference Element;
@@ -19,13 +19,13 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public List<DropDownListItem> _Items { get; set; } = new List<DropDownListItem>();
 
-        [Parameter] public EventCallback<ChangeEventArgs> Change { get; set; }
+        [Parameter] public EventCallback<ChangeEventArgs> OnChange { get; set; }
 
         public string SelectedValue
         {
             get
             {
-                return _SelectedValue;
+                return _SelectedValue.ToStringOrNull();
             }
             set
             {
@@ -94,14 +94,25 @@ namespace Aplicativo.View.Controls
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
 
         public void Focus()
         {
-            Element.Focus(JSRuntime);
+            Element.Focus();
+        }
+
+        public async Task LoadDropDownList<T>(string valueField, string textField, DropDownListItem First = null) where T : class
+        {
+
+            var Query = new HelpQuery<T>();
+
+            var List = await Query.ToList();
+
+            LoadDropDownList(valueField, textField, First, List);
+
         }
 
         public void LoadDropDownList<T>(string valueField, string textField, DropDownListItem First = null, List<T> List = null) where T : class
@@ -155,7 +166,7 @@ namespace Aplicativo.View.Controls
         {
             if (args != string.Empty)
             {
-                Change.InvokeAsync(new ChangeEventArgs() { Value = args });
+                OnChange.InvokeAsync(new ChangeEventArgs() { Value = args });
             }
         }
 

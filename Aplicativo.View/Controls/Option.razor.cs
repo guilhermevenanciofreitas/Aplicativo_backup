@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
 {
-    public class OptionControl : HelpComponent
+    public class OptionControl : ComponentBase
     {
 
         [CascadingParameter] public Options ContainerOptions { get; set; }
@@ -35,9 +35,10 @@ namespace Aplicativo.View.Controls
             });
         }
 
-        protected void Radio_Change(ChangeEventArgs args)
+        protected async Task Radio_Change(ChangeEventArgs args)
         {
             ContainerOptions.Value = args.Value.ToString();
+            await ContainerOptions.Change(ContainerOptions.Value);
         }
 
     }

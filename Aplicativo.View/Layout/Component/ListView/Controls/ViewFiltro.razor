@@ -1,0 +1,42 @@
+﻿@inherits ViewFiltroComponent;
+
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+{
+
+}
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
+    <ViewModal @ref="ViewModal" FullScreen="false" Title="@Title" Width="500px">
+
+        <DialogContent Style="padding: 16px; width: 460px">
+            <div style="height: 360px;">
+                @if (Filtros != null)
+                {
+                    @foreach (var item in Filtros)
+                    {
+                        if (item.Type == FiltroType.TextBox)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <TextBox @ref="item.Element[0]" _Label="@item.Label"></TextBox>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </DialogContent>
+        <DialogActions Style="marging: 0px; padding: 8px;">
+            <Button Variant="@ButtonVariant.Contained" OnClick="ViewFiltro_Confirmar" Style="color: #fff; background-color: #5cb85c;">
+                <StartIcon>
+                    <CheckIcon />
+                </StartIcon>
+                <ChildContent>
+                    Confirmar
+                </ChildContent>
+            </Button>
+        </DialogActions>
+
+    </ViewModal>
+}

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Aplicativo.View.Controls.Transitions
 {
-    public class ScaleTransition : HelpComponent
+    public class ScaleTransition : ComponentBase
     {
 
         [Parameter] public string Class { get; set; }

@@ -13,10 +13,10 @@ namespace Aplicativo.View.Helpers
 
         public static Dominio Dominio { get; set; } = new Dominio();
 
-        public static async Task<Dominio> GetDominio(IJSRuntime JSRuntime)
+        public static async Task<Dominio> GetDominio()
         {
 
-            var Dominio = await HelpCookie.Get(JSRuntime, "Dominio");
+            var Dominio = await HelpCookie.Get("Dominio");
 
             if (string.IsNullOrEmpty(Dominio))
             {
@@ -27,25 +27,39 @@ namespace Aplicativo.View.Helpers
 
         }
 
-        public static async Task SetName(IJSRuntime JSRuntime, string Name)
+        public static string GetDatabase()
+        {
+
+            var Conexao = Dominio.Conexao.FirstOrDefault(c => c.Name == Dominio.Name);
+
+            if (Conexao == null)
+            {
+                return null;
+            }
+
+            return Conexao.GetDatabase();
+
+        }
+
+        public static async Task SetName(string Name)
         {
 
             Dominio.Name = Name;
 
-            await HelpCookie.Set(JSRuntime, "Dominio", JsonSerializer.Serialize(Dominio), 30);
+            await HelpCookie.Set("Dominio", JsonSerializer.Serialize(Dominio), 0);
 
         }
 
-        public static async Task Add(IJSRuntime JSRuntime, Conexao Conexao)
+        public static async Task Add(Conexao Conexao)
         {
 
             Dominio.Conexao.Add(Conexao);
 
-            await HelpCookie.Set(JSRuntime, "Dominio", JsonSerializer.Serialize(Dominio), 30);
+            await HelpCookie.Set("Dominio", JsonSerializer.Serialize(Dominio), 0);
 
         }
 
-        public static async Task Remove(IJSRuntime JSRuntime, string Name)
+        public static async Task Remove(string Name)
         {
 
             foreach (var item in Dominio.Conexao.Where(c => c.Name == Name).ToList())
@@ -53,7 +67,7 @@ namespace Aplicativo.View.Helpers
                 Dominio.Conexao.Remove(item);
             }
 
-            await HelpCookie.Set(JSRuntime, "Dominio", JsonSerializer.Serialize(Dominio), 30);
+            await HelpCookie.Set("Dominio", JsonSerializer.Serialize(Dominio), 0);
 
         }
 
@@ -79,6 +93,48 @@ namespace Aplicativo.View.Helpers
         public string Database { get; set; }
         public string UserId { get; set; }
         public string Password { get; set; }
+
+        public bool? IsOnline { get; set; }
+
+        public string GetDatabase()
+        {
+            return "Server=" + Server + ";Database=" + Database + ";User Id=" + UserId + ";Password=" + Password;
+        }
+
+        public string Status
+        {
+            get
+            {
+                if (IsOnline == true)
+                {
+                    return "online";
+                }
+                if (IsOnline == false)
+                {
+                    return "offline";
+                }
+
+                return "";
+
+            }
+        }
+
+        public string Color { 
+            get
+            {
+                if (IsOnline == true)
+                {
+                    return "#7fffd4";
+                }
+                if (IsOnline == false)
+                {
+                    return "red";
+                }
+
+                return "";
+            } 
+        }
+
 
     }
 

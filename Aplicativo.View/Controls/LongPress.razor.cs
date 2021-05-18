@@ -5,7 +5,7 @@ using System;
 
 namespace Aplicativo.View.Controls
 {
-    public class LongPressControl : HelpComponent
+    public class LongPressControl : ComponentBase
     {
 
         [Parameter] public int Time { get; set; } = 500;
@@ -21,13 +21,13 @@ namespace Aplicativo.View.Controls
             try
             {
                 IsPressedLong = false;
-                await JSRuntime.InvokeVoidAsync("LongPress.MouseDown", Time);
+                await App.JSRuntime.InvokeVoidAsync("LongPress.MouseDown", Time);
                 await OnLongPress.InvokeAsync(null);
                 IsPressedLong = true;
             }
             catch (Exception ex)
             {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+                await App.JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
             }
         }
 
@@ -35,11 +35,11 @@ namespace Aplicativo.View.Controls
         {
             try
             {
-                await JSRuntime.InvokeVoidAsync("LongPress.MouseUp");
+                await App.JSRuntime.InvokeVoidAsync("LongPress.MouseUp");
             }
             catch (Exception ex)
             {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+                await App.JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
+                await App.JSRuntime.InvokeVoidAsync("alert", "Error: " + ex.Message);
             }
         }
 

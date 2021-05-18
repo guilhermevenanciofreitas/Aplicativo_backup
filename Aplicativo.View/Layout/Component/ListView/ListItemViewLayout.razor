@@ -1,0 +1,72 @@
+﻿@inherits ListItemViewLayoutPage
+
+<style>
+    body {
+        background-color: #f4f6f8 !important;
+    }
+    .CardActions-Root {
+        display: block !important;
+    }
+</style>
+
+<ComponentLayout OnResize="Component_Resize">
+    <CascadingValue Value=this>
+
+        @ViewPages
+
+        @if (HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+        {
+
+        }
+
+        @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+        {
+
+        <Card>
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <CardHeader Title="@Title" />
+                <Divider />
+            }
+            <CardActions>
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
+                        {
+                            @BtnNovo
+                        }
+                        else
+                        {
+                            @BtnExcluir
+                        }
+
+                        @BtnPesquisa
+
+                    </div>
+                </div>
+            </CardActions>
+            <Divider />
+            <CardContent>
+                <div style="margin-top: 5px; margin-bottom: 4px">
+                    @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
+                    {
+                        <font size="3">Nenhum registro selecionado</font>
+                    }
+                    else
+                    {
+                        <font size="3">@ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
+                    }
+                </div>
+
+                <div style="height: 60vh">
+                    @GridView
+                </div>
+
+            </CardContent>
+        </Card>
+
+        }
+
+    </CascadingValue>
+</ComponentLayout>

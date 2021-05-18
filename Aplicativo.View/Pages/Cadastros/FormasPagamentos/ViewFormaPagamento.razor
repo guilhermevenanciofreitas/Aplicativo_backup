@@ -1,0 +1,68 @@
+﻿@inherits ViewFormaPagamentoPage
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Forma de pagamento" OnLoad="ViewLayout_Load" Width="700px">
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+    </BtnLimpar>
+    <BtnSalvar>
+        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+    </BtnSalvar>
+    <BtnExcluir>
+        <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
+    </BtnExcluir>
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+
+                    <div class="col-md-2 col-sm-12">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    </div>
+
+                    <div class="col-md-10 col-sm-12">
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true" />
+                    </div>
+
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+</EditItemViewLayout>
+
+@*@inherits ViewFormaPagamentoPage<FormaPagamento>
+
+    <EditItemViewLayout @ref="EditItemViewLayout"
+                        ListItemViewLayout="ListItemViewLayout"
+                        Title="Forma de pagamento"
+                        Width="700px"
+                        OnPageLoad="ViewLayout_PageLoad"
+                        OnLimpar="ViewLayout_Limpar"
+                        OnCarregar="ViewLayout_Carregar"
+                        OnSalvar="ViewLayout_Salvar"
+                        OnExcluir="ViewLayout_Excluir">
+        <View>
+            <TabSet @ref="TabSet" Changed="StateHasChanged">
+                <TabPage Id="Principal" Title="Principal">
+                    <Box Padding="3">
+
+                        <div class="row">
+
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group">
+                                    <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                                </div>
+                            </div>
+
+                            <div class="col-md-10 col-sm-12">
+                                <div class="form-group">
+                                    <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true"></TextBox>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </Box>
+                </TabPage>
+            </TabSet>
+        </View>
+    </EditItemViewLayout>*@

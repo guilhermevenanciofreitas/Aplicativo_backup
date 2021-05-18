@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Skclusive.Material.Text;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Controls
@@ -21,7 +22,7 @@ namespace Aplicativo.View.Controls
         UpperCase
     }
 
-    public class TextBoxComponent : HelpComponent
+    public class TextBoxComponent : ComponentBase
     {
 
         protected TextField TextField;
@@ -113,7 +114,7 @@ namespace Aplicativo.View.Controls
 
         public void SetMask(string Mask)
         {
-            JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, Mask);
+            App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, Mask);
         }
 
 
@@ -131,11 +132,11 @@ namespace Aplicativo.View.Controls
                     {
                         if (HelpParametros.Template == Template.Mobile)
                         {
-                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
+                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
                         }
                         else
                         {
-                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
+                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
                         }
                         
                     }
@@ -143,14 +144,14 @@ namespace Aplicativo.View.Controls
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
 
         public void Focus()
         {
-            Element.Focus(JSRuntime);
+            Element.Focus();
             //StateHasChanged();
         }
 
@@ -163,7 +164,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 
@@ -175,7 +176,7 @@ namespace Aplicativo.View.Controls
             }
             catch (Exception ex)
             {
-                await HelpErro.Show(this, ex);
+                await HelpErro.Show(new Error(ex));
             }
         }
 

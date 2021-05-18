@@ -2,6 +2,15 @@
 
 @inherits AppViewPage;
 
-<ThemeProvider Light="@Light" Dark="@Dark">
-    <RouterLayout Default="@typeof(AppLayout)" />
+<ThemeProvider Light="@Light">
+    <ConventionRouter PageDefault="Cadastros/Usuarios">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(AppLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView>
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </ConventionRouter>
 </ThemeProvider>

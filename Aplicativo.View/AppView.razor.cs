@@ -1,63 +1,53 @@
 ﻿using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Skclusive.Material.Theme;
+using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View
 {
-    public class AppViewPage : HelpComponent
+    public class AppViewPage : ComponentBase
     {
 
-        protected override async Task OnInitializedAsync()
+        protected string Body { get; set; }
+
+        //[Inject] HttpClient Http { get; set; }
+
+        //[Inject] IJSRuntime JSRuntime { get; set; }
+
+        //[Inject] NavigationManager NavigationManager { get; set; }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-
-            await base.OnInitializedAsync();
-
-            HelpConexao.Dominio = await HelpConexao.GetDominio(JSRuntime);
-
-            if (string.IsNullOrEmpty(HelpConexao.Dominio.Name))
+            try
             {
-                NavigationManager.NavigateTo("Login/Conexao");
-            }
-            else
-            {
-                if (!await HelpParametros.VerificarUsuarioLogado(JSRuntime))
+
+                await base.OnAfterRenderAsync(firstRender);
+
+                if (firstRender)
                 {
-                    NavigationManager.NavigateTo("Login/Entrar");
+
+                    //App.NavigationManager = NavigationManager;
+                    //App.JSRuntime = JSRuntime;
+                    //App.Http = Http;
+
                 }
             }
-
+            catch (Exception ex)
+            {
+                Body = HelpErro.GetMessage(new Error(ex));
+            }
         }
-
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    base.OnAfterRender(firstRender);
-
-        //    if (firstRender)
-        //    {
-
-        //        HelpConexao.Dominio = await HelpConexao.GetDominio(JSRuntime);
-
-        //        if (string.IsNullOrEmpty(HelpConexao.Dominio.Name))
-        //        {
-        //            NavigationManager.NavigateTo("Login/Conexao");
-        //        }
-        //        else
-        //        {
-        //            NavigationManager.NavigateTo("Login/Entrar");
-        //        }
-
-
-        //    }
-
-        //}
 
         public static ThemeValue Light = ThemeFactory.CreateTheme(new ThemeConfig
         {
             Palette = new PaletteConfig
             {
+
                 Type = PaletteType.Light,
 
                 Primary = new PaletteColorConfig
@@ -86,40 +76,7 @@ namespace Aplicativo.View
                 },
                 }
             }
-        });
 
-        public static ThemeValue Dark = ThemeFactory.CreateTheme(new ThemeConfig
-        {
-            Palette = new PaletteConfig
-            {
-                Type = PaletteType.Dark,
-
-                Primary = new PaletteColorConfig
-                {
-                    Main = PaletteColors.Blue.X200
-                },
-
-                Secondary = new PaletteColorConfig
-                {
-                    Main = PaletteColors.Pink.X200
-                },
-
-                Background = new PaletteBackground
-                {
-                    Default = "#121212",
-
-                    Custom = new Dictionary<string, string>
-                {
-                    { "level1", PaletteColors.Grey.X900 },
-
-                    { "level2", "#333" },
-
-                    { "appbar-color", "#fff" },
-
-                    { "appbar-background-color", "#333" },
-                },
-                }
-            }
         });
 
     }

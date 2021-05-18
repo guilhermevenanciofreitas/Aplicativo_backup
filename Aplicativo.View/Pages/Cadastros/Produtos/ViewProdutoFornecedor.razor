@@ -1,84 +1,167 @@
 ﻿@inherits ViewProdutoFornecedorPage
 
-<ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="ProdutoFornecedor"
-                    Simples="true"
-                    Height="300px"
-                    OnItemView="ViewLayout_ItemView"
-                    OnDelete="ViewLayout_Delete">
-    <View>
-        <EditItemViewLayout @ref="EditItemViewLayout"
-                            ListItemViewLayout="ListItemViewLayout"
-                            Title="Fornecedor"
-                            Simples="true"
-                            Width="650px"
-                            OnLimpar="ViewLayout_Limpar"
-                            OnCarregar="ViewLayout_Carregar"
-                            OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
-            <View>
-                <Box Padding="3">
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListItemViewLayout">
 
+        <BtnNovo>
+            <ListViewBtnNovo Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+        </BtnExcluir>
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Fornecedor" Width="650px" ZIndex="8001">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir OnClick="@(() => ViewLayout_Excluir(new List<object>() { ViewModel }))" />
+                </BtnExcluir>
+
+                <View>
                     <div class="row">
                         <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtCodigo" _Label="Cód. Fornec." _AutoFocus="true"></TextBox>
-                            </div>
+                            <TextBox @ref="TxtCodigo" _Label="Cód. Fornec." _AutoFocus="true" />
                         </div>
                         <div class="col-md-9 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtFornecedor" _Label="Fornecedor"></TextBox>
-                            </div>
+                            <TextBox @ref="TxtFornecedor" _Label="Fornecedor" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
-                            <div class="form-group">
-                                <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
-                            </div>
+                            <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida" />
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <div class="form-group">
-                                <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3"></NumericBox>
-                            </div>
+                            <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3" />
                         </div>
                         <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <NumericBox @ref="TxtPreco" _Label="Preço Un."></NumericBox>
-                            </div>
+                            <NumericBox @ref="TxtPreco" _Label="Preço Un." />
                         </div>
                         <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true"></NumericBox>
-                            </div>
+                            <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true" />
                         </div>
                     </div>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
 
-                </Box>
-            </View>
-        </EditItemViewLayout>
-    </View>
-    <ItemView>
-        @{
-            var item = (ProdutoFornecedor)context;
+        <!--<View>-->
+        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
+        <!--</View>-->
+        @*<ItemView>
+                @{
+                    var item = (Usuario)context;
 
-            <ListItemText Primary="@item.Fornecedor.NomeFantasia">
-                <SecondaryContent>
-                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Fornecedor.RazaoSocial
-                    </Typography>
-                    — I'll be in your neighborhood
-                </SecondaryContent>
-            </ListItemText>
-        }
-    </ItemView>
-    <GridView>
-        <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="100"></GridColumn>
-        <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="250"></GridColumn>
-        <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="140"></GridColumn>
-        <GridColumn Field="Contem" HeaderText="Contém" Width="80" Format="N3" TextAlign="TextAlign.Right"></GridColumn>
-        <GridColumn Field="Preco" HeaderText="Preço Un." Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
-        <GridColumn Field="Total" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
-    </GridView>
-</ListItemViewLayout>
+                    <ListItemText Primary="@item.Login">
+                        <SecondaryContent>
+                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                @item.Login
+                            </Typography>
+                            — I'll be in your neighborhood
+                        </SecondaryContent>
+                    </ListItemText>
+                }
+            </ItemView>*@
+
+        <GridView>
+            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+                <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="100" />
+                <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="250" />
+                <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="140" />
+                <GridColumn Field="Contem" HeaderText="Contém" Width="80" Format="N3" TextAlign="TextAlign.Right" />
+                <GridColumn Field="Preco" HeaderText="Preço Un." Width="100" Format="C2" TextAlign="TextAlign.Right" />
+                <GridColumn Field="Total" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right" />
+            </GridViewItem>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>
+
+@*@inherits ViewProdutoFornecedorPage
+
+    <ListItemViewLayout @ref="ListItemViewLayout"
+                        TValue="ProdutoFornecedor"
+                        Simples="true"
+                        Height="300px"
+                        OnItemView="ViewLayout_ItemView"
+                        OnDelete="ViewLayout_Delete">
+        <View>
+            <EditItemViewLayout @ref="EditItemViewLayout"
+                                ListItemViewLayout="ListItemViewLayout"
+                                Title="Fornecedor"
+                                Simples="true"
+                                Width="650px"
+                                OnLimpar="ViewLayout_Limpar"
+                                OnCarregar="ViewLayout_Carregar"
+                                OnSalvar="ViewLayout_Salvar"
+                                OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
+                <View>
+                    <Box Padding="3">
+
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <TextBox @ref="TxtCodigo" _Label="Cód. Fornec." _AutoFocus="true"></TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-9 col-sm-12">
+                                <div class="form-group">
+                                    <TextBox @ref="TxtFornecedor" _Label="Fornecedor"></TextBox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-12">
+                                <div class="form-group">
+                                    <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3"></NumericBox>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <NumericBox @ref="TxtPreco" _Label="Preço Un."></NumericBox>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="form-group">
+                                    <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true"></NumericBox>
+                                </div>
+                            </div>
+                        </div>
+
+                    </Box>
+                </View>
+            </EditItemViewLayout>
+        </View>
+        <ItemView>
+            @{
+                var item = (ProdutoFornecedor)context;
+
+                <ListItemText Primary="@item.Fornecedor.NomeFantasia">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Fornecedor.RazaoSocial
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>
+        <GridView>
+            <GridColumn Field="CodigoFornecedor" HeaderText="Cód. Fornec." Width="100"></GridColumn>
+            <GridColumn Field="Fornecedor.NomeFantasia" HeaderText="Fornecedor" Width="250"></GridColumn>
+            <GridColumn Field="UnidadeMedida.Unidade" HeaderText="Un. Médida" Width="140"></GridColumn>
+            <GridColumn Field="Contem" HeaderText="Contém" Width="80" Format="N3" TextAlign="TextAlign.Right"></GridColumn>
+            <GridColumn Field="Preco" HeaderText="Preço Un." Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
+            <GridColumn Field="Total" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right"></GridColumn>
+        </GridView>
+    </ListItemViewLayout>*@

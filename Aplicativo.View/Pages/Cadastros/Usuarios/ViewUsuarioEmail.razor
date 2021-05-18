@@ -1,80 +1,89 @@
 ﻿@inherits ViewUsuarioEmailPage
 
-<ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="UsuarioEmail"
-                    Simples="true"
-                    Height="300px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnItemView="ViewLayout_ItemView"
-                    OnDelete="ViewLayout_Delete">
-    <View>
-        <EditItemViewLayout @ref="EditItemViewLayout"
-                            ListItemViewLayout="ListItemViewLayout"
-                            Title="Email"
-                            Simples="true"
-                            Width="650px"
-                            OnLimpar="ViewLayout_Limpar"
-                            OnCarregar="ViewLayout_Carregar"
-                            OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
-            <View>
-                <Box Padding="3">
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListItemViewLayout">
 
+        <BtnNovo>
+            <ListViewBtnNovo Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+        </BtnExcluir>
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="E-mail" Width="650px" ZIndex="8001">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir OnClick="@(() => ViewLayout_Excluir(new List<object>() { ViewModel }))" />
+                </BtnExcluir>
+
+                <View>
                     <div class="row">
                         <div class="col-md-10 col-sm-10">
-                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" _AutoFocus="true"></TextBox>
+                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" />
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                            <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                            <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
+                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None" />
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
+                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-10 col-sm-12">
-                            <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true"></CheckBox>
+                            <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true" />
                         </div>
                         <div class="col-md-2 col-sm-12">
                             <Button Variant="@ButtonVariant.Contained" Color="Color.Primary" OnClick="BtnTestar_Click">Testar</Button>
                         </div>
                     </div>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
 
-                </Box>
-            </View>
-        </EditItemViewLayout>
-    </View>
-    <ItemView>
-        @{
-            var item = (UsuarioEmail)context;
+        <!--<View>-->
+        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
+        <!--</View>-->
+        @*<ItemView>
+            @{
+                var item = (Usuario)context;
 
-            <ListItemText Primary="@item.Senha">
-                <SecondaryContent>
-                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Email
-                    </Typography>
-                    — I'll be in your neighborhood
-                </SecondaryContent>
-            </ListItemText>
-        }
-    </ItemView>
-    <GridView>
-        <GridColumn Field="Smtp" HeaderText="Smtp" Width="200"></GridColumn>
-        <GridColumn Field="Porta" HeaderText="Porta" Width="100"></GridColumn>
-        <GridColumn Field="Email" HeaderText="Email" Width="400"></GridColumn>
-        <GridColumn Field="Ssl_Habilitado" HeaderText="Ssl" Width="60"></GridColumn>
-    </GridView>
-</ListItemViewLayout>
+                <ListItemText Primary="@item.Login">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Login
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>*@
+
+        <GridView>
+            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+                <GridColumn Field="Smtp" HeaderText="Smtp" Width="200"></GridColumn>
+                <GridColumn Field="Porta" HeaderText="Porta" Width="100"></GridColumn>
+                <GridColumn Field="Email" HeaderText="Email" Width="380"></GridColumn>
+                <GridColumn Field="Ssl_Habilitado" HeaderText="Ssl" Width="80"></GridColumn>
+            </GridViewItem>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

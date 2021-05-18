@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Aplicativo.View.Controls
 {
  
-    public class DateTimePickerComponent : HelpComponent
+    public class DateTimePickerComponent : ComponentBase
     {
 
         public ElementReference Element;
@@ -84,14 +84,14 @@ namespace Aplicativo.View.Controls
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
 
         public void Focus()
         {
-            Element.Focus(JSRuntime);
+            Element.Focus();
         }
 
         protected void Change(ChangeEventArgs args)

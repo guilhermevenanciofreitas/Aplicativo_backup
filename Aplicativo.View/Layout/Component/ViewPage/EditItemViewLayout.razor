@@ -1,0 +1,45 @@
+﻿
+@inherits EditItemViewLayoutPage
+
+<ComponentLayout>
+    <CascadingValue Value=this>
+
+        @if (HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+        { 
+            <style>
+                .fab-button {
+                    right: 16px;
+                    bottom: 16px;
+                    position: fixed;
+                }
+            </style>
+        }
+
+        @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+        {
+            <ViewModal @ref="ViewModal" Overlay="true" FullScreen="true" Title="@Title" Width="@Width" ZIndex="ZIndex">
+
+                <div class="box-header with-border">
+
+                    @BtnLimpar
+
+                    @BtnSalvar
+
+                    @if (ItemViewMode == ItemViewMode.Edit)
+                    {
+                        @BtnExcluir
+                    }
+
+                </div>
+
+                <br />
+
+                <Divider />
+
+                @View
+
+            </ViewModal>
+        }
+
+    </CascadingValue>
+</ComponentLayout>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Aplicativo.View.Controls
 {
 
-    public class TextAreaComponent : HelpComponent
+    public class TextAreaComponent : ComponentBase
     {
 
         protected TextField TextField;
@@ -110,11 +110,11 @@ namespace Aplicativo.View.Controls
                     {
                         if (HelpParametros.Template == Template.Mobile)
                         {
-                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
+                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
                         }
                         else
                         {
-                            await JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
+                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
                         }
                         
                     }
@@ -122,14 +122,14 @@ namespace Aplicativo.View.Controls
                 }
                 catch (Exception ex)
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", ex.Message);
+                    await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
                 }
             }
         }
 
         public void Focus()
         {
-            Element.Focus(JSRuntime);
+            Element.Focus();
             //StateHasChanged();
         }
 

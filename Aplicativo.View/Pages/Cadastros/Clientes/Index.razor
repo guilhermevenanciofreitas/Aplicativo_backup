@@ -1,3 +1,4 @@
-﻿@page "/Cadastros/Clientes"
+﻿@attribute [Page("Cadastros/Clientes")]
+@attribute [LoginRequired(true)]
 
-<Aplicativo.View.Pages.Cadastros.Pessoas.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoas.Tipo.Cliente" TitleView="Cliente"></Aplicativo.View.Pages.Cadastros.Pessoas.Index>
+<Aplicativo.View.Pages.Cadastros.Pessoas.Index Tipo="Aplicativo.View.Pages.Cadastros.Pessoas.Tipo.Cliente" TitleList="Clientes" TitleView="Cliente"></Aplicativo.View.Pages.Cadastros.Pessoas.Index>

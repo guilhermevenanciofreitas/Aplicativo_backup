@@ -1,10 +1,8 @@
 ﻿using Aplicativo.Utils;
-using Aplicativo.Utils.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -15,35 +13,25 @@ namespace Aplicativo.View.Helpers
 
         public static string Url { get; set; } = ""; //"http://192.168.0.6:7070/";
 
-
-        public async static Task<List<T>> Query<T>(HttpClient Http, HelpQuery Query) where T : class
+        public async static Task<T> Send<T>(string Action, Request Request) where T : class
         {
 
-            var Request = new Request();
+            var Response = await Post(Action, Request);
 
-            Request.Parameters.Add(new Parameters("Query", Query));
-
-            return await Send<List<T>>(Http, "api/Default/Query", Request);
-
-        }
-
-
-        public async static Task Send(HttpClient Http, string Action, Request Request)
-        {
-            var Response = await Post(Http, Action, Request);
             Tratament(Response);
-        }
 
-        public async static Task<T> Send<T>(HttpClient Http, string Action, Request Request) where T : class
-        {
-            var Response = await Post(Http, Action, Request);
-            Tratament(Response);
+            if (Response.Data == null)
+            {
+                return null;
+            }
+
             return JsonConvert.DeserializeObject<T>(Response.Data.ToString());
+
         }
 
-        public async static Task<Response> Post(HttpClient Http, string Action, Request Request)
+        public async static Task<Response> Post(string Action, Request Request)
         {
-            var Result = await Http.PostAsJsonAsync(Path.Combine(Url, Action), Request);
+            var Result = await App.Http.PostAsJsonAsync(Path.Combine(Url, Action), Request);
 
             if (!Result.IsSuccessStatusCode) throw new Exception("Problema na conexão com o servidor!");
         
@@ -65,14 +53,13 @@ namespace Aplicativo.View.Helpers
                 case StatusCode.Error:
                     throw new Exception(Response.Data.ToString());
 
-                case StatusCode.LoginExpired:
-                    throw new Exception("LoginExpired");
+                case StatusCode.LoginRequired:
+                    throw new LoginRequiredException();
 
                 default:
                     throw new Exception("HelpHttp.NotImplemented");
 
             }
         }
-
     }
 }

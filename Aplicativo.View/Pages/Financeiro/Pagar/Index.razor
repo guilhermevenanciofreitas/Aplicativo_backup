@@ -1,3 +1,4 @@
-﻿@page "/Financeiro/Pagar"
+﻿@attribute [Page("Financeiro/ContasPagar")]
+@attribute [LoginRequired(true)]
 
-<Aplicativo.View.Pages.Financeiro.TituloDetalhes.Index Tipo="Aplicativo.View.Pages.Financeiro.TituloDetalhes.Tipo.Pagar" TitleView="Contas a pagar"></Aplicativo.View.Pages.Financeiro.TituloDetalhes.Index>
+<Aplicativo.View.Pages.Financeiro.TituloDetalhes.Index Tipo="Aplicativo.View.Pages.Financeiro.TituloDetalhes.Tipo.Pagar" TitleList="Contas a pagar" TitleView="Conta a pagar"></Aplicativo.View.Pages.Financeiro.TituloDetalhes.Index>

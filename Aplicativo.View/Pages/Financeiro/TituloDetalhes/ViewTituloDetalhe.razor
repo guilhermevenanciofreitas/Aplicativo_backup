@@ -1,76 +1,57 @@
-﻿@inherits ViewTituluDetalhePage<TituloDetalhe>
+﻿@inherits ViewTituluDetalhePage
 
-<EditItemViewLayout @ref="EditItemViewLayout"
-                    ListItemViewLayout="ListItemViewLayout"
-                    Title="Editar parcela"
-                    Width="1150px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnLimpar="ViewLayout_Limpar"
-                    OnCarregar="ViewLayout_Carregar"
-                    OnSalvar="ViewLayout_Salvar"
-                    OnExcluir="ViewLayout_Excluir">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Parcela" OnLoad="ViewLayout_Load" Width="1150px">
+    @*<BtnLimpar>
+        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+    </BtnLimpar>*@
+    <BtnSalvar>
+        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+    </BtnSalvar>
+    @*<BtnExcluir>
+        <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
+    </BtnExcluir>*@
     <View>
-
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
 
                     <div class="row">
                         <div class="col-md-8 col-sm-12">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <div class="form-group">
-                                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
-                                    </div>
+                                    <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <TextBox @ref="TxtNumeroDocumento" _Label="Nº Documento"></TextBox>
-                                    </div>
+                                    <TextBox @ref="TxtNumeroDocumento" _Label="Nº Documento" />
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <DatePicker @ref="DtpEmissao" _Label="Emissão"></DatePicker>
-                                    </div>
+                                    <DatePicker @ref="DtpEmissao" _Label="Emissão" />
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnLeave="DtpVencimento_Leave"></DatePicker>
-                                    </div>
+                                    <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnLeave="DtpVencimento_Leave" />
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="form-group">
-
-                                    </div>
-                                    @*<label>@(PlanoContaTipoID == 1 ? "Pagador" : "Recebedor")</label>
-        <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>*@
+                                    
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="form-group">
-                                        @*<ViewPesquisa @ref="ViewPesquisaFormaPagamento" Label="Forma de pagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>*@
-                                    </div>
+                                    
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="form-group">
-                                        @*<ViewPesquisa @ref="ViewPesquisaPlanoConta" Label="Plano de conta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>*@
-                                    </div>
+                                    
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-9">
-                                    <div class="form-group">
-                                        @*<ViewPesquisa @ref="ViewPesquisaCentroCusto" Label="Centro de custo" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>*@
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -83,9 +64,7 @@
                                         <label class="control-label" style="margin-top: 10px">Valor total</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtTotal" _Prefix="R$ " OnKeyUp="TxtTotal_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtTotal" _Prefix="R$ " OnKeyUp="TxtTotal_KeyUp" />
                                     </div>
                                 </div>
 
@@ -94,14 +73,10 @@
                                         <label class="control-label" style="margin-top: 10px">Desconto</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtPercDesconto" _Prefix="% " _Digits="3" OnKeyUp="TxtPercDesconto_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtPercDesconto" _Prefix="% " _Digits="3" OnKeyUp="TxtPercDesconto_KeyUp" />
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtValorDesconto" _Prefix="R$ " OnKeyUp="TxtValorDesconto_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtValorDesconto" _Prefix="R$ " OnKeyUp="TxtValorDesconto_KeyUp" />
                                     </div>
                                 </div>
 
@@ -110,14 +85,10 @@
                                         <label class="control-label" style="margin-top: 10px"><font color="red">Juros (ao dia)</font></label>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtPercJuros" _Prefix="% " _Digits="3" OnKeyUp="TxtPercJuros_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtPercJuros" _Prefix="% " _Digits="3" OnKeyUp="TxtPercJuros_KeyUp" />
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtValorJuros" _Prefix="R$ " OnKeyUp="TxtValorJuros_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtValorJuros" _Prefix="R$ " OnKeyUp="TxtValorJuros_KeyUp" />
                                     </div>
                                 </div>
 
@@ -126,9 +97,7 @@
                                         <label class="control-label" style="margin-top: 10px">Dias atrasados</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtDiasAtrasados" _Digits="0" OnKeyUp="TxtDiasAtrasados_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtDiasAtrasados" _Digits="0" OnKeyUp="TxtDiasAtrasados_KeyUp" />
                                     </div>
                                 </div>
 
@@ -137,14 +106,10 @@
                                         <label class="control-label" style="margin-top: 10px"><font color="red">Multa</font></label>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtPercMulta" _Prefix="% " _Digits="3" OnKeyUp="TxtPercMulta_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtPercMulta" _Prefix="% " _Digits="3" OnKeyUp="TxtPercMulta_KeyUp" />
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <NumericBox @ref="TxtValorMulta" _Prefix="R$ " OnKeyUp="TxtValorMulta_KeyUp"></NumericBox>
-                                        </div>
+                                        <NumericBox @ref="TxtValorMulta" _Prefix="R$ " OnKeyUp="TxtValorMulta_KeyUp" />
                                     </div>
                                 </div>
 
@@ -153,7 +118,7 @@
                                         <label class="control-label"><font color="green" size="4">Valor a pagar</font></label>
                                     </div>
                                     <div class="col-md-7" style="text-align: right">
-                                        <label class="control-label"><font size="5" color="green">R$ @(Math.Round(ValorLiquido, 2))</font></label>
+                                        <label class="control-label"><font size="5" color="green">R$ @(Math.Round(vLiquido, 2))</font></label>
                                     </div>
                                 </div>
                             </div>
@@ -162,20 +127,197 @@
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <div class="form-group">
-                                <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
-                            </div>
+                            <TextArea @ref="TxtObservacao" _Label="Observação" />
                         </div>
                     </div>
 
-
-                </Box>
             </TabPage>
             <TabPage Id="Parcelas" Title="Outras parcelas">
-                
+
 
             </TabPage>
         </TabSet>
-
     </View>
 </EditItemViewLayout>
+
+                            <!-- ViewTituluDetalhePage<TituloDetalhe>
+
+                            <EditItemViewLayout @ref="EditItemViewLayout"
+                                                ListItemViewLayout="ListItemViewLayout"
+                                                Title="Editar parcela"
+                                                Width="1150px"
+                                                OnPageLoad="ViewLayout_PageLoad"
+                                                OnLimpar="ViewLayout_Limpar"
+                                                OnCarregar="ViewLayout_Carregar"
+                                                OnSalvar="ViewLayout_Salvar"
+                                                OnExcluir="ViewLayout_Excluir">
+                                <View>
+
+                                    <TabSet @ref="TabSet" Changed="StateHasChanged">
+                                        <TabPage Id="Principal" Title="Principal">
+                                            <Box Padding="3">
+
+                                                <div class="row">
+                                                    <div class="col-md-8 col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <TextBox @ref="TxtNumeroDocumento" _Label="Nº Documento"></TextBox>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <DatePicker @ref="DtpEmissao" _Label="Emissão"></DatePicker>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnLeave="DtpVencimento_Leave"></DatePicker>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+
+                                                                </div>-->
+                                    @*<label>@(PlanoContaTipoID == 1 ? "Pagador" : "Recebedor")</label>
+                                <ViewPesquisa @ref="ViewPesquisaPessoa" Titulo="Procurar receber" TipoPesquisa="TipoPesquisa.Pessoa" CampoPesquisa="Nome fantasia"></ViewPesquisa>*@
+                                    <!--</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">-->
+                                    @*<ViewPesquisa @ref="ViewPesquisaFormaPagamento" Label="Forma de pagamento" Titulo="Procurar forma de pagamento" TipoPesquisa="TipoPesquisa.FormaPagamento" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    <!--</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">-->
+                                    @*<ViewPesquisa @ref="ViewPesquisaPlanoConta" Label="Plano de conta" Titulo="Procurar plano de conta" TipoPesquisa="TipoPesquisa.PlanoConta" CampoPesquisa="Descrição" Where="@("Inteiro02 == " + PlanoContaTipoID)"></ViewPesquisa>*@
+                                    <!--</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">-->
+                                    @*<ViewPesquisa @ref="ViewPesquisaCentroCusto" Label="Centro de custo" Titulo="Procurar centro de custo" TipoPesquisa="TipoPesquisa.CentroCusto" CampoPesquisa="Descrição"></ViewPesquisa>*@
+                                    <!--</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="box-body">
+
+                                                            <div class="row" style="margin-bottom: 10px">
+                                                                <div class="col-md-4">
+                                                                    <label class="control-label" style="margin-top: 10px">Valor total</label>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtTotal" _Prefix="R$ " OnKeyUp="TxtTotal_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" style="margin-bottom: 10px">
+                                                                <div class="col-md-4">
+                                                                    <label class="control-label" style="margin-top: 10px">Desconto</label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtPercDesconto" _Prefix="% " _Digits="3" OnKeyUp="TxtPercDesconto_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtValorDesconto" _Prefix="R$ " OnKeyUp="TxtValorDesconto_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" style="margin-bottom: 10px">
+                                                                <div class="col-md-4">
+                                                                    <label class="control-label" style="margin-top: 10px"><font color="red">Juros (ao dia)</font></label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtPercJuros" _Prefix="% " _Digits="3" OnKeyUp="TxtPercJuros_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtValorJuros" _Prefix="R$ " OnKeyUp="TxtValorJuros_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" style="margin-bottom: 10px">
+                                                                <div class="col-md-4">
+                                                                    <label class="control-label" style="margin-top: 10px">Dias atrasados</label>
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtDiasAtrasados" _Digits="0" OnKeyUp="TxtDiasAtrasados_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row" style="margin-bottom: 12px">
+                                                                <div class="col-md-4">
+                                                                    <label class="control-label" style="margin-top: 10px"><font color="red">Multa</font></label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtPercMulta" _Prefix="% " _Digits="3" OnKeyUp="TxtPercMulta_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <NumericBox @ref="TxtValorMulta" _Prefix="R$ " OnKeyUp="TxtValorMulta_KeyUp"></NumericBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="control-label"><font color="green" size="4">Valor a pagar</font></label>
+                                                                </div>
+                                                                <div class="col-md-7" style="text-align: right">
+                                                                    <label class="control-label"><font size="5" color="green">R$ @(Math.Round(ValorLiquido, 2))</font></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12">
+                                                        <div class="form-group">
+                                                            <TextArea @ref="TxtObservacao" _Label="Observação"></TextArea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </Box>
+                                        </TabPage>
+                                        <TabPage Id="Parcelas" Title="Outras parcelas">
+
+
+                                        </TabPage>
+                                    </TabSet>
+
+                                </View>
+                            </EditItemViewLayout>-->

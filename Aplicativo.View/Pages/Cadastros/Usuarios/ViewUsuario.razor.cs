@@ -2,7 +2,8 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Aplicativo.View.Layout;
+using Aplicativo.View.Helpers.Exceptions;
+using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
-    public partial class ViewUsuarioPage<TValue> : HelpComponent
+    public partial class ViewUsuarioPage : ComponentBase
     {
 
-        [Parameter]
-        public ListItemViewLayout<TValue> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<Usuario> EditItemViewLayout { get; set; }
+        [Parameter] public bool BtnLimpar { get; set; } = true;
+        [Parameter] public bool BtnExcluir { get; set; } = true;
+
+        public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
         public TextBox TxtCodigo { get; set; }
@@ -28,8 +30,27 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
         #endregion
 
-        protected void ViewLayout_PageLoad()
+        protected async Task ViewLayout_Load(object args)
         {
+
+            await ViewLayout_Limpar();
+
+            if (args == null) return;
+
+            var Query = new HelpQuery<Usuario>();
+
+            Query.AddInclude("UsuarioEmail");
+            Query.AddWhere("UsuarioID == @0", ((Usuario)args).UsuarioID);
+            
+            var ViewModel = await Query.FirstOrDefault();
+
+            TxtCodigo.Text = ViewModel.UsuarioID.ToStringOrNull();
+            TxtLogin.Text = ViewModel.Login.ToStringOrNull();
+            TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
+            TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
+
+            ViewUsuarioEmail.ListItemViewLayout.ListItemView = ViewModel.UsuarioEmail.Cast<object>().ToList();
+            
         }
 
         protected async Task ViewLayout_Limpar()
@@ -37,34 +58,11 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             EditItemViewLayout.LimparCampos(this);
 
-            ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<UsuarioEmail>();
-            ViewUsuarioEmail.ListItemViewLayout.Refresh();
-
+            ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<object>();
+            
             await TabSet.Active("Principal");
 
             TxtLogin.Focus();
-
-        }
-
-        protected async Task ViewLayout_Carregar(object args)
-        {
-
-            var Query = new HelpQuery(typeof(TValue).Name);
-
-            Query.AddInclude("UsuarioEmail");
-            Query.AddWhere("UsuarioID == @0", ((Usuario)args)?.UsuarioID);
-            Query.AddTake(1);
-
-            EditItemViewLayout.ViewModel = await EditItemViewLayout.Carregar<Usuario>(Query);
-
-
-            TxtCodigo.Text = EditItemViewLayout.ViewModel.UsuarioID.ToStringOrNull();
-            TxtLogin.Text = EditItemViewLayout.ViewModel.Login.ToStringOrNull();
-            TxtSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
-            TxtConfirmarSenha.Text = EditItemViewLayout.ViewModel.Senha.ToStringOrNull();
-
-            ViewUsuarioEmail.ListItemViewLayout.ListItemView = EditItemViewLayout.ViewModel.UsuarioEmail.ToList();
-            ViewUsuarioEmail.ListItemViewLayout.Refresh();
 
         }
 
@@ -74,37 +72,68 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (string.IsNullOrEmpty(TxtLogin.Text))
             {
                 await TabSet.Active("Principal");
-                await HelpEmptyException.New(JSRuntime, TxtLogin.Element, "Informe o login!");
+                throw new EmptyException("Informe o login!", TxtLogin.Element);
             }
 
             if (TxtSenha.Text != TxtConfirmarSenha.Text)
             {
                 await TabSet.Active("Principal");
-                await HelpEmptyException.New(JSRuntime, TxtConfirmarSenha.Element, "A confirmação da senha está diferente da senha informada!");
+                throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
             }
 
 
-            EditItemViewLayout.ViewModel.UsuarioID = TxtCodigo.Text.ToIntOrNull();
-            EditItemViewLayout.ViewModel.Login = TxtLogin.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
+            var ViewModel = new Usuario();
 
-            EditItemViewLayout.ViewModel.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView;
+            ViewModel.UsuarioID = TxtCodigo.Text.ToIntOrNull();
+            ViewModel.Login = TxtLogin.Text.ToStringOrNull();
+            ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
+
+            ViewModel.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView.Cast<UsuarioEmail>().ToList();
 
 
-            EditItemViewLayout.ViewModel = await EditItemViewLayout.Update(EditItemViewLayout.ViewModel);
+            var Query = new HelpQuery<Usuario>();
+
+            ViewModel = await Query.Update(ViewModel);
 
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
-                await EditItemViewLayout.Carregar(EditItemViewLayout.ViewModel);
+            {
+                EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
+                TxtCodigo.Text = ViewModel.UsuarioID.ToStringOrNull();
+            }
             else
+            {
                 EditItemViewLayout.ViewModal.Hide();
-          
-            
+            }
+
         }
 
         protected async Task ViewLayout_Excluir()
         {
-            await EditItemViewLayout.Delete(EditItemViewLayout.ViewModel);
+
+            await Excluir(new List<int> { TxtCodigo.Text.ToInt() });
+
+            EditItemViewLayout.ViewModal.Hide();
+
         }
+
+        public async Task Excluir(List<int> args)
+        {
+
+            var Query = new HelpQuery<Usuario>();
+
+            Query.AddWhere("UsuarioID IN (" + string.Join(",", args.ToArray()) + ")");
+
+            var ViewModel = await Query.ToList();
+
+            foreach (var item in ViewModel)
+            {
+                item.Ativo = false;
+            }
+
+            await Query.Update(ViewModel, false);
+
+        }
+
     }
 }

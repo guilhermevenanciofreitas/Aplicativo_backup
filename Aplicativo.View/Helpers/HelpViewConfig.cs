@@ -57,7 +57,7 @@ namespace Aplicativo.View.Helpers
 
     public class HelpViewStyleProvider : StyleTypeProvider
     {
-        public HelpViewStyleProvider() : base(priority: default, typeof(AppStyle))
+        public HelpViewStyleProvider() : base(priority: default)
         {
         }
     }

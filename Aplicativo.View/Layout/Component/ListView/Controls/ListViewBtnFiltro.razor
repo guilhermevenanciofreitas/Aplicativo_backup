@@ -1,0 +1,18 @@
+﻿@inherits ListViewBtnFiltroComponent
+
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+{
+
+}
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
+    <Button Variant="@ButtonVariant.Contained" OnClick="ButtonFiltro_Click">
+        <StartIcon>
+            <FilterListIcon />
+        </StartIcon>
+        <ChildContent>
+            @Text
+        </ChildContent>
+    </Button>
+}

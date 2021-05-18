@@ -2,84 +2,179 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout;
+using Aplicativo.View.Layout.Component.ListView;
+using Aplicativo.View.Layout.Component.ViewPage;
+using Microsoft.AspNetCore.Components;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Cadastros.Pessoas
 {
-    public class ViewPessoaContatoPage : HelpComponent
+    public class ViewPessoaContatoPage : ComponentBase
     {
 
-        public ListItemViewLayout<PessoaContato> ListItemViewLayout { get; set; }
-        public EditItemViewLayout<PessoaContato> EditItemViewLayout { get; set; }
+        public PessoaContato ViewModel { get; set; } = new PessoaContato();
+
+        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public EditItemViewLayout EditItemViewLayout { get; set; }
 
         public TextBox TxtNome { get; set; }
         public TextBox TxtTelefone { get; set; }
         public TextBox TxtEmail { get; set; }
 
 
-        protected void ViewLayout_PageLoad()
-        {
-
-        }
-
-        protected void ViewLayout_Limpar()
-        {
-            EditItemViewLayout.LimparCampos(this);
-        }
-
+        #region ListView
         protected async Task ViewLayout_ItemView(object args)
         {
-            await EditItemViewLayout.Carregar((PessoaContato)args);
+            await ViewLayout_Carregar(args);
         }
+        #endregion
 
-        protected void ViewLayout_Carregar(object args)
+        #region ViewPage
+        protected void ViewLayout_Limpar()
         {
 
-            EditItemViewLayout.ViewModel = (PessoaContato)args;
+            ViewModel = new PessoaContato();
 
-            TxtNome.Text = EditItemViewLayout.ViewModel.Contato.Nome.ToStringOrNull();
-            TxtTelefone.Text = EditItemViewLayout.ViewModel.Contato.Telefone.ToStringOrNull();
-            TxtEmail.Text = EditItemViewLayout.ViewModel.Contato.Email.ToStringOrNull();
-            
+            EditItemViewLayout.LimparCampos(this);
+
         }
 
-        protected async Task ViewLayout_Salvar()
+        protected async Task ViewLayout_Carregar(object args)
         {
 
-            //if (string.IsNullOrEmpty(TxtCEP.Text))
-            //    throw new EmptyException("Informe o CEP!", TxtCEP.Element);
+            ViewLayout_Limpar();
+
+            await EditItemViewLayout.Show(args);
+
+            if (args == null) return;
+
+            ViewModel = (PessoaContato)args;
+
+            TxtNome.Text = ViewModel.Contato.Nome.ToStringOrNull();
+            TxtTelefone.Text = ViewModel.Contato.Telefone.ToStringOrNull();
+            TxtEmail.Text = ViewModel.Contato.Email.ToStringOrNull();
+
+        }
+
+        protected void ViewLayout_Salvar()
+        {
 
             if (string.IsNullOrEmpty(TxtNome.Text))
             {
-                await HelpEmptyException.New(JSRuntime, TxtNome.Element, "Informe o nome!");
-            }
-            
-
-            if (EditItemViewLayout.ViewModel.Contato == null)
-            {
-                EditItemViewLayout.ViewModel.Contato = new Contato();
+                throw new EmptyException("Informe o nome!", TxtNome.Element);
             }
 
-            EditItemViewLayout.ViewModel.Contato.Nome = TxtNome.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Contato.Telefone = TxtTelefone.Text.ToStringOrNull();
-            EditItemViewLayout.ViewModel.Contato.Email = TxtEmail.Text.ToStringOrNull();
-            
+            var ListItemView = ListItemViewLayout.ListItemView;
+
+            ViewModel.Contato = new Contato();
+
+            ViewModel.Contato.Nome = TxtNome.Text.ToStringOrNull();
+            ViewModel.Contato.Telefone = TxtTelefone.Text.ToStringOrNull();
+            ViewModel.Contato.Email = TxtEmail.Text.ToStringOrNull();
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
+                ListItemView.Add(ViewModel);
             }
+
+            ListItemViewLayout.ListItemView = ListItemView;
+
             EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void ViewLayout_Delete(object args)
+        protected void ViewLayout_Excluir(object args)
         {
-            foreach(var item in (List<PessoaContato>)args) ListItemViewLayout.ListItemView.Remove(item);
+
+            var ListItemView = ListItemViewLayout.ListItemView;
+
+            foreach (var item in ((IEnumerable)args).Cast<PessoaContato>().ToList())
+            {
+                ListItemView.Remove(item);
+            }
+
+            ListItemViewLayout.ListItemView = ListItemView;
+
             EditItemViewLayout.ViewModal.Hide();
+
         }
+
+        #endregion
+
+        //public ListItemViewLayout<PessoaContato> ListItemViewLayout { get; set; }
+        //public EditItemViewLayout<PessoaContato> EditItemViewLayout { get; set; }
+
+        //public TextBox TxtNome { get; set; }
+        //public TextBox TxtTelefone { get; set; }
+        //public TextBox TxtEmail { get; set; }
+
+
+        //protected void ViewLayout_PageLoad()
+        //{
+
+        //}
+
+        //protected void ViewLayout_Limpar()
+        //{
+        //    EditItemViewLayout.LimparCampos(this);
+        //}
+
+        //protected async Task ViewLayout_ItemView(object args)
+        //{
+        //    await EditItemViewLayout.Carregar((PessoaContato)args);
+        //}
+
+        //protected void ViewLayout_Carregar(object args)
+        //{
+
+        //    EditItemViewLayout.ViewModel = (PessoaContato)args;
+
+        //    TxtNome.Text = EditItemViewLayout.ViewModel.Contato.Nome.ToStringOrNull();
+        //    TxtTelefone.Text = EditItemViewLayout.ViewModel.Contato.Telefone.ToStringOrNull();
+        //    TxtEmail.Text = EditItemViewLayout.ViewModel.Contato.Email.ToStringOrNull();
+
+        //}
+
+        //protected async Task ViewLayout_Salvar()
+        //{
+
+        //    //if (string.IsNullOrEmpty(TxtCEP.Text))
+        //    //    throw new EmptyException("Informe o CEP!", TxtCEP.Element);
+
+        //    if (string.IsNullOrEmpty(TxtNome.Text))
+        //    {
+        //        //await HelpEmptyException.New(JSRuntime, TxtNome.Element, "Informe o nome!");
+        //    }
+
+
+        //    if (EditItemViewLayout.ViewModel.Contato == null)
+        //    {
+        //        EditItemViewLayout.ViewModel.Contato = new Contato();
+        //    }
+
+        //    EditItemViewLayout.ViewModel.Contato.Nome = TxtNome.Text.ToStringOrNull();
+        //    EditItemViewLayout.ViewModel.Contato.Telefone = TxtTelefone.Text.ToStringOrNull();
+        //    EditItemViewLayout.ViewModel.Contato.Email = TxtEmail.Text.ToStringOrNull();
+
+
+        //    if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
+        //    {
+        //        ListItemViewLayout.ListItemView.Add(EditItemViewLayout.ViewModel);
+        //    }
+        //    EditItemViewLayout.ViewModal.Hide();
+
+        //}
+
+        //protected void ViewLayout_Delete(object args)
+        //{
+        //    foreach(var item in (List<PessoaContato>)args) ListItemViewLayout.ListItemView.Remove(item);
+        //    EditItemViewLayout.ViewModal.Hide();
+        //}
 
     }
 }

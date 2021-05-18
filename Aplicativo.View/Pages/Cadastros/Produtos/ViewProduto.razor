@@ -1,4 +1,52 @@
-﻿@inherits ViewProdutoPage<Produto>
+﻿@inherits ViewProdutoPage
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Produto" OnLoad="ViewLayout_Load" Width="1250px">
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+    </BtnLimpar>
+    <BtnSalvar>
+        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+    </BtnSalvar>
+    <BtnExcluir>
+        <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
+    </BtnExcluir>
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+                    <div class="col-md-1 col-sm-6">
+                        <TextBox @ref="TxtCodigo" _Label="Código" />
+                    </div>
+                    <div class="col-md-5 col-sm-6">
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Tributacao" Title="Tributação">
+                <div class="row">
+                    <div class="col-md-5 col-sm-12">
+                        <DropDownList @ref="DplOrigem" _Label="Origem" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Fornecedores" Title="Fornecedores">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewProdutoFornecedor @ref="ViewProdutoFornecedor" />
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+</EditItemViewLayout>
+
+<!--
 
 <EditItemViewLayout @ref="EditItemViewLayout"
                     ListItemViewLayout="ListItemViewLayout"
@@ -65,8 +113,7 @@
         </TabSet>
 
     </View>
-</EditItemViewLayout>
-
+</EditItemViewLayout>-->
 @*@inherits ViewProdutoPage
 
     <EditItemViewLayout @ref="EditItemViewLayout"

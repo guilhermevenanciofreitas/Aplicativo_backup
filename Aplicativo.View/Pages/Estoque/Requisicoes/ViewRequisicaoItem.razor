@@ -1,69 +1,69 @@
-﻿@inherits ViewRequisicaoItemPage
+﻿@*@inherits ViewRequisicaoItemPage
 
-<ListItemViewLayout @ref="ListItemViewLayout"
-                    TValue="RequisicaoItem"
-                    Simples="true"
-                    Height="280px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnItemView="ViewLayout_ItemView"
-                    OnDelete="ViewLayout_Delete">
-    <View>
-        <EditItemViewLayout @ref="EditItemViewLayout"
-                            ListItemViewLayout="ListItemViewLayout"
-                            Title="Requisição item"
-                            Simples="true"
-                            Width="650px"
-                            OnLimpar="ViewLayout_Limpar"
-                            OnCarregar="ViewLayout_Carregar"
-                            OnSalvar="ViewLayout_Salvar"
-                            OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
-            <View>
-                <Box Padding="3">
+    <ListItemViewLayout @ref="ListItemViewLayout"
+                        TValue="RequisicaoItem"
+                        Simples="true"
+                        Height="280px"
+                        OnPageLoad="ViewLayout_PageLoad"
+                        OnItemView="ViewLayout_ItemView"
+                        OnDelete="ViewLayout_Delete">
+        <View>
+            <EditItemViewLayout @ref="EditItemViewLayout"
+                                ListItemViewLayout="ListItemViewLayout"
+                                Title="Requisição item"
+                                Simples="true"
+                                Width="650px"
+                                OnLimpar="ViewLayout_Limpar"
+                                OnCarregar="ViewLayout_Carregar"
+                                OnSalvar="ViewLayout_Salvar"
+                                OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModel }))">
+                <View>
+                    <Box Padding="3">
 
-                    <TabSet Changed="StateHasChanged">
+                        <TabSet Changed="StateHasChanged">
 
-                        <TabPage Id="CodigoBarras" Title="Por código de barras">
+                            <TabPage Id="CodigoBarras" Title="Por código de barras">
 
-                            <Box Padding="3">
-                                <div class="row">
-                                    <div class="col-md-4 col-sm-12">
-                                        <TextBox @ref="TxtQuantidade" _Label="Quantidade"></TextBox>
+                                <Box Padding="3">
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-12">
+                                            <TextBox @ref="TxtQuantidade" _Label="Quantidade"></TextBox>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8 col-sm-12">
-                                        <TextBox @ref="TxtCodigoBarras" _Label="Código de barras"></TextBox>
+                                    <div class="row">
+                                        <div class="col-md-8 col-sm-12">
+                                            <TextBox @ref="TxtCodigoBarras" _Label="Código de barras"></TextBox>
+                                        </div>
                                     </div>
-                                </div>
-                            </Box>
+                                </Box>
 
-                        </TabPage>
-                        <TabPage Id="Produto" Title="Por produto">
+                            </TabPage>
+                            <TabPage Id="Produto" Title="Por produto">
 
-                        </TabPage>
+                            </TabPage>
 
-                    </TabSet>
+                        </TabSet>
 
-                </Box>
-            </View>
-        </EditItemViewLayout>
-    </View>
-    <ItemView>
-        @{
-            var item = (RequisicaoItem)context;
+                    </Box>
+                </View>
+            </EditItemViewLayout>
+        </View>
+        <ItemView>
+            @{
+                var item = (RequisicaoItem)context;
 
-            <ListItemText Primary="@item.Produto.Descricao">
-                <SecondaryContent>
-                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                        @item.Produto.Descricao
-                    </Typography>
-                    — I'll be in your neighborhood
-                </SecondaryContent>
-            </ListItemText>
-        }
-    </ItemView>
-    <GridView>
-        <GridColumn Field="Produto.Descricao" HeaderText="Descrição" Width="200"></GridColumn>
-        <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="80"></GridColumn>
-    </GridView>
-</ListItemViewLayout>
+                <ListItemText Primary="@item.Produto.Descricao">
+                    <SecondaryContent>
+                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                            @item.Produto.Descricao
+                        </Typography>
+                        — I'll be in your neighborhood
+                    </SecondaryContent>
+                </ListItemText>
+            }
+        </ItemView>
+        <GridView>
+            <GridColumn Field="Produto.Descricao" HeaderText="Descrição" Width="200"></GridColumn>
+            <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="80"></GridColumn>
+        </GridView>
+    </ListItemViewLayout>*@

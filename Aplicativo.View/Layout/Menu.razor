@@ -1,28 +1,119 @@
+@inherits MenuLayout;
+
 @*<Navigation Items="@Items" />*@
 
-<Syncfusion.Blazor.Navigations.SfAccordion>
-    <Syncfusion.Blazor.Navigations.AccordionItems>
+<style>
+    .Sidebar-Content {
+        padding: 0px !important;
+        background-color: #1D2B36;
+    }
+    .ListItemText-Root {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+        margin-left: -30px !important;
+    }
+</style>
+<style>
+    .Menu-Accordion {
+        background-color: #1D2B36;
+        color: #fff;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
 
-        <Syncfusion.Blazor.Navigations.AccordionItem>
-            <HeaderTemplate>
-                Cadastros
-            </HeaderTemplate>
-            <ContentTemplate>
-                <Navigation Items="@Cadastros" />
-            </ContentTemplate>
-        </Syncfusion.Blazor.Navigations.AccordionItem>
-    </Syncfusion.Blazor.Navigations.AccordionItems>
-</Syncfusion.Blazor.Navigations.SfAccordion>
+    .Menu-Accordion:after {
+        content: '\002B';
+        color: #777;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+        .Menu-Accordion.active:after {
+            content: "\2212";
+        }
+
+    .Menu-Accordion-Item {
+        background-color: #495057;
+        color: #fff;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+    }
+
+    .Navigation-Active {
+        color: #75ecff !important;
+    }
+
+    .Navigation-Item a:hover {
+        color: #fff;
+    }
+</style>
+
+<button class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Cadastros</button>
+<div class="Menu-Accordion-Item">
+    <Navigation Items="@Cadastros" />
+</div>
+
+<button class="Menu-Accordion"><MoneyIcon />&nbsp;&nbsp; Financeiro</button>
+<div class="Menu-Accordion-Item">
+    <Navigation Items="@Financeiro" />
+</div>
+
+<button class="Menu-Accordion">Fiscal</button>
+<div class="Menu-Accordion-Item">
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+</div>
+
+<button class="Menu-Accordion"><SettingsIcon />&nbsp;&nbsp; Configuracao</button>
+<div class="Menu-Accordion-Item">
+    <Navigation Items="@Configuracoes" />
+</div>
 
 @code
-{private static List<NavigationItem> Cadastros = new List<NavigationItem>
+{
+    private static List<NavigationItem> Cadastros = new List<NavigationItem>
     {
+        new NavigationItem
+        {
+            Title = "Clientes",
+            Path = "Cadastros/Clientes",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Fornecedores",
+            Path = "Cadastros/Fornecedores",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Transportadoras",
+            Path = "Cadastros/Transportadoras",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Funcionarios",
+            Path = "Cadastros/Funcionarios",
+            Prefix = false
+        },
 
         new NavigationItem
         {
             Title = "Usuarios",
             Path = "Cadastros/Usuarios",
-            Icon = @<HomeIcon />,
             Prefix = false
         },
 
@@ -30,33 +121,53 @@
         {
             Title = "Produtos",
             Path = "Cadastros/Produtos",
-            Icon = @<HomeIcon />,
             Prefix = false
         },
 
         new NavigationItem
         {
-            Title = "Clientes",
-            Path = "Cadastros/Clientes",
-            Icon = @<HomeIcon />,
+            Title = "Formas de pagamentos",
+            Path = "Cadastros/FormasPagamentos",
             Prefix = false
         },
 
-     new NavigationItem
+        new NavigationItem
         {
-            Title = "Fornecedores",
-            Path = "Cadastros/Fornecedores",
-            Icon = @<HomeIcon />,
+            Title = "Contas bancarias",
+            Path = "Cadastros/ContaBancarias",
             Prefix = false
         },
 
-@*new NavigationItem
+    };
+
+    private static List<NavigationItem> Financeiro = new List<NavigationItem>
     {
-        Title = "Requisicao",
-        Path = "Estoque/Requisicao",
-        Icon = @<HomeIcon />,
-        Prefix = false
-    },*@
+
+        new NavigationItem
+        {
+            Title = "Contas a pagar",
+            Path = "Financeiro/ContasPagar",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Contas a receber",
+            Path = "Financeiro/ContasReceber",
+            Prefix = false
+        },
+
+    };
+
+    private static List<NavigationItem> Configuracoes = new List<NavigationItem>
+    {
+
+        new NavigationItem
+        {
+            Title = "Empresa",
+            Path = "Configuracoes/Empresa",
+            Prefix = false
+        },
 
     };
 

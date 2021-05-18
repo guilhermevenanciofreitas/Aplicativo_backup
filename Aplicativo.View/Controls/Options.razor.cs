@@ -16,7 +16,7 @@ namespace Aplicativo.View.Controls
         public bool Checked { get; set; }
     }
 
-    public class OptionsControl : HelpComponent
+    public class OptionsControl : ComponentBase
     {
 
         [Parameter] public string _Name { get; set; }
@@ -47,13 +47,16 @@ namespace Aplicativo.View.Controls
 
                 Option.Checked = true;
 
-                OnChange.InvokeAsync(value);
-
                 _Value = value;
 
                 StateHasChanged();
 
             }
+        }
+
+        public async Task Change(string Value)
+        {
+            await OnChange.InvokeAsync(Value);
         }
 
         public string Name

@@ -1,0 +1,27 @@
+﻿@inherits ListViewBtnPesquisaComponent;
+
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+{
+
+}
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
+    <div class="form-check-inline float-end">
+        <div class="form-group">
+
+            <CascadingValue Value="this">
+                @ChildContent
+            </CascadingValue>
+
+            <Button Variant="@ButtonVariant.Contained" Color="@Color.Primary" OnClick="BtnPesquisar_Click">
+                <StartIcon>
+                    <SearchIcon />
+                </StartIcon>
+                <ChildContent>
+                    @Text
+                </ChildContent>
+            </Button>
+        </div>
+    </div>
+}
