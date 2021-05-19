@@ -1,17 +1,17 @@
 ﻿using Aplicativo.View.Helpers;
+using BlazorPro.BlazorSize;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component
 {
-    public class ComponentLayoutBase : ComponentBase//, IDisposable
+    public class ComponentLayoutBase : ComponentBase
     {
 
-        protected static Action<int, int> OnResizeFromJS;
+        [Inject] protected ResizeListener Listener { get; set; }
+
+        protected BrowserWindowSize Browser = new BrowserWindowSize();
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -23,7 +23,6 @@ namespace Aplicativo.View.Layout.Component
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            OnResizeFromJS = Resize;
             await HelpLoading.Hide();
         }
 
@@ -37,7 +36,8 @@ namespace Aplicativo.View.Layout.Component
                 if (firstRender)
                 {
 
-                    await App.JSRuntime.InvokeVoidAsync("WindowResize");
+                    Listener.OnResized += Resize;
+
                     await OnLoad.InvokeAsync(null);
 
                     StateHasChanged();
@@ -54,22 +54,16 @@ namespace Aplicativo.View.Layout.Component
             }
         }
 
-        protected void Resize(int Width, int Height)
+        protected void Resize(object args, BrowserWindowSize window)
         {
 
-            HelpDisplay.Display = new Display(Width, Height);
+            HelpDisplay.Display = new Display(window.Width, window.Height);
 
             OnResize.InvokeAsync(HelpDisplay.Display);
 
+            Browser = window;
             StateHasChanged();
 
-        }
-
-        [JSInvokable]
-        public static Task PageResizeJSInvokable(int Width, int Height)
-        {
-            OnResizeFromJS.Invoke(Width, Height);
-            return Task.FromResult(new List<int> { Width, Height });
         }
 
     }

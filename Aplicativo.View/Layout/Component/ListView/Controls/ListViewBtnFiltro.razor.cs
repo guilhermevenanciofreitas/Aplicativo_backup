@@ -10,19 +10,17 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
     public partial class ListViewBtnFiltroComponent : ComponentBase
     {
 
-        [CascadingParameter] public ListViewBtnPesquisa ListViewBtnPesquisa { get; set; }
-
         [Parameter] public string Text { get; set; } = "Filtro";
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public ViewModal ViewModal;
+        [Parameter] public ViewFiltro ViewFiltro { get; set; }
 
         public async Task ButtonFiltro_Click()
         {
             try
             {
-                ViewModal.Show();
+                ViewFiltro.ViewModal.Show();
             }
             catch (Exception ex)
             {

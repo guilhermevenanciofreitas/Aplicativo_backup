@@ -8,30 +8,36 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ListView.Controls
 {
-    public class GridViewItemComponent : ComponentBase
+    public partial class ListViewGridViewComponent<Type> : ComponentBase
     {
 
-        [CascadingParameter] public ListItemViewLayout ListItemViewLayout { get; set; }
+        [Parameter] public RenderFragment ChildContent { get; set; }
 
         [Parameter] public EventCallback OnDoubleClick { get; set; }
 
-        [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public EventCallback OnDataChange { get; set; }
 
         [Parameter] public bool AllowGrouping { get; set; }
 
 
-        public SfGrid<object> GridViewItem { get; set; }
+        protected List<Type> _ListItemView { get; set; } = new List<Type>();
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        public List<Type> ListItemView
         {
-
-            await base.OnAfterRenderAsync(firstRender);
-
-            ListItemViewLayout.GridViewItem = this;
-
+            get => _ListItemView;
+            set
+            {
+                _ListItemView = value;
+                OnDataChange.InvokeAsync(null);
+                GridView.Refresh();
+            }
         }
 
-        protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<object> ItemView)
+        public SfGrid<Type> GridView { get; set; }
+
+
+
+        protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<Type> ItemView)
         {
             try
             {
@@ -51,12 +57,12 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
             }
         }
 
-        protected async Task GridViewItem_Chcked(object ItemView)
+        protected async Task GridViewItem_Checked(Type ItemView)
         {
             try
             {
                 ItemView.GetType().GetProperty("Selected").SetValue(ItemView, !Convert.ToBoolean(ItemView.GetType().GetProperty("Selected").GetValue(ItemView)));
-                ListItemViewLayout.ListItemView = ListItemViewLayout.ListItemView;
+                ListItemView = ListItemView;
             }
             catch (Exception ex)
             {
@@ -68,12 +74,12 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
         {
             try
             {
-                foreach (var item in ListItemViewLayout.ListItemView)
+                foreach (var item in ListItemView)
                 {
                     item.GetType().GetProperty("Selected").SetValue(item, (bool)args.Value);
                 }
 
-                ListItemViewLayout.ListItemView = ListItemViewLayout.ListItemView;
+                ListItemView = ListItemView;
 
             }
             catch (Exception ex)

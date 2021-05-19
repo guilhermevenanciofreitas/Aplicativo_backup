@@ -121,5 +121,10 @@ namespace Aplicativo.View.Layout.Component.ViewPage
 
         }
 
+        protected void Page_Resize(object args)
+        {
+            StateHasChanged();
+        }
+
     }
 }

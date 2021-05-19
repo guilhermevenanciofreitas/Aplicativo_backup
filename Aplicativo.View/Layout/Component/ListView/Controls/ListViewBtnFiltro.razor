@@ -7,6 +7,9 @@
 
 @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
+
+    @ChildContent
+
     <Button Variant="@ButtonVariant.Contained" OnClick="ButtonFiltro_Click">
         <StartIcon>
             <FilterListIcon />

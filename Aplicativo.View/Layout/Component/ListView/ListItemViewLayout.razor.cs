@@ -5,38 +5,28 @@ using System.Collections.Generic;
 namespace Aplicativo.View.Layout.Component.ListView
 {
 
-    public class ListItemViewLayoutPage : ComponentBase
+    public class ListItemViewLayoutPage<Type> : ComponentBase
     {
 
         [Parameter] public string Title { get; set; }
 
         [Parameter] public RenderFragment ViewPages { get; set; }
 
-        [Parameter] public RenderFragment BtnPesquisa { get; set; }
         [Parameter] public RenderFragment BtnNovo { get; set; }
         [Parameter] public RenderFragment BtnExcluir { get; set; }
-        
+        [Parameter] public RenderFragment BtnFiltro { get; set; }
+        [Parameter] public RenderFragment BtnPesquisa { get; set; }
         [Parameter] public RenderFragment GridView { get; set; }
 
+        public ViewFiltro ViewFiltro { get; set; }
+        public ListViewBtnNovo ListViewBtnNovo { get; set; }
+        public ListViewBtnExcluir<Type> ListViewBtnExcluir { get; set; }
+        public ListViewBtnPesquisa ListViewBtnPesquisa { get; set; }
+        public ListViewGridView<Type> ListViewGridView { get; set; }
 
-        public ListViewBtnPesquisaComponent ListViewBtnPesquisa { get; set; }
-        public GridViewItemComponent GridViewItem { get; set; }
-
-        protected List<object> _ListItemView { get; set; } = new List<object>();
-
-        public List<object> ListItemView
+        protected void Page_Resize(object args)
         {
-            get => _ListItemView;
-            set
-            {
-                _ListItemView = value;
-                StateHasChanged();
-            }
-        }
-
-        protected void Component_Resize(object args)
-        {
-
+            StateHasChanged();
         }
 
         public void Refresh()

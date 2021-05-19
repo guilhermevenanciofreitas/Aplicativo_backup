@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ListView.Controls
 {
-    public class ListViewBtnExcluirComponent : ComponentBase
+    public class ListViewBtnExcluirComponent<Type> : ComponentBase
     {
 
-        [CascadingParameter] public ListItemViewLayout ListItemViewLayout { get; set; }
+        [Parameter] public ListItemViewLayout<Type> ListItemViewLayout { get; set; }
 
         [Parameter] public string Text { get; set; } = "Excluir";
 
@@ -34,7 +34,7 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
 
                 await HelpLoading.Show("Excluindo...");
 
-                var List = ListItemViewLayout?.ListItemView?.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true)?.ToList();
+                var List = ListItemViewLayout.ListViewGridView?.ListItemView?.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true)?.ToList();
 
                 await OnClick.InvokeAsync(List);
 
@@ -43,12 +43,12 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
                     await ListItemViewLayout.ListViewBtnPesquisa.BtnPesquisar_Click();
                 }
 
-                if (ListItemViewLayout?.GridViewItem?.GridViewItem != null)
+                if (ListItemViewLayout?.ListViewGridView?.GridView != null)
                 {
-                    ListItemViewLayout.GridViewItem.GridViewItem.Refresh();
+                    ListItemViewLayout.ListViewGridView.GridView.Refresh();
                 }
 
-                
+
 
                 //await ShowToast("Informação:", List.Count() + " registro(s) excluído(s) com sucesso!", "e-toast-success", "e-success toast-icons");
 

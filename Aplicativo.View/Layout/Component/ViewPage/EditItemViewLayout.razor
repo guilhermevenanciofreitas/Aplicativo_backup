@@ -1,7 +1,7 @@
 ﻿
 @inherits EditItemViewLayoutPage
 
-<ComponentLayout>
+<ComponentLayout OnResize="Page_Resize">
     <CascadingValue Value=this>
 
         @if (HelpDisplay.Display.Width <= (int)LayoutSize.Small)

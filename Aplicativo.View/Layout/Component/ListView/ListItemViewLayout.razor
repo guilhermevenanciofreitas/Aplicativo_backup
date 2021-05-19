@@ -1,4 +1,6 @@
-﻿@inherits ListItemViewLayoutPage
+﻿@typeparam Type
+
+@inherits ListItemViewLayoutPage<Type>
 
 <style>
     body {
@@ -9,18 +11,12 @@
     }
 </style>
 
-<ComponentLayout OnResize="Component_Resize">
-    <CascadingValue Value=this>
+<ComponentLayout OnResize="Page_Resize">
 
-        @ViewPages
+    @ViewPages
 
-        @if (HelpDisplay.Display.Width <= (int)LayoutSize.Small)
-        {
-
-        }
-
-        @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
-        {
+    @if (HelpDisplay.Display.Width >= 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
+    {
 
         <Card>
             @if (!string.IsNullOrEmpty(Title))
@@ -32,7 +28,7 @@
                 <div class="row">
                     <div class="col-sm-12">
 
-                        @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
+                        @if (!ListViewGridView?.ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) ?? false)
                         {
                             @BtnNovo
                         }
@@ -41,7 +37,13 @@
                             @BtnExcluir
                         }
 
-                        @BtnPesquisa
+                        <div class="form-check-inline float-end">
+                            <div class="form-group">
+                                @BtnFiltro
+                                @BtnPesquisa
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>
@@ -49,13 +51,13 @@
             <Divider />
             <CardContent>
                 <div style="margin-top: 5px; margin-bottom: 4px">
-                    @if (!ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))
+                    @if (!ListViewGridView?.ListItemView?.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) ?? false)
                     {
                         <font size="3">Nenhum registro selecionado</font>
                     }
                     else
                     {
-                        <font size="3">@ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
+                        <font size="3">@ListViewGridView?.ListItemView?.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
                     }
                 </div>
 
@@ -66,7 +68,60 @@
             </CardContent>
         </Card>
 
-        }
+    }
 
-    </CascadingValue>
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+
+        <Card>
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <CardHeader Title="@Title" />
+                <Divider />
+            }
+            <CardActions>
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        @if (!ListViewGridView?.ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) ?? false)
+                        {
+                            @BtnNovo
+                        }
+                        else
+                        {
+                            @BtnExcluir
+                        }
+
+                        <div class="form-check-inline float-end">
+                            <div class="form-group">
+                                @BtnFiltro
+                                @BtnPesquisa
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </CardActions>
+            <Divider />
+            <CardContent>
+                <div style="margin-top: 5px; margin-bottom: 4px">
+                    @if (!ListViewGridView?.ListItemView?.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) ?? false)
+                    {
+                        <font size="3">Nenhum registro selecionado</font>
+                    }
+                    else
+                    {
+                        <font size="3">@ListViewGridView?.ListItemView?.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() registro(s) selecionado(s)</font>
+                    }
+                </div>
+
+                <div style="height: 60vh">
+                    @GridView
+                </div>
+
+            </CardContent>
+        </Card>
+
+    }
 </ComponentLayout>

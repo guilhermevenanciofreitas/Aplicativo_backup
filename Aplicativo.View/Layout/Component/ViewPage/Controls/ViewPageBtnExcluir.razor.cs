@@ -10,8 +10,8 @@ namespace Aplicativo.View.Layout.Component.ViewPage.Controls
     public class ViewPageBtnExcluirComponent : ComponentBase
     {
 
-        [CascadingParameter] public ListItemViewLayout ListItemViewLayout { get; set; }
-        [CascadingParameter] public EditItemViewLayout EditItemViewLayout { get; set; }
+        //[CascadingParameter] public ListItemViewLayout ListItemViewLayout { get; set; }
+        //[CascadingParameter] public EditItemViewLayout EditItemViewLayout { get; set; }
 
 
         [Parameter] public string Text { get; set; } = "Excluir";
@@ -34,15 +34,15 @@ namespace Aplicativo.View.Layout.Component.ViewPage.Controls
                 await OnClick.InvokeAsync(null);
 
 
-                if (ListItemViewLayout?.ListViewBtnPesquisa != null)
-                {
-                    await ListItemViewLayout.ListViewBtnPesquisa.BtnPesquisar_Click();
-                }
+                //if (ListItemViewLayout?.ListViewBtnPesquisa != null)
+                //{
+                //    await ListItemViewLayout.ListViewBtnPesquisa.BtnPesquisar_Click();
+                //}
 
-                if (ListItemViewLayout?.GridViewItem?.GridViewItem != null)
-                {
-                    ListItemViewLayout.GridViewItem.GridViewItem.Refresh();
-                }
+                //if (ListItemViewLayout?.GridViewItem?.GridViewItem != null)
+                //{
+                //    ListItemViewLayout.GridViewItem.GridViewItem.Refresh();
+                //}
 
 
             }
