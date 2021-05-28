@@ -31,16 +31,11 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             ListView.Items = await Query.ToList();
             
-            await HelpLoading.Hide();
-
-            StateHasChanged();
-
         }
 
         protected async Task BtnItemView_Click(object args)
         {
             await View.EditItemViewLayout.Show(args);
-            await BtnPesquisar_Click();
         }
 
         protected async Task BtnExcluir_Click(object args)

@@ -15,14 +15,11 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
     public partial class ListViewGridViewComponent<Type> : ComponentBase
     {
 
-        [Parameter] public string CheckBoxWidth { get; set; } = "60";
-        [Parameter] public bool CheckBoxVisible { get; set; } = true;
-
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         [Parameter] public EventCallback OnDataChange { get; set; }
 
-        public List<Type> _ListItemView { get; set; }
+        public List<Type> _ListItemView { get; set; } = new List<Type>();
 
         public List<Type> ListItemView
         {
@@ -30,15 +27,8 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
             set
             {
 
-                //var Items = value.Clone();
-
                 _ListItemView.Clear();
                 
-                //foreach(var item in _ListItemView)
-                //{
-                //    _ListItemView.Remove(item);
-                //}
-
                 foreach (var item in value)
                 {
                     _ListItemView.Add(item);
@@ -56,15 +46,7 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
             }
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
 
-            _ListItemView = new List<Type>();
-
-        }
-
-        
 
         #region ListView
 
@@ -137,6 +119,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
         #endregion
 
         #region GridView
+
+        [Parameter] public string CheckBoxWidth { get; set; } = "60";
+
+        [Parameter] public bool CheckBoxVisible { get; set; } = true;
 
         [Parameter] public string Height { get; set; } = "60vh";
 
