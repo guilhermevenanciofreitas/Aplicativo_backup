@@ -11,8 +11,9 @@ namespace Aplicativo.Server
 
         private string ConnectionString { get; set; } = @"Server=localhost\AtlantaSistemas;Database=Dev;User Id=sa;Password=@Rped94ft";
 
-        public Context()
+        public Context(string ConnectionString)
         {
+            this.ConnectionString = ConnectionString;
             ChangeTracker.LazyLoadingEnabled = false;
         }
 
@@ -30,7 +31,7 @@ namespace Aplicativo.Server
 
         public DbSet<Atributo> Atributo { get; set; }
 
-        //public DbSet<CentroCusto> CentroCusto { get; set; }
+        public DbSet<CentroCusto> CentroCusto { get; set; }
 
         public DbSet<CFOP> CFOP { get; set; }
 
@@ -132,7 +133,9 @@ namespace Aplicativo.Server
 
         public DbSet<PessoaVendedor> PessoaVendedor { get; set; }
 
-        //public DbSet<PlanoConta> PlanoConta { get; set; }
+        public DbSet<PlanoConta> PlanoConta { get; set; }
+
+        public DbSet<PlanoContaTipo> PlanoContaTipo { get; set; }
 
         public DbSet<Preco> Preco { get; set; }
 

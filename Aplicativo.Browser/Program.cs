@@ -5,10 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using Aplicativo.Browser.Services;
 using Aplicativo.View.Services;
-using Skclusive.Material.Docs.App.View;
 using Aplicativo.View.Helpers;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
+using Aplicativo.View;
+using Aplicativo.View.Tasks;
+using Aplicativo.View.Routing;
+using BlazorPro.BlazorSize;
 
 namespace Aplicativo.Browser
 {
@@ -26,6 +29,8 @@ namespace Aplicativo.Browser
             builder.Services.AddSingleton<IBarCodeScanner, BarCodeScanner>();
             builder.Services.AddSingleton<ICamera, Camera>();
 
+            builder.Services.AddSingleton<RouteManager>();
+
             builder.Services.TryAddViewServices
             (
                 new HelpViewConfig()
@@ -37,8 +42,10 @@ namespace Aplicativo.Browser
 
             builder.Services.AddSyncfusionBlazor();
 
+            builder.Services.AddMediaQueryService();
+            builder.Services.AddScoped<ResizeListener>();
 
-            SyncfusionLicenseProvider.RegisterLicense("NDA3MzI5QDMxMzgyZTM0MmUzMFJYOFhwTm81eUlzL1g4QmJNNXZSRi9ZcDZSbS9Tcm9OY0ZIcjkrbmFMWG89");
+            SyncfusionLicenseProvider.RegisterLicense("NDUyMjcxQDMxMzkyZTMxMmUzMGhaZWdaemtERXduQUF2ME1kallnMDZublVKMTBCTGYvb1BYZmNjczdoRG89");
 
             await builder.Build().RunAsync();
 

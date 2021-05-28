@@ -20,112 +20,116 @@ namespace Sistema.Server.Controllers
     {
 
 
-        [HttpPost]
-        [Route("[action]")]
-        public Response Salvar([FromBody] Request Request)
-        {
+        //[HttpPost]
+        //[Route("[action]")]
+        //public Response Salvar([FromBody] Request Request)
+        //{
 
-            var Response = new Response();
+        //    var Response = new Response();
 
-            try
-            {
+        //    try
+        //    {
 
-                using var db = new Context();
+        //        var Database = Request.GetParameter("Database");
 
-                var Requisicao = JsonConvert.DeserializeObject<List<Requisicao>>(Request.GetParameter("Requisicao"));
+        //        using var db = new Context(Database);
 
-                Update(db, Requisicao, true);
+        //        var Requisicao = JsonConvert.DeserializeObject<List<Requisicao>>(Request.GetParameter("Requisicao"));
 
-                foreach (var item in Requisicao)
-                {
+        //        Update(db, Requisicao);
 
-                    //Realiza a entrada dos itens que foram excluídos
-                    var RequisicaoItemExcluido = db.RequisicaoItem.Where(c => c.RequisicaoID == item.RequisicaoID && !item.RequisicaoItem.Select(c => c.RequisicaoItemID).Contains(c.RequisicaoItemID)).ToList();
+        //        foreach (var item in Requisicao)
+        //        {
 
-                    foreach (var item2 in RequisicaoItemExcluido.Where(c => c.DataSaida != null))
-                    {
-                        var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
+        //            //Realiza a entrada dos itens que foram excluídos
+        //            var RequisicaoItemExcluido = db.RequisicaoItem.Where(c => c.RequisicaoID == item.RequisicaoID && !item.RequisicaoItem.Select(c => c.RequisicaoItemID).Contains(c.RequisicaoItemID)).ToList();
 
-                        EstoqueMovimentoItemEntrada.Saldo += item2.Quantidade;
+        //            foreach (var item2 in RequisicaoItemExcluido.Where(c => c.DataSaida != null))
+        //            {
+        //                var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
 
-                        db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
-                    }
+        //                EstoqueMovimentoItemEntrada.Saldo += item2.Quantidade;
+
+        //                db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
+        //            }
 
 
-                    //Realiza a saída dos novos itens que foram adicionados
-                    foreach (var item2 in item.RequisicaoItem.Where(c => c.DataSaida == null))
-                    {
-                        var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
+        //            //Realiza a saída dos novos itens que foram adicionados
+        //            foreach (var item2 in item.RequisicaoItem.Where(c => c.DataSaida == null))
+        //            {
+        //                var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
 
-                        EstoqueMovimentoItemEntrada.Saldo -= item2.Quantidade;
+        //                EstoqueMovimentoItemEntrada.Saldo -= item2.Quantidade;
 
-                        db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
-                        item2.DataSaida = DateTime.Now;
+        //                db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
+        //                item2.DataSaida = DateTime.Now;
 
-                    }
+        //            }
 
-                }
+        //        }
 
-                db.SaveChanges();
+        //        db.SaveChanges();
 
-                Response.Data = Requisicao;
+        //        Response.Data = Requisicao;
 
-                return Response;
+        //        return Response;
 
-            }
-            catch (Exception ex)
-            {
-                return Exception(ex, Response);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Exception(ex, Response);
+        //    }
+        //}
 
-        [HttpPost]
-        [Route("[action]")]
-        public Response Finalizar([FromBody] Request Request)
-        {
+        //[HttpPost]
+        //[Route("[action]")]
+        //public Response Finalizar([FromBody] Request Request)
+        //{
 
-            var Response = new Response();
+        //    var Response = new Response();
 
-            try
-            {
+        //    try
+        //    {
 
-                using var db = new Context();
+        //        var Database = Request.GetParameter("Database");
 
-                var Requisicao = JsonConvert.DeserializeObject<List<Requisicao>>(Request.GetParameter("Requisicao"));
+        //        using var db = new Context(Database);
 
-                Update(db, Requisicao, false);
+        //        var Requisicao = JsonConvert.DeserializeObject<List<Requisicao>>(Request.GetParameter("Requisicao"));
 
-                foreach (var item in Requisicao)
-                {
+        //        Update(db, Requisicao);
 
-                    var RequisicaoItem = db.RequisicaoItem.Where(c => c.RequisicaoID == item.RequisicaoID).ToList();
+        //        foreach (var item in Requisicao)
+        //        {
 
-                    foreach (var item2 in RequisicaoItem)
-                    {
-                        var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
+        //            var RequisicaoItem = db.RequisicaoItem.Where(c => c.RequisicaoID == item.RequisicaoID).ToList();
 
-                        EstoqueMovimentoItemEntrada.Saldo += item2.Quantidade;
+        //            foreach (var item2 in RequisicaoItem)
+        //            {
+        //                var EstoqueMovimentoItemEntrada = db.EstoqueMovimentoItemEntrada.FirstOrDefault(c => c.EstoqueMovimentoItemEntradaID == item2.EstoqueMovimentoItemEntradaID);
 
-                        db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
+        //                EstoqueMovimentoItemEntrada.Saldo += item2.Quantidade;
 
-                        item2.DataEntrada = DateTime.Now;
+        //                db.EstoqueMovimentoItemEntrada.Update(EstoqueMovimentoItemEntrada);
 
-                    }
+        //                item2.DataEntrada = DateTime.Now;
 
-                }
+        //            }
 
-                db.SaveChanges();
+        //        }
 
-                Response.Data = Requisicao;
+        //        db.SaveChanges();
 
-                return Response;
+        //        Response.Data = Requisicao;
 
-            }
-            catch (Exception ex)
-            {
-                return Exception(ex, Response);
-            }
-        }
+        //        return Response;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Exception(ex, Response);
+        //    }
+        //}
 
     }
 }

@@ -18,12 +18,13 @@ namespace Build.Server.Controllers
     public class _ControllerBase : ControllerBase
     {
 
-        protected Response CommandQuery(HelpQuery Query)
+        protected Response CommandQuery(string Database, HelpQuery<object> Query)
         {
 
             var Response = new Response();
 
-            using var db = new Context();
+
+            using var db = new Context(Database);
 
             var query = AsQueryable(db, Query.Table);
 
@@ -42,27 +43,26 @@ namespace Build.Server.Controllers
                 query = query.Take((int)Query.Take);
             }
 
-            Response.Data = query.AsQueryable<object>().ToList();
+            Response.Data = query.AsQueryable().ToList();
 
             return Response;
 
         }
 
+        //protected void Update<T>(Context db, List<T> List, bool UpdateIncludes) where T : class
+        //{
+        //    var Objects = new List<object>();
 
-        protected void Update<T>(Context db, List<T> List, bool UpdateIncludes) where T : class
-        {
-            var Objects = new List<object>();
+        //    foreach(var item in List)
+        //    {
+        //        Objects.Add(item);
+        //    }
 
-            foreach(var item in List)
-            {
-                Objects.Add(item);
-            }
+        //    Update(db, Objects, UpdateIncludes);
 
-            Update(db, Objects, UpdateIncludes);
+        //}
 
-        }
-
-        protected void Update(Context db, List<object> List, bool UpdateIncludes)
+        protected void Update(Context db, List<object> List, bool RemoveIncludes = false)
         {
 
             foreach (var item in List)
@@ -77,39 +77,43 @@ namespace Build.Server.Controllers
                 else
                 {
 
-                    if (UpdateIncludes) RemoveInclude(db, item);
-
+                    if (RemoveIncludes)
+                    {
+                        RemoveInclude(db, item);
+                    }
+                    
                     db.Update(item);
+
                 }
             }
 
         }
 
 
-        protected void RemoveInclude(Context db, object item)
+        protected void RemoveInclude(Context db, object Item)
         {
 
-            var Collections = item.GetType().GetProperties().Where(c => c.PropertyType.IsGenericType && c.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>));
+            var Collections = Item.GetType().GetProperties().Where(c => c.PropertyType.IsGenericType && c.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>));
 
-            foreach (var item2 in Collections)
+            foreach (var Collection in Collections)
             {
-                Remove<int?>(db, item, item2.PropertyType.GetGenericArguments().Single(), item2.Name);
+                Remove<int?>(db, Item, Collection.PropertyType.GetGenericArguments().Single(), Collection.Name);
             }
 
         }
 
-        protected void Remove<TypePrimaryKey>(Context db, object item, Type type, string name)
+        protected void Remove<TypePrimaryKey>(Context db, object Item, Type Type, string Name)
         {
 
-            var TablePrimaryKey = db.Model.FindEntityType(item.GetType()).FindPrimaryKey().Properties.First().Name;
+            var TablePrimaryKey = db.Model.FindEntityType(Item.GetType()).FindPrimaryKey().Properties.First().Name;
 
-            var PrimaryKey = db.Model.FindEntityType(type).FindPrimaryKey().Properties.First().Name;
+            var PrimaryKey = db.Model.FindEntityType(Type).FindPrimaryKey().Properties.First().Name;
 
-            var List = ((IEnumerable)item.GetType().GetProperty(name).GetValue(item)).Cast<object>().ToList().Select(c => c.GetType().GetProperty(PrimaryKey).GetValue(c));
+            var List = ((IEnumerable)Item.GetType().GetProperty(Name).GetValue(Item)).Cast<object>().ToList().Select(c => c.GetType().GetProperty(PrimaryKey).GetValue(c));
 
             if (List != null)
             {
-                var Remove = AsQueryable(db, type.Name).Where(TablePrimaryKey + " == @0 && !@1.Contains(" + PrimaryKey + ")", item.GetType().GetProperty(TablePrimaryKey).GetValue(item), ((IEnumerable)List).Cast<TypePrimaryKey>().ToList());
+                var Remove = AsQueryable(db, Type.Name).Where(TablePrimaryKey + " == @0 && !@1.Contains(" + PrimaryKey + ")", Item.GetType().GetProperty(TablePrimaryKey).GetValue(Item), ((IEnumerable)List).Cast<TypePrimaryKey>().ToList());
                 db.RemoveRange(Remove);
             }
 

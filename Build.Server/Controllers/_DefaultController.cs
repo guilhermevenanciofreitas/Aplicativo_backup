@@ -27,9 +27,11 @@ namespace Sistema.Server.Controllers
             try
             {
 
-                HelpQuery Query = JsonConvert.DeserializeObject<HelpQuery>(Request.GetParameter("Query"));
+                //var Database = Request.GetParameter("Database");
 
-                return CommandQuery(Query);
+                var Query = JsonConvert.DeserializeObject<HelpQuery<object>>(Request.GetParameter("Query"));
+
+                return CommandQuery(Query.Database, Query);
 
             }
             catch (Exception ex)
@@ -40,19 +42,22 @@ namespace Sistema.Server.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public Response Save([FromBody] Request Request)
+        public Response Update([FromBody] Request Request)
         {
             var Response = new Response();
 
             try
             {
 
-                var db = new Context();
-
+                var Database = Request.GetParameter("Database");
 
                 var Table = Request.GetParameter("Table").ToString();
 
+                var db = new Context(Database);
+
                 var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Table).ClrType;
+
+                var RemoveIncludes = Request.GetParameter("RemoveIncludes").ToBoolean();
 
                 var List = new List<object>();
 
@@ -61,8 +66,7 @@ namespace Sistema.Server.Controllers
                     List.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item), Type));
                 }
 
-
-                Update(db, List, true);
+                Update(db, List, RemoveIncludes);
 
                 db.SaveChanges();
 
@@ -77,45 +81,47 @@ namespace Sistema.Server.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("[action]")]
-        public Response Delete([FromBody] Request Request)
-        {
+        //[HttpPost]
+        //[Route("[action]")]
+        //public Response Delete([FromBody] Request Request)
+        //{
 
-            var Response = new Response();
+        //    var Response = new Response();
 
-            try
-            {
+        //    try
+        //    {
 
-                var db = new Context();
+        //        var Database = Request.GetParameter("Database");
 
-                var Table = Request.GetParameter("Table").ToString();
+        //        var db = new Context(Database);
 
-                var List = new List<object>();
+        //        var Table = Request.GetParameter("Table").ToString();
 
-                var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Table).ClrType;
+        //        var List = new List<object>();
 
-                foreach (var item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
-                {
-                    List.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item), Type));
-                }
+        //        var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Table).ClrType;
+
+        //        foreach (var item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
+        //        {
+        //            List.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item), Type));
+        //        }
 
 
-                foreach(var item in List)
-                {
-                    item.GetType().GetProperty("Ativo").SetValue(item, false);
-                    db.Update(item);
-                }
+        //        foreach(var item in List)
+        //        {
+        //            item.GetType().GetProperty("Ativo").SetValue(item, false);
+        //            db.Update(item);
+        //        }
 
-                db.SaveChanges();
+        //        db.SaveChanges();
 
-                return Response;
+        //        return Response;
 
-            }
-            catch (Exception ex)
-            {
-                return Exception(ex, Response);
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Exception(ex, Response);
+        //    }
+        //}
     }
 }

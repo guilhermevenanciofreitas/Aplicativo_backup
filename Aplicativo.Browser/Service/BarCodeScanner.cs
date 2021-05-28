@@ -1,4 +1,5 @@
 ﻿using Aplicativo.View.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Aplicativo.Browser.Services
@@ -7,7 +8,7 @@ namespace Aplicativo.Browser.Services
     {
         public Task<string> ScanAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
