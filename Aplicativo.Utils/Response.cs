@@ -19,8 +19,7 @@ namespace Aplicativo.Utils
 
 
         //Usuário desconectado
-        LoginExpired = 200,
-        Desconected = 201,
+        LoginRequired = 200,
 
         //Erro não tratado
         Error = 400,

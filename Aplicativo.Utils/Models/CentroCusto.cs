@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,25 +6,17 @@ namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
-    [Table("Atributo")]
-    public partial class Atributo : _Extends
+    [Table("CentroCusto")]
+    public partial class CentroCusto : _Extends
     {
-        public Atributo()
-        {
-            Variacao = new HashSet<Variacao>();
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? AtributoID { get; set; }
+        public int? CentroCustoID { get; set; }
 
-        [StringLength(100)]
+        [StringLength(140)]
         public string Descricao { get; set; }
 
         public bool Ativo { get; set; } = true;
 
-        public virtual ICollection<Variacao> Variacao { get; set; }
-
     }
-
 }

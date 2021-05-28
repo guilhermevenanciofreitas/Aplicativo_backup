@@ -81,11 +81,11 @@ namespace Aplicativo.Utils.Models
 
         public virtual FormaPagamento FormaPagamento { get; set; }
 
-        //public virtual PlanoConta PlanoConta { get; set; }
+        public virtual PlanoConta PlanoConta { get; set; }
 
-        //public virtual CentroCusto CentroCusto { get; set; }
+        public virtual CentroCusto CentroCusto { get; set; }
 
-        //public virtual Pagamento Pagamento { get; set; }
+        public virtual Pagamento Pagamento { get; set; }
 
 
     }

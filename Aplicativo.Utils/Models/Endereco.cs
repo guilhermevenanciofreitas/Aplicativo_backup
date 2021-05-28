@@ -27,6 +27,9 @@ namespace Aplicativo.Utils.Models
         [StringLength(8)]
         public string CEP { get; set; }
 
+        [NotMapped]
+        public string CEP_Formatado => CEP?.StringFormat("##.###-###");
+
         [StringLength(140)]
         public string Logradouro { get; set; }
 
@@ -44,7 +47,7 @@ namespace Aplicativo.Utils.Models
         {
             get
             {
-                return Logradouro.Juntar(Numero, ',').Juntar(Complemento, ',').Juntar(Bairro, '-');
+                return Logradouro.Juntar(Numero, ",").Juntar(Complemento, ",").Juntar(Bairro, " -");
             }
         }
 

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Aplicativo.Utils.Helpers
 {
@@ -6,11 +10,11 @@ namespace Aplicativo.Utils.Helpers
     {
 
 
-        public static string Juntar(this string value, string texto, char separador = '-')
+        public static string Juntar(this string value, string texto, string separador = "-")
         {
             if (string.IsNullOrEmpty(texto))
                 return value;
-            return string.Format("{0} {1} {2}", value.Trim(), separador, texto.Trim());
+            return string.Format("{0}{1} {2}", value.Trim(), separador, texto.Trim());
         }
 
         public static string ToStringOrNull(this string value)
@@ -181,6 +185,55 @@ namespace Aplicativo.Utils.Helpers
 
             return null;
 
+        }
+
+        public static string FormataString(this object valor, string mascara)
+        {
+            return FormataString(valor.ToString(), mascara);
+        }
+
+        public static string StringFormat(this string valor, string mascara)
+        {
+
+            string novoValor = string.Empty;
+
+            int posicao = 0;
+
+            for (int i = 0; mascara.Length > i; i++)
+            {
+
+                if (mascara[i] == '#')
+                {
+                    if (valor.Length > posicao)
+                    {
+                        novoValor = novoValor + valor[posicao];
+                        posicao++;
+                    }
+                    else
+                        break;
+                }
+                else
+                {
+                    if (valor.Length > posicao)
+                        novoValor = novoValor + mascara[i];
+                    else
+                        break;
+                }
+            }
+
+            return novoValor;
+
+        }
+
+        public static T Clone<T>(this T obj) where T : class
+        {
+            if (obj == null) return null;
+            System.Reflection.MethodInfo inst = obj.GetType().GetMethod("MemberwiseClone",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (inst != null)
+                return (T)inst.Invoke(obj, null);
+            else
+                return null;
         }
 
 

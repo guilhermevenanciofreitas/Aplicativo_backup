@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Aplicativo.Utils.Helpers
 {
-    public class HelpQuery
+    public class HelpQuery<T> : IDisposable
     {
 
-        public HelpQuery(string Table)
+        public HelpQuery()
         {
-            this.Table = Table;
+            Table = typeof(T).Name;
         }
+
+        public string Database { get; set; }
 
         public string Table { get; set; }
 
@@ -59,8 +63,10 @@ namespace Aplicativo.Utils.Helpers
             this.Take = Take;
         }
 
-
-
+        public void Dispose()
+        {
+            Dispose();
+        }
     }
 
     public class Where
