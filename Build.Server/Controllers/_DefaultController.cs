@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sistema.Server.Controllers
 {
@@ -61,9 +62,19 @@ namespace Sistema.Server.Controllers
 
                 var List = new List<object>();
 
-                foreach(var item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
+                foreach(var Item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
                 {
-                    List.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item), Type));
+
+                    var Obj = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Item), Type);
+
+                    var Virtuals = Obj.GetType().GetProperties().Where(c => c.GetGetMethod().IsVirtual && (!c.PropertyType.IsGenericType && c.PropertyType.GetType() != typeof(ICollection<>))).ToList();
+
+                    foreach(var Item2 in Virtuals)
+                    {
+                        Obj.GetType().GetProperty(Item2.Name).SetValue(Obj, null);
+                    }
+
+                    List.Add(Obj);
                 }
 
                 Update(db, List, RemoveIncludes);

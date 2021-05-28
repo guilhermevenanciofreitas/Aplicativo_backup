@@ -22,8 +22,12 @@
             <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnNovo_Click" />
         </BtnNovo>
 
+        <BtnOneSelected>
+            <ListViewBtnCustom ListItemViewLayout="ListView" Color="#6c757d" Text="Baixar" OnClick="BtnBaixar_Click" />
+        </BtnOneSelected>
+
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" CheckBoxVisible="false" Type="TituloDetalhe" OnDoubleClick="BtnItemView_Click" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" CheckBoxWidth="20" Type="TituloDetalhe" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
                         var item = (TituloDetalhe)context;
@@ -39,14 +43,14 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="40" />
-                    <GridColumn Field="nParcela" HeaderText="Parcela" Width="30" />
-                    <GridColumn Field="Pessoa.NomeFantasia" HeaderText="Nome fantasia" Width="100" />
-                    <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="40" Format="dd/MM/yyyy" />
-                    <GridColumn Field="ContaBancaria.Descricao" HeaderText="Conta bancária" Width="80" />
-                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="Forma de pagamento" Width="80" />
-                    <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="40" Format="dd/MM/yyyy" />
-                    <GridColumn Field="vLiquido" HeaderText="Valor" Width="40" Format="C2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="50" />
+                    <GridColumn Field="nParcela" HeaderText="Parcela" Width="40" />
+                    <GridColumn Field="Pessoa.NomeFantasia" HeaderText="Nome fantasia" Width="110" />
+                    <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="50" Format="dd/MM/yyyy" />
+                    <GridColumn Field="ContaBancaria.Descricao" HeaderText="Conta bancária" Width="90" />
+                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="Forma de pagamento" Width="90" />
+                    <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="50" Format="dd/MM/yyyy" />
+                    <GridColumn Field="vLiquido" HeaderText="Valor" Width="50" Format="C2" TextAlign="TextAlign.Right" />
                 </Columns>
             </ListViewGridView>
         </GridView>

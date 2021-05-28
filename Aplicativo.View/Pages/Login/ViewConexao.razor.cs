@@ -17,7 +17,7 @@ namespace Aplicativo.View.Pages.Login
         public TextBox TxtUserId { get; set; }
         public TextBox TxtPassword { get; set; }
 
-        protected void Component_Load()
+        protected void Page_Load()
         {
             TxtName.Focus();
         }

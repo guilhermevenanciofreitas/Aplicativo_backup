@@ -1,11 +1,11 @@
 ﻿@inherits ViewTituluDetalhePage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Parcela" OnLoad="ViewLayout_Load" Width="1150px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Parcela" OnLoad="Page_Load" Width="1150px">
     @*<BtnLimpar>
         <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
     </BtnLimpar>*@
     <BtnSalvar>
-        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
     @*<BtnExcluir>
         <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />

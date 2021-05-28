@@ -28,17 +28,6 @@
 
         @GridView
 
-        @*<Card>
-                @if (!string.IsNullOrEmpty(Title))
-                {
-                    <CardHeader Title="@Title" />
-                    <Divider />
-                }
-                <CardContent>
-                    @GridView
-                </CardContent>
-            </Card>*@
-
         @BtnFiltro
 
         @BtnPesquisa
@@ -71,13 +60,23 @@
                             @BtnExcluir
                         }
 
+
+                        @if (ListViewGridView?.ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == 1)
+                        {
+                            @BtnOneSelected
+                        }
+
+                        @if (ListViewGridView?.ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() > 1)
+                        {
+                            @BtnOneMoreSelected
+                        }
+
                         <div class="form-check-inline float-end">
                             <div class="form-group">
                                 @BtnFiltro
                                 @BtnPesquisa
                             </div>
                         </div>
-
 
                     </div>
                 </div>

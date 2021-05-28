@@ -3,6 +3,8 @@ using Aplicativo.Utils.Models;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout.Component.ListView;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -58,8 +60,6 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             ListView.Items = await Query.ToList();
 
-            await HelpLoading.Hide();
-
         }
 
         protected async Task BtnNovo_Click()
@@ -70,6 +70,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task BtnItemView_Click(object args)
         {
             await View.EditItemViewLayout.Show(args);
+        }
+
+        protected async Task BtnBaixar_Click(object args)
+        {
+            await View.Baixar(((IEnumerable)args).Cast<TituloDetalhe>().Select(c => (int)c.TituloDetalheID).ToList());
         }
 
     }

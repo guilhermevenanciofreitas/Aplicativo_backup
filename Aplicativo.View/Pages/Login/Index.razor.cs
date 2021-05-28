@@ -13,9 +13,10 @@ namespace Aplicativo.View.Pages.Login
         public ViewDominio ViewDominio { get; set; }
         public ViewConexao ViewConexao { get; set; }
 
-        protected void Component_Load()
+        protected void Page_Load()
         {
             OptTipo.Value = "Dominio";
+            StateHasChanged();
         }
 
         protected async Task BtnExcluir_Click(string Name)

@@ -1,0 +1,18 @@
+﻿@typeparam Type;
+
+@inherits ListViewBtnCustomComponent<Type>;
+
+@if (Visible)
+{
+    @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+    {
+        <Button Variant="@ButtonVariant.Contained" OnClick="ButtonCustom_Click" Style=@("color: #fff; background-color: " + Color + "; width: " + Width)>
+            <StartIcon>
+                <AddCircleIcon />
+            </StartIcon>
+            <ChildContent>
+                @Text
+            </ChildContent>
+        </Button>
+    }
+} 

@@ -14,7 +14,7 @@
     }
 </style>
 
-<ComponentLayout OnLoad="Component_Load">
+<ComponentLayout OnLoad="Page_Load">
     <LoginLayout>
 
         <div class="row">
@@ -36,15 +36,18 @@
 
         <br />
 
-        @if (OptTipo?.Value == "Dominio")
-        {
-            <ViewDominio @ref="ViewDominio"></ViewDominio>
-        }
-
-        @if (OptTipo?.Value == "Database")
-        {
-            <ViewConexao @ref="ViewConexao"></ViewConexao>
-        }
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                @if (OptTipo?.Value == "Dominio")
+                {
+                    <ViewDominio @ref="ViewDominio" />
+                }
+                @if (OptTipo?.Value == "Database")
+                {
+                    <ViewConexao @ref="ViewConexao" />
+                }
+            </div>
+        </div>
 
         <style>
             .zoom {

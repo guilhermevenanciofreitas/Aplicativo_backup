@@ -1,11 +1,9 @@
 ﻿@inherits ViewConexaoPage
 
-<ComponentLayout OnLoad="Component_Load">
+<ComponentLayout OnLoad="Page_Load">
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <div class="form-group">
-                <TextBox @ref="TxtName" _Label="Nome"></TextBox>
-            </div>
+            <TextBox @ref="TxtName" _Label="Nome"></TextBox>
         </div>
     </div>
 
@@ -13,38 +11,28 @@
 
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <div class="form-group">
-                <TextBox @ref="TxtServer" _Label="Server" _CharacterCasing="CharacterCasing.None"></TextBox>
-            </div>
+            <TextBox @ref="TxtServer" _Label="Server" _CharacterCasing="CharacterCasing.None" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <div class="form-group">
-                <TextBox @ref="TxtDatabase" _Label="Database" _CharacterCasing="CharacterCasing.None"></TextBox>
-            </div>
+            <TextBox @ref="TxtDatabase" _Label="Database" _CharacterCasing="CharacterCasing.None" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <div class="form-group">
-                <TextBox @ref="TxtUserId" _Label="User ID" _CharacterCasing="CharacterCasing.None"></TextBox>
-            </div>
+            <TextBox @ref="TxtUserId" _Label="User ID" _CharacterCasing="CharacterCasing.None" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 col-sm-12">
-            <div class="form-group">
-                <TextBox @ref="TxtPassword" _Label="Password" _CharacterCasing="CharacterCasing.None"></TextBox>
-            </div>
+            <TextBox @ref="TxtPassword" _Label="Password" _CharacterCasing="CharacterCasing.None" />
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 col-sm-12">
-            <div class="form-group">
-                <Button Color="@Color.Primary" FullWidth Size="@Size.Large" Variant="@ButtonVariant.Contained" OnClick="BtnConfirmar_Click">Confirmar</Button>
-            </div>
+            <Button Color="@Color.Primary" FullWidth Size="@Size.Large" Variant="@ButtonVariant.Contained" OnClick="BtnConfirmar_Click">Confirmar</Button>
         </div>
     </div>
 </ComponentLayout>

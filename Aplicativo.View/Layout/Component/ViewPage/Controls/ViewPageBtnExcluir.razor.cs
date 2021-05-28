@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ViewPage.Controls
 {
-    public class ViewPageBtnExcluirComponent : ComponentBase
+    public class ViewPageBtnExcluirComponent<Type> : ComponentBase
     {
 
         [Parameter] public ListItemViewLayout<Type> ListItemViewLayout { get; set; }

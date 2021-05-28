@@ -19,7 +19,7 @@
                 </BtnSalvar>
 
                 <BtnExcluir>
-                    <ViewPageBtnExcluir OnClick="ViewPageBtnExcluir_Click" />
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
                 </BtnExcluir>
 
                 <View>
@@ -51,7 +51,7 @@
         </ViewPages>
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="ProdutoFornecedor" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="ProdutoFornecedor" Height="400px" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
                         var item = (ProdutoFornecedor)context;

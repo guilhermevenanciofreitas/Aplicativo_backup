@@ -81,7 +81,7 @@
             <GridColumns>
                 @if (CheckBoxVisible)
                 {
-                    <GridColumn Width="@CheckBoxWidth" AllowSorting="false">
+                    <GridColumn Width="@CheckBoxWidth" AllowSorting="false" AllowFiltering="false">
                         <HeaderTemplate>
                             <Checkbox OnChange="GridViewItemHeader_Change" Checked="@(_ListItemView.Any() && _ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() == _ListItemView.Count)" Indeterminate="@(_ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true) && _ListItemView.Where(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true).Count() != _ListItemView.Count)" />
                         </HeaderTemplate>

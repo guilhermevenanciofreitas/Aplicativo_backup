@@ -12,7 +12,7 @@ namespace Aplicativo.View.Pages.Login
 
         public TextBox TxtName { get; set; }
 
-        protected void Component_Load()
+        protected void Page_Load()
         {
             TxtName.Focus();
         }

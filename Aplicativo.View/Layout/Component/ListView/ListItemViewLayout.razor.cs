@@ -15,6 +15,8 @@ namespace Aplicativo.View.Layout.Component.ListView
         [Parameter] public RenderFragment ViewPages { get; set; }
 
         [Parameter] public RenderFragment BtnNovo { get; set; }
+        [Parameter] public RenderFragment BtnOneSelected { get; set; }
+        [Parameter] public RenderFragment BtnOneMoreSelected { get; set; }
         [Parameter] public RenderFragment BtnExcluir { get; set; }
         [Parameter] public RenderFragment BtnFiltro { get; set; }
         [Parameter] public RenderFragment BtnPesquisa { get; set; }
@@ -25,6 +27,8 @@ namespace Aplicativo.View.Layout.Component.ListView
         public ListViewBtnExcluir<Type> ListViewBtnExcluir { get; set; }
         public ListViewBtnPesquisa ListViewBtnPesquisa { get; set; }
         public ListViewGridView<Type> ListViewGridView { get; set; }
+
+        [Parameter] public ListViewGridView<Type> ListViewGridView1 { get; set; }
 
         public List<Type> Items
         {
