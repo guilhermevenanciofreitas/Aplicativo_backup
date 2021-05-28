@@ -21,7 +21,7 @@ namespace Aplicativo.View.Pages.Login.Entrar
 
         public CheckBox ChkManterConectado { get; set; }
 
-        protected async Task Component_Load()
+        protected async Task Page_Load()
         {
             try
             {

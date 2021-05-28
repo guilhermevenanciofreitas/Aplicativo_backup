@@ -1,6 +1,6 @@
 ﻿@inherits TextBoxCEPComponent
 
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
     <TextField @ref="TextField"
                @bind-Value="@_Text"
@@ -9,7 +9,8 @@
                Variant="@TextFieldVariant.Outlined"
                Style="width: 100%" />
 }
-else
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
 
     @if (_Label != null)
@@ -18,10 +19,8 @@ else
     }
 
     <div class="input-group">
-        <input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" autofocus="@_AutoFocus" @oninput="TextBox_Input" @onkeyup="TextBox_KeyUp" autocomplete="off" >
+        <input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" @oninput="TextBox_Input" @onkeyup="TextBox_KeyUp" autocomplete="off">
         <button class="btn btn-outline-secondary" type="button" @onclick="BtnPesquisar_Click"><SearchIcon /></button>
     </div>
-
-    @*<input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" autofocus="@_AutoFocus" @oninput="TextBox_Input" @onkeyup="TextBox_KeyUp" />*@
 
 }

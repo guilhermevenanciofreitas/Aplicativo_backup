@@ -17,10 +17,16 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
 
         [Parameter] public EventCallback OnClick { get; set; }
 
+        private bool Excuting { get; set; }
+
         public async Task BtnPesquisar_Click()
         {
             try
             {
+
+                if (Excuting) return;
+
+                Excuting = true;
 
                 await HelpLoading.Show("Carregando...");
 
@@ -39,6 +45,7 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
             finally
             {
                 await HelpLoading.Hide();
+                Excuting = false;
             }
         }
 

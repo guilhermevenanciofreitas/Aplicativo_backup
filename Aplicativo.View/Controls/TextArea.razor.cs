@@ -18,7 +18,6 @@ namespace Aplicativo.View.Controls
         [Parameter] public TextBoxType _Type { get; set; } = TextBoxType.String;
         [Parameter] public string _Label { get; set; }
         [Parameter] public string _Text { get; set; }
-        [Parameter] public string _Mask { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
         [Parameter] public int _Rows { get; set; } = 3;
@@ -105,19 +104,6 @@ namespace Aplicativo.View.Controls
 
                     Text = _Text;
                     PlaceHolder = _PlaceHolder;
-
-                    if (!string.IsNullOrEmpty(_Mask))
-                    {
-                        if (HelpParametros.Template == Template.Mobile)
-                        {
-                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
-                        }
-                        else
-                        {
-                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
-                        }
-                        
-                    }
 
                 }
                 catch (Exception ex)

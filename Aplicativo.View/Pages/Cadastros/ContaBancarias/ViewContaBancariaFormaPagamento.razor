@@ -1,21 +1,21 @@
 ﻿@inherits ViewContaBancariaFormaPagamentoPage
 
 <ComponentLayout>
-    <ListItemViewLayout @ref="ListItemViewLayout">
+    <ListItemViewLayout @ref="ListView" Type="ContaBancariaFormaPagamento">
 
         <BtnNovo>
-            <ListViewBtnNovo Text="Adicionar" OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo Text="Adicionar" ListItemViewLayout="ListView" OnClick="ViewLayout_ItemView" />
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ViewLayout_Excluir" />
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="E-mail" Width="650px" ZIndex="8001">
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="E-mail" Width="650px" Top="100px">
 
                 <BtnSalvar>
-                    <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
                 </BtnSalvar>
 
                 <BtnExcluir>
@@ -23,110 +23,31 @@
                 </BtnExcluir>
 
                 <View>
-                    <Box Padding="2">
 
-                    </Box>
                 </View>
             </EditItemViewLayout>
         </ViewPages>
 
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-                @{
-                    var item = (Usuario)context;
-
-                    <ListItemText Primary="@item.Login">
-                        <SecondaryContent>
-                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                @item.Login
-                            </Typography>
-                            — I'll be in your neighborhood
-                        </SecondaryContent>
-                    </ListItemText>
-                }
-            </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="FormaPagamento.Descricao" HeaderText="ContaBancariaID" Width="200"></GridColumn>
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="ContaBancariaFormaPagamento" Height="400px" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (ContaBancariaFormaPagamento)context;
+
+                        <ListItemText Primary="@item.FormaPagamento.Descricao">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.FormaPagamento.Descricao
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="ContaBancariaID" Width="200" />
+                </Columns>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>
-
-@*@inherits ViewContaBancariaFormaPagamentoPage
-
-    <ListItemViewLayout @ref="ListItemViewLayout"
-                        TValue="ContaBancariaFormaPagamento"
-                        Simples="true"
-                        Height="300px"
-                        OnPageLoad="ViewLayout_PageLoad"
-                        OnItemView="ViewLayout_ItemView"
-                        OnDelete="ViewLayout_Delete">
-        <View>
-            <EditItemViewLayout @ref="EditItemViewLayout"
-                                ListItemViewLayout="ListItemViewLayout"
-                                Title="Adicionar forma de pagamento"
-                                Simples="true"
-                                Width="650px"
-                                OnLimpar="ViewLayout_Limpar"
-                                OnCarregar="ViewLayout_Carregar"
-                                OnSalvar="ViewLayout_Salvar"
-                                OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
-                <View>
-                    <Box Padding="3">
-
-                        <div class="row">
-                            <div class="col-md-10 col-sm-10">
-                                <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" _AutoFocus="true"></TextBox>
-                            </div>
-                            <div class="col-md-2 col-sm-12">
-                                <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
-                            </div>
-                            <div class="col-md-6 col-sm-12">
-                                <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None"></TextBox>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-10 col-sm-12">
-                                <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true"></CheckBox>
-                            </div>
-                        </div>
-
-                    </Box>
-                </View>
-            </EditItemViewLayout>
-        </View>
-        <ItemView>
-            @{
-                var item = (ContaBancariaFormaPagamento)context;
-
-                <ListItemText Primary="@item.FormaPagamento.Descricao">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.FormaPagamento.Descricao
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>
-        <GridView>
-            <GridColumn Field="FormaPagamento.Descricao" HeaderText="ContaBancariaID" Width="200"></GridColumn>
-        </GridView>
-    </ListItemViewLayout>*@

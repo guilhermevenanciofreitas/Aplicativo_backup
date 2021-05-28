@@ -1,33 +1,26 @@
 ﻿@inherits TextAreaComponent
-@*@if (_Label != null)
-    {
-        <label for="@TextBox.Id">@_Label</label>
-    }
 
-    <input type="text" class="form-control" @ref="@TextBox" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />*@
-
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
-    <TextField @ref="TextField" 
+    <TextField @ref="TextField"
                @bind-Value="@_Text"
                Label="@_Label"
                Margin="@Margin.Normal"
                Variant="@TextFieldVariant.Outlined"
                Style="width: 100%" />
 }
-else
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
 
-<div class="form-group">
-    @if (_Label != null)
-    {
-        <label for="@Element.Id">@_Label</label>
-    }
+    <div class="form-group">
+        @if (_Label != null)
+        {
+            <label for="@Element.Id">@_Label</label>
+        }
 
-    <textarea class="form-control" id="@Element.Id" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" rows="@_Rows"></textarea>
+        <textarea class="form-control" id="@Element.Id" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" rows="@_Rows"></textarea>
 
-    @*<input type="@_Type.ToString().ToLower()" id="@Element.Id" class="form-control" @ref="@Element" @bind="@_Text" placeholder="@_PlaceHolder" readonly="@_ReadOnly" style="text-transform: @_CharacterCasing.ToString().ToLower()" />*@
+    </div>
 
-</div>
-    
 }

@@ -3,6 +3,7 @@ using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Helpers.Exceptions;
+using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
     public partial class ViewUsuarioPage : ComponentBase
     {
 
+        public Usuario ViewModel = new Usuario();
+
         [Parameter] public bool BtnLimpar { get; set; } = true;
         [Parameter] public bool BtnExcluir { get; set; } = true;
 
+        [Parameter] public ListItemViewLayout<Usuario> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
@@ -30,10 +34,10 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
         #endregion
 
-        protected async Task ViewLayout_Load(object args)
+        protected async Task Page_Load(object args)
         {
 
-            await ViewLayout_Limpar();
+            await BtnLimpar_Click();
 
             if (args == null) return;
 
@@ -42,31 +46,31 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             Query.AddInclude("UsuarioEmail");
             Query.AddWhere("UsuarioID == @0", ((Usuario)args).UsuarioID);
             
-            var ViewModel = await Query.FirstOrDefault();
+            ViewModel = await Query.FirstOrDefault();
 
             TxtCodigo.Text = ViewModel.UsuarioID.ToStringOrNull();
             TxtLogin.Text = ViewModel.Login.ToStringOrNull();
             TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
             TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
 
-            ViewUsuarioEmail.ListItemViewLayout.ListItemView = ViewModel.UsuarioEmail.Cast<object>().ToList();
+            ViewUsuarioEmail.ListView.Items = ViewModel.UsuarioEmail.ToList();
             
         }
 
-        protected async Task ViewLayout_Limpar()
+        protected async Task BtnLimpar_Click()
         {
 
             EditItemViewLayout.LimparCampos(this);
 
-            ViewUsuarioEmail.ListItemViewLayout.ListItemView = new List<object>();
-            
+            ViewUsuarioEmail.ListView.Items = new List<UsuarioEmail>();
+
             await TabSet.Active("Principal");
 
             TxtLogin.Focus();
 
         }
 
-        protected async Task ViewLayout_Salvar()
+        protected async Task BtnSalvar_Click()
         {
 
             if (string.IsNullOrEmpty(TxtLogin.Text))
@@ -81,20 +85,16 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
                 throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
             }
 
-
-            var ViewModel = new Usuario();
-
             ViewModel.UsuarioID = TxtCodigo.Text.ToIntOrNull();
             ViewModel.Login = TxtLogin.Text.ToStringOrNull();
             ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
 
-            ViewModel.UsuarioEmail = ViewUsuarioEmail.ListItemViewLayout.ListItemView.Cast<UsuarioEmail>().ToList();
+            ViewModel.UsuarioEmail = ViewUsuarioEmail.ListView.Items.ToList();
 
 
             var Query = new HelpQuery<Usuario>();
 
             ViewModel = await Query.Update(ViewModel);
-
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
@@ -103,17 +103,17 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             }
             else
             {
-                EditItemViewLayout.ViewModal.Hide();
+                await EditItemViewLayout.ViewModal.Hide();
             }
 
         }
 
-        protected async Task ViewLayout_Excluir()
+        protected async Task BtnExcluir_Click()
         {
 
             await Excluir(new List<int> { TxtCodigo.Text.ToInt() });
 
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 

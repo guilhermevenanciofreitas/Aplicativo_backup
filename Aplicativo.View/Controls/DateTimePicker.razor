@@ -1,6 +1,6 @@
 ﻿@inherits DateTimePickerComponent
 
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
     <TextField Type="datetime-local"
                Value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
@@ -11,8 +11,10 @@
                Shrink="true"
                FullWidth="true" />
 }
-else
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
+
     <div class="form-group">
         @if (_Label != null)
         {
@@ -22,4 +24,5 @@ else
         <input type="datetime-local" id="@Element.Id" class="form-control" @ref="@Element" value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-ddTHH:mm") : "")" @onchange="Change" placeholder="@_PlaceHolder" readonly="@_ReadOnly" />
 
     </div>
+
 }

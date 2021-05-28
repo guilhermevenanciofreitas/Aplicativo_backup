@@ -14,7 +14,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
     public class IndexPage : ComponentBase
     {
 
-        protected ListItemViewLayout ListItemViewLayout { get; set; }
+        [Parameter] public ListItemViewLayout<ContaBancaria> ListView { get; set; }
         protected ViewContaBancaria View { get; set; }
 
         protected async Task Component_Load()
@@ -29,7 +29,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
 
             Query.AddWhere("Ativo == @0", true);
 
-            ListItemViewLayout.ListItemView = (await Query.ToList()).Cast<object>().ToList();
+            //ListItemViewLayout.ListItemView = (await Query.ToList()).Cast<object>().ToList();
 
             await HelpLoading.Hide();
 

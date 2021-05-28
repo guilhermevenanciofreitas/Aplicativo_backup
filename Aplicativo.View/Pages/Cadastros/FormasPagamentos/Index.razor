@@ -3,79 +3,51 @@
 
 @inherits IndexPage
 
-<ComponentLayout OnLoad="Component_Load">
-    <ListItemViewLayout @ref="ListItemViewLayout" Title="Formas de pagamentos">
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="FormaPagamento" Title="Formas de pagamentos">
 
         <ViewPages>
-            <ViewFormaPagamento @ref="View" />
+            <ViewFormaPagamento @ref="View" ListView="ListView" />
         </ViewPages>
 
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
         <BtnPesquisa>
-            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
-                <ListViewBtnFiltro>
-                    <ViewFiltro />
-                </ListViewBtnFiltro>
-            </ListViewBtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
         </BtnPesquisa>
 
         <BtnNovo>
-            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
         </BtnExcluir>
 
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-                @{
-                    var item = (Usuario)context;
-
-                    <ListItemText Primary="@item.Login">
-                        <SecondaryContent>
-                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                @item.Login
-                            </Typography>
-                            — I'll be in your neighborhood
-                        </SecondaryContent>
-                    </ListItemText>
-                }
-            </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="FormaPagamento" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (FormaPagamento)context;
+
+                        <ListItemText Primary="@item.Descricao">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Descricao
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="Descricao" HeaderText="Descrição" Width="300" />
+                </Columns>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>
-
-@*<ListItemViewLayout @ref="ListItemViewLayout"
-                        TValue="FormaPagamento"
-                        OnPageLoad="ViewLayout_PageLoad"
-                        OnPesquisar="ViewLayout_Pesquisar"
-                        OnItemView="ViewLayout_ItemView"
-                        OnDelete="ViewLayout_Delete">
-        <View>
-            <ViewFormaPagamento @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewFormaPagamento>
-        </View>
-        <ItemView>
-            @{
-                var item = (FormaPagamento)context;
-
-                <ListItemText Primary="@item.Descricao">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.Descricao
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>
-        <GridView>
-            <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
-        </GridView>
-    </ListItemViewLayout>*@

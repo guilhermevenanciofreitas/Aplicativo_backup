@@ -1,0 +1,20 @@
+﻿@inherits ViewPesquisaControl;
+
+@if (_Label != null)
+{
+    <label>@_Label</label>
+}
+
+<div class="pesquisa-container">
+    <div class="pesquisa-codigo">
+        <TextBox @ref="TxtCodigo" />
+    </div>
+    <div class="pesquisa-button">
+        <center>
+            <button type="button" class="btn btn-primary pesquisa-btnpesquisa" tabindex="-1"><SearchIcon Style="margin: -5px -5px -5px -5px;" /></button>
+        </center>
+    </div>
+    <div class="pesquisa-descricao">
+        <TextBox @ref="TxtDescricao" _ReadOnly="true" />
+    </div>
+</div>

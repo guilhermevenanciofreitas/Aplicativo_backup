@@ -28,7 +28,10 @@ namespace Aplicativo.View.Helpers
 
             var Request = new Request();
 
-            Request.Parameters.Add(new Parameters("Database", Database));
+            //Request.Parameters.Add(new Parameters("Database", Database));
+
+            Query.Database = Database;
+
             Request.Parameters.Add(new Parameters("Query", Query));
 
             return await HelpHttp.Send<List<T>>(Link, Request);

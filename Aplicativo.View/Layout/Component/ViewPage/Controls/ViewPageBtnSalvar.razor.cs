@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ViewPage.Controls
 {
-    public partial class ViewPageBtnSalvarComponent : ComponentBase
+    public partial class ViewPageBtnSalvarComponent<Type> : ComponentBase
     {
 
-        //[CascadingParameter] public ListItemViewLayout ListItemViewLayout { get; set; }
-        //[CascadingParameter] public EditItemViewLayout EditItemViewLayout { get; set; }
-
         protected SfToast Toast { get; set; }
+
+        [Parameter] public ListItemViewLayout<Type> ListItemViewLayout { get; set; }
 
         [Parameter] public string Text { get; set; } = "Salvar";
 
@@ -29,16 +28,16 @@ namespace Aplicativo.View.Layout.Component.ViewPage.Controls
 
                 await OnClick.InvokeAsync(null);
 
-                //if (ListItemViewLayout?.ListViewBtnPesquisa != null)
-                //{
-                //    await ListItemViewLayout.ListViewBtnPesquisa.BtnPesquisar_Click();
-                //}
+                if (ListItemViewLayout?.ListViewBtnPesquisa != null)
+                {
+                    await ListItemViewLayout.ListViewBtnPesquisa.BtnPesquisar_Click();
+                }
 
-                //if (ListItemViewLayout?.GridViewItem?.GridViewItem != null)
-                //{
-                //    ListItemViewLayout.GridViewItem.GridViewItem.Refresh();
-                //}
-                
+                if (ListItemViewLayout?.ListViewGridView?.GridView != null)
+                {
+                    ListItemViewLayout.ListViewGridView.GridView.Refresh();
+                }
+
             }
             catch (EmptyException)
             {

@@ -1,21 +1,8 @@
-﻿using Aplicativo.Utils;
-using Aplicativo.Utils.Helpers;
-using Aplicativo.Utils.Models;
-using Aplicativo.View.Controls;
+﻿using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
-using Aplicativo.View.Helpers.Exceptions;
+using Aplicativo.View.Layout.Component.ListView;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Skclusive.Core.Component;
-using Skclusive.Material.Button;
-using Skclusive.Material.Menu;
-using Skclusive.Material.Tab;
-using Syncfusion.Blazor.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ViewPage
@@ -30,12 +17,13 @@ namespace Aplicativo.View.Layout.Component.ViewPage
     public partial class EditItemViewLayoutPage : ComponentBase
     {
 
+
         public ItemViewMode ItemViewMode { get; set; }
 
         [Parameter] public string Title { get; set; }
-        [Parameter] public string Width { get; set; }
 
-        [Parameter] public int ZIndex { get; set; } = 8000;
+        [Parameter] public string Top { get; set; }
+        [Parameter] public string Width { get; set; }
 
         [Parameter] public RenderFragment BtnLimpar { get; set; }
         [Parameter] public RenderFragment BtnSalvar { get; set; }
@@ -60,7 +48,7 @@ namespace Aplicativo.View.Layout.Component.ViewPage
                 
             }
 
-            ViewModal.Show();
+            await ViewModal.Show();
 
             await OnLoad.InvokeAsync(args);
 
@@ -83,6 +71,9 @@ namespace Aplicativo.View.Layout.Component.ViewPage
 
             var DropDownList = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(DropDownList)).ToList();
 
+            var ViewPesquisa = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(ViewPesquisa)).ToList();
+
+            var TextBoxCEP = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(TextBoxCEP)).ToList();
 
             foreach (var item in TextBox)
             {
@@ -117,6 +108,16 @@ namespace Aplicativo.View.Layout.Component.ViewPage
             foreach (var item in DropDownList)
             {
                 ((DropDownList)item.GetValue(Page)).SelectedValue = null;
+            }
+
+            foreach (var item in ViewPesquisa)
+            {
+                ((ViewPesquisa)item.GetValue(Page)).Clear();
+            }
+
+            foreach (var item in TextBoxCEP)
+            {
+                ((TextBoxCEP)item.GetValue(Page)).Text = null;
             }
 
         }

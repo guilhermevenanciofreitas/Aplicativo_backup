@@ -4,14 +4,14 @@
 @inherits IndexPage
 
 <ComponentLayout OnLoad="Component_Load">
-    <ListItemViewLayout @ref="ListItemViewLayout">
+    <ListItemViewLayout @ref="ListView" Type="ContaBancaria">
 
         <ViewPages>
-            <ViewContaBancaria @ref="View"></ViewContaBancaria>
+            <ViewContaBancaria @ref="View" ListView="ListView" />
         </ViewPages>
 
         <BtnPesquisa>
-            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" OnClick="ViewLayout_Pesquisar">
                 <ListViewBtnFiltro>
                     <ViewFiltro />
                 </ListViewBtnFiltro>
@@ -19,11 +19,11 @@
         </BtnPesquisa>
 
         <BtnNovo>
-            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="ViewLayout_ItemView" />
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ViewLayout_Excluir" />
         </BtnExcluir>
 
         <!--<View>-->
@@ -45,9 +45,9 @@
             </ItemView>*@
 
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="ContaBancaria" OnItemView="ViewLayout_ItemView">
                 <GridColumn Field="Descricao" HeaderText="Descrição" Width="300"></GridColumn>
-            </GridViewItem>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>

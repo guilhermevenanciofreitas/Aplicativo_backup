@@ -21,7 +21,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
 
         public ContaBancariaFormaPagamento ViewModel { get; set; } = new ContaBancariaFormaPagamento();
 
-        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public ListItemViewLayout<ContaBancariaFormaPagamento> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
 
@@ -33,7 +33,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         #endregion
 
         #region ViewPage
-        protected void ViewLayout_Limpar()
+        protected void BtnLimpar_Click()
         {
             ViewModel = new ContaBancariaFormaPagamento();
             EditItemViewLayout.LimparCampos(this);
@@ -42,9 +42,9 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         protected async Task ViewLayout_Carregar(object args)
         {
 
-            ViewLayout_Limpar();
-
             await EditItemViewLayout.Show(args);
+
+            BtnLimpar_Click();
 
             if (args == null) return;
 
@@ -58,16 +58,16 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         protected void ViewLayout_Salvar()
         {
 
-            var ListItemView = ListItemViewLayout.ListItemView;
+            //var ListItemView = ListItemViewLayout.ListItemView;
 
             //ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
             
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemView.Add(ViewModel);
+                //ListItemView.Add(ViewModel);
             }
 
-            ListItemViewLayout.ListItemView = ListItemView;
+            //ListItemViewLayout.ListItemView = ListItemView;
 
             EditItemViewLayout.ViewModal.Hide();
 
@@ -76,14 +76,14 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         protected void ViewLayout_Excluir(object args)
         {
 
-            var ListItemView = ListItemViewLayout.ListItemView;
+            //var ListItemView = ListItemViewLayout.ListItemView;
 
             foreach (var item in ((IEnumerable)args).Cast<ContaBancariaFormaPagamento>().ToList())
             {
-                ListItemView.Remove(item);
+                //ListItemView.Remove(item);
             }
 
-            ListItemViewLayout.ListItemView = ListItemView;
+            //ListItemViewLayout.ListItemView = ListItemView;
 
             EditItemViewLayout.ViewModal.Hide();
 

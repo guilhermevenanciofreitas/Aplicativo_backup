@@ -11,6 +11,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,9 +22,10 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
         public UsuarioEmail ViewModel { get; set; } = new UsuarioEmail();
 
-        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public ListItemViewLayout<UsuarioEmail> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
+        #region Elements
         public TextBox TxtSmtp { get; set; }
         public TextBox TxtPorta { get; set; }
         public TextBox TxtEmail { get; set; }
@@ -31,7 +33,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         public TextBox TxtConfirmarSenha { get; set; }
 
         public CheckBox ChkSSL { get; set; }
-
+        #endregion
 
         #region ListView
         protected async Task ViewLayout_ItemView(object args)
@@ -41,7 +43,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         #endregion
 
         #region ViewPage
-        protected void ViewLayout_Limpar()
+        protected void BtnLimpar_Click()
         {
 
             ViewModel = new UsuarioEmail();
@@ -50,14 +52,16 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             ChkSSL.Checked = true;
 
+            TxtSmtp.Focus();
+
         }
 
         protected async Task ViewLayout_Carregar(object args)
         {
 
-            ViewLayout_Limpar();
-
             await EditItemViewLayout.Show(args);
+
+            BtnLimpar_Click();
 
             if (args == null) return;
 
@@ -72,7 +76,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
         }
 
-        protected void ViewLayout_Salvar()
+        protected async Task ViewPageBtnSalvar_Click()
         {
 
             if (string.IsNullOrEmpty(TxtSmtp.Text))
@@ -90,8 +94,6 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (TxtSenha.Text != TxtConfirmarSenha.Text)
                 throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
 
-            var ListItemView = ListItemViewLayout.ListItemView;
-
             ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
             ViewModel.Porta = TxtPorta.Text.ToIntOrNull();
             ViewModel.Email = TxtEmail.Text.ToStringOrNull();
@@ -100,29 +102,35 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemView.Add(ViewModel);
+                ListView.Items.Add(ViewModel);
             }
 
-            ListItemViewLayout.ListItemView = ListItemView;
-
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void ViewLayout_Excluir(object args)
+        protected async Task ViewPageBtnExcluir_Click()
         {
 
-            var ListItemView = ListItemViewLayout.ListItemView;
+            Excluir(new List<UsuarioEmail>() { ViewModel });
 
-            foreach (var item in ((IEnumerable)args).Cast<UsuarioEmail>().ToList())
+            await EditItemViewLayout.ViewModal.Hide();
+
+        }
+
+        protected void ListViewBtnExcluir_Click(object args)
+        {
+
+            Excluir(((IEnumerable)args).Cast<UsuarioEmail>().ToList());
+
+        }
+
+        public void Excluir(List<UsuarioEmail> args)
+        {
+            foreach (var item in args)
             {
-                ListItemView.Remove(item);
+                ListView.Items.Remove(item);
             }
-
-            ListItemViewLayout.ListItemView = ListItemView;
-
-            EditItemViewLayout.ViewModal.Hide();
-
         }
 
         protected async Task BtnTestar_Click()

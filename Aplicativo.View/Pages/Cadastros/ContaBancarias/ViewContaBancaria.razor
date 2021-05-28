@@ -1,11 +1,11 @@
 ﻿@inherits ViewContaBancariaPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="ViewLayout_Load" Width="1250px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="Page_Load" Width="1250px">
     <BtnLimpar>
-        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
     </BtnLimpar>
     <BtnSalvar>
-        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
     <BtnExcluir>
         <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
@@ -13,30 +13,20 @@
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
+                <div class="row">
 
-                    <div class="row">
-
-                        <div class="col-md-2 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
-                            </div>
-                        </div>
-
-                        <div class="col-md-10 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true"></TextBox>
-                            </div>
-                        </div>
-
+                    <div class="col-md-2 col-sm-12">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
                     </div>
 
-                </Box>
+                    <div class="col-md-10 col-sm-12">
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true" />
+                    </div>
+
+                </div>
             </TabPage>
             <TabPage Id="FormasPagamento" Title="Formas de pagamento">
-                <Box Padding="3">
-                    <ViewContaBancariaFormaPagamento @ref="ViewContaBancariaFormaPagamento"></ViewContaBancariaFormaPagamento>
-                </Box>
+                <ViewContaBancariaFormaPagamento @ref="ViewContaBancariaFormaPagamento"></ViewContaBancariaFormaPagamento>
             </TabPage>
         </TabSet>
     </View>

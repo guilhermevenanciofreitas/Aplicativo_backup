@@ -23,7 +23,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
         public ProdutoFornecedor ViewModel { get; set; } = new ProdutoFornecedor();
 
-        public ListItemViewLayout ListItemViewLayout { get; set; }
+        public ListItemViewLayout<ProdutoFornecedor> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
@@ -43,7 +43,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         #endregion
 
         #region ViewPage
-        protected void ViewLayout_Limpar()
+        protected void BtnLimpar_Click()
         {
             ViewModel = new ProdutoFornecedor();
             EditItemViewLayout.LimparCampos(this);
@@ -52,7 +52,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         protected async Task ViewLayout_Carregar(object args)
         {
 
-            ViewLayout_Limpar();
+            BtnLimpar_Click();
 
             await EditItemViewLayout.Show(args);
 
@@ -69,7 +69,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
         }
 
-        protected void ViewLayout_Salvar()
+        protected async Task ViewPageBtnSalvar_Click()
         {
 
             ViewModel.CodigoFornecedor = TxtCodigo.Text.ToStringOrNull();
@@ -79,27 +79,35 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemViewLayout.ListItemView.Add(ViewModel);
+                ListView.Items.Add(ViewModel);
             }
 
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void ViewLayout_Excluir(object args)
+        protected async Task ViewPageBtnExcluir_Click()
         {
 
-            var ListItemView = ListItemViewLayout.ListItemView;
+            Excluir(new List<ProdutoFornecedor>() { ViewModel });
 
-            foreach (var item in ((IEnumerable)args).Cast<ProdutoFornecedor>().ToList())
+            await EditItemViewLayout.ViewModal.Hide();
+
+        }
+
+        protected void ListViewBtnExcluir_Click(object args)
+        {
+
+            Excluir(((IEnumerable)args).Cast<ProdutoFornecedor>().ToList());
+
+        }
+
+        public void Excluir(List<ProdutoFornecedor> args)
+        {
+            foreach (var item in args)
             {
-                ListItemView.Remove(item);
+                ListView.Items.Remove(item);
             }
-
-            ListItemViewLayout.ListItemView = ListItemView;
-
-            EditItemViewLayout.ViewModal.Hide();
-
         }
 
         #endregion

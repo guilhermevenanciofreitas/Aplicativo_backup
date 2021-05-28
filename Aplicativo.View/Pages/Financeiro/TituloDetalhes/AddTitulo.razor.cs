@@ -2,6 +2,8 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
+using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -17,6 +19,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
     public partial class AddTituloPage : ComponentBase
     {
 
+        [Parameter] public ListItemViewLayout<TituloDetalhe> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
@@ -26,12 +29,18 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public TextBox TxtDocumento { get; set; }
         public DatePicker DtpEmissao { get; set; }
 
+        public ViewPesquisa ViewPesquisaPessoa { get; set; }
 
         public NumericBox TxtValor { get; set; }
         public DatePicker DtpVencimento { get; set; }
         public NumericBox TxtParcelas { get; set; }
         public DropDownList DplPeriodo { get; set; }
         public NumericBox TxtPeriodo { get; set; }
+
+        public ViewPesquisa ViewPesquisaPlanoConta { get; set; }
+        public ViewPesquisa ViewPesquisaContaBancaria { get; set; }
+        public ViewPesquisa ViewPesquisaFormaPagamento { get; set; }
+        public ViewPesquisa ViewPesquisaCentroCusto { get; set; }
 
 
         public SfGrid<TituloDetalhe> GridViewTituloDetalhe { get; set; }
@@ -70,11 +79,65 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task ViewLayout_Salvar()
         {
 
+            if (TxtDocumento.Text.ToStringOrNull() == null)
+            {
+                throw new EmptyException("Informe o número documento!", TxtDocumento.Element);
+            }
+
+            if (ViewPesquisaPessoa.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe o fornecedor!", ViewPesquisaPessoa.Element);
+            }
+
+            if (DtpEmissao.Value == null)
+            {
+                throw new EmptyException("Informe a data de emissão!", DtpEmissao.Element);
+            }
+
+            if (ViewPesquisaPlanoConta.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe o plano de contas!", ViewPesquisaPlanoConta.Element);
+            }
+
+            if (ViewPesquisaContaBancaria.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe a conta bancária!", ViewPesquisaContaBancaria.Element);
+            }
+
+            if (ViewPesquisaFormaPagamento.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe a forma de pagamento!", ViewPesquisaFormaPagamento.Element);
+            }
+
+            if (TxtValor.Value == 0)
+            {
+                throw new EmptyException("Informe o valor!", TxtValor.Element);
+            }
+
+            if (DtpVencimento.Value == null)
+            {
+                throw new EmptyException("Informe a data de vencimento!", DtpVencimento.Element);
+            }
+
+            if (TxtParcelas.Value == 0)
+            {
+                throw new EmptyException("Informe a quantidade de parcelas!", TxtParcelas.Element);
+            }
+
+
             var Titulo = new Titulo();
 
             foreach (var item in ListTituloDetalhe)
             {
+
+                item.PessoaID = ViewPesquisaPessoa.Value.ToIntOrNull();
+                item.PlanoContaID = ViewPesquisaPlanoConta.Value.ToIntOrNull();
+                item.ContaBancariaID = ViewPesquisaContaBancaria.Value.ToIntOrNull();
+                item.FormaPagamentoID = ViewPesquisaFormaPagamento.Value.ToIntOrNull();
+                item.CentroCustoID = ViewPesquisaCentroCusto.Value.ToIntOrNull();
+
                 Titulo.TituloDetalhe.Add(item);
+
             }
 
             var Query = new HelpQuery<Titulo>();
@@ -127,27 +190,27 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             ListTituloDetalhe.Clear();
 
-            DateTime DataVencimento = DateTime.Today;
+            DateTime? DataVencimento = DateTime.Today;
 
             for (var i = 1; i <= Convert.ToInt32(TxtParcelas.Value); i++)
             {
 
                 if (i == 1)
                 {
-                    DataVencimento = (DateTime)DtpVencimento.Value;
+                    DataVencimento = DtpVencimento.Value;
                 }
                 else
                 {
                     switch (DplPeriodo.SelectedValue)
                     {
                         case "0":
-                            DataVencimento = DataVencimento.AddDays((int)TxtPeriodo.Value);
+                            DataVencimento = DataVencimento?.AddDays((int)TxtPeriodo.Value);
                             break;
                         case "30":
-                            DataVencimento = DataVencimento.AddMonths(1);
+                            DataVencimento = DataVencimento?.AddMonths(1);
                             break;
                         default:
-                            DataVencimento = DataVencimento.AddDays(DplPeriodo.SelectedValue.ToInt());
+                            DataVencimento = DataVencimento?.AddDays(DplPeriodo.SelectedValue.ToInt());
                             break;
                     }
                 }
@@ -159,7 +222,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                     vTotal = Math.Round(TxtValor.Value - ListTituloDetalhe.Sum(c => c.vTotal ?? 0), 2);
                 }
 
-                ListTituloDetalhe.Add(new TituloDetalhe() { DataEmissao = DtpEmissao.Value, nDocumento = TxtDocumento.Text, nParcela = i, vTotal = vTotal, vLiquido = vTotal, DataVencimento = DataVencimento.ToUniversalTime() });
+                ListTituloDetalhe.Add(new TituloDetalhe() { DataEmissao = DtpEmissao.Value, nDocumento = TxtDocumento.Text, nParcela = i, vTotal = vTotal, vLiquido = vTotal, DataVencimento = DataVencimento?.ToUniversalTime() });
 
             }
 

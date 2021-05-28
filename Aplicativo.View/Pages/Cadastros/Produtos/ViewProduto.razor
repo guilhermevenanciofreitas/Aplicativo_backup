@@ -1,14 +1,14 @@
 ﻿@inherits ViewProdutoPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Produto" OnLoad="ViewLayout_Load" Width="1250px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Produto" OnLoad="Page_Load" Width="1250px">
     <BtnLimpar>
-        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
     </BtnLimpar>
     <BtnSalvar>
-        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
     <BtnExcluir>
-        <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
+        <ViewPageBtnExcluir OnClick="BtnExcluir_Click" />
     </BtnExcluir>
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
@@ -18,7 +18,7 @@
                         <TextBox @ref="TxtCodigo" _Label="Código" />
                     </div>
                     <div class="col-md-5 col-sm-6">
-                        <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true" />
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" />
                     </div>
                 </div>
 
@@ -45,124 +45,3 @@
         </TabSet>
     </View>
 </EditItemViewLayout>
-
-<!--
-
-<EditItemViewLayout @ref="EditItemViewLayout"
-                    ListItemViewLayout="ListItemViewLayout"
-                    Title="Produto"
-                    Width="1250px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnLimpar="ViewLayout_Limpar"
-                    OnCarregar="ViewLayout_Carregar"
-                    OnSalvar="ViewLayout_Salvar"
-                    OnExcluir="ViewLayout_Excluir">
-    <View>
-
-        <TabSet @ref="TabSet" Changed="StateHasChanged">
-            <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
-
-                    <div class="row">
-                        <div class="col-md-1 col-sm-6">
-                            <div class="form-group">
-                                <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
-                            </div>
-                        </div>
-                        <div class="col-md-5 col-sm-6">
-                            <div class="form-group">
-                                <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true"></TextBox>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida"></DropDownList>
-                            </div>
-                        </div>
-                    </div>
-
-                </Box>
-            </TabPage>
-            <TabPage Id="Tributacao" Title="Tributação">
-                <Box Padding="3">
-
-                    <div class="row">
-                        <div class="col-md-5 col-sm-12">
-                            <div class="form-group">
-                                <DropDownList @ref="DplOrigem" _Label="Origem"></DropDownList>
-                            </div>
-                        </div>
-                    </div>
-
-                </Box>
-            </TabPage>
-            <TabPage Id="Fornecedores" Title="Fornecedores">
-                <Box Padding="3">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="form-group">
-                                <ViewProdutoFornecedor @ref="ViewProdutoFornecedor"></ViewProdutoFornecedor>
-                            </div>
-                        </div>
-                    </div>
-                </Box>
-            </TabPage>
-        </TabSet>
-
-    </View>
-</EditItemViewLayout>-->
-@*@inherits ViewProdutoPage
-
-    <EditItemViewLayout @ref="EditItemViewLayout"
-                        ListItemViewLayout="ListItemViewLayout"
-                        Title="Produto"
-                        Width="1250px"
-                        OnLimpar="ViewLayout_Limpar"
-                        OnCarregar="ViewLayout_Carregar"
-                        OnSalvar="ViewLayout_Salvar"
-                        OnExcluir="ViewLayout_Excluir">
-        <View>
-
-            <TabSet @ref="TabSet" Changed="StateHasChanged">
-                <TabPage Id="Principal" Title="Principal">
-                    <Box Padding="3">
-
-                        <div class="row">
-
-                            <div class="col-md-1 col-sm-6">
-                                <TextBox @ref="TxtCodigo" _Label="Código"></TextBox>
-                            </div>
-
-                            <div class="col-md-5 col-sm-6">
-                                <TextBox @ref="TxtDescricao" _Label="Descrição"></TextBox>
-                            </div>
-
-                        </div>
-
-                    </Box>
-                </TabPage>
-                <TabPage Id="Tributacao" Title="Tributação">
-                    <Box Padding="3">
-
-                        <div class="row">
-
-                            <div class="col-md-5 col-sm-12">
-                                <DropDownList @ref="DplOrigem" _Label="Origem"></DropDownList>
-                            </div>
-
-                        </div>
-
-                    </Box>
-                </TabPage>
-                <TabPage Id="Fornecedores" Title="Fornecedores">
-                    <Box Padding="3">
-                        <ViewProdutoFornecedor @ref="ViewProdutoFornecedor"></ViewProdutoFornecedor>
-                    </Box>
-                </TabPage>
-            </TabSet>
-
-        </View>
-    </EditItemViewLayout>*@

@@ -5,7 +5,7 @@
         <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
     </BtnLimpar>*@
     <BtnSalvar>
-        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
     </BtnSalvar>
     @*<BtnExcluir>
         <ViewPageBtnExcluir OnClick="ViewLayout_Excluir" />
@@ -32,28 +32,29 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-9">
-                                    
+                                <div class="col-md-6">
+                                    <ViewPesquisa @ref="ViewPesquisaPessoa" _Label="Fornecedor" />
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-9">
-                                    
+                                <div class="col-md-6">
+                                    <ViewPesquisa @ref="ViewPesquisaPlanoConta" _Label="Plano de conta" />
+                                </div>
+                                <div class="col-md-6">
+                                    <ViewPesquisa @ref="ViewPesquisaCentroCusto" _Label="Centro de custo" />
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-9">
-                                    
+                                <div class="col-md-6">
+                                    <ViewPesquisa @ref="ViewPesquisaContaBancaria" _Label="Conta bancária" />
+                                </div>
+                                <div class="col-md-6">
+                                    <ViewPesquisa @ref="ViewPesquisaFormaPagamento" _Label="Forma de pagamento" />
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-9">
-                                    
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-md-4">

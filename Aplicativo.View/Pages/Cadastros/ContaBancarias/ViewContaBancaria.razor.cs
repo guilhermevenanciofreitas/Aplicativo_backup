@@ -4,6 +4,7 @@ using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout;
+using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
     public partial class ViewContaBancariaPage : ComponentBase
     {
 
+        [Parameter] public ListItemViewLayout<ContaBancaria> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
@@ -27,10 +29,10 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
         public ViewContaBancariaFormaPagamento ViewContaBancariaFormaPagamento { get; set; }
         #endregion
 
-        protected async Task ViewLayout_Load(object args)
+        protected async Task Page_Load(object args)
         {
 
-            await ViewLayout_Limpar();
+            await BtnLimpar_Click();
 
             if (args == null) return;
 
@@ -46,16 +48,16 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
             TxtCodigo.Text = ViewModel.ContaBancariaID.ToStringOrNull();
             TxtDescricao.Text = ViewModel.Descricao.ToStringOrNull();
 
-            ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView = ViewModel.ContaBancariaFormaPagamento.Cast<object>().ToList();
+            //ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView = ViewModel.ContaBancariaFormaPagamento.Cast<object>().ToList();
 
         }
 
-        protected async Task ViewLayout_Limpar()
+        protected async Task BtnLimpar_Click()
         {
 
             EditItemViewLayout.LimparCampos(this);
 
-            ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView = new List<object>();
+            //ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView = new List<object>();
 
             await TabSet.Active("Principal");
 
@@ -63,7 +65,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
 
         }
 
-        protected async Task ViewLayout_Salvar()
+        protected async Task BtnSalvar_Click()
         {
 
             if (string.IsNullOrEmpty(TxtDescricao.Text))
@@ -78,7 +80,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
             ViewModel.ContaBancariaID = TxtCodigo.Text.ToIntOrNull();
             ViewModel.Descricao = TxtDescricao.Text.ToStringOrNull();
 
-            ViewModel.ContaBancariaFormaPagamento = ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView.Cast<ContaBancariaFormaPagamento>().ToList(); ;
+            //ViewModel.ContaBancariaFormaPagamento = ViewContaBancariaFormaPagamento.ListItemViewLayout.ListItemView.Cast<ContaBancariaFormaPagamento>().ToList(); ;
 
 
             var Query = new HelpQuery<ContaBancaria>();

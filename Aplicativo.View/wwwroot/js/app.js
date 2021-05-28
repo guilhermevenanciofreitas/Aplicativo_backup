@@ -150,3 +150,13 @@ window.Menu =
         }
     }
 }
+
+window.Modal =
+{
+    Show: function (element) {
+        $(element).modal('show');
+    },
+    Hide: function (element) {
+        $(element).modal('hide');
+    },
+}

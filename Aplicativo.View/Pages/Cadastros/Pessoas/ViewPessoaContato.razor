@@ -1,131 +1,67 @@
 ﻿@inherits ViewPessoaContatoPage
 
 <ComponentLayout>
-    <ListItemViewLayout @ref="ListItemViewLayout">
+    <ListItemViewLayout @ref="ListView" Type="PessoaContato">
 
         <BtnNovo>
-            <ListViewBtnNovo Text="Adicionar" OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="E-mail" Width="650px" ZIndex="8001">
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Contato" Width="650px" Top="100px">
 
                 <BtnSalvar>
-                    <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
                 </BtnSalvar>
 
                 <BtnExcluir>
-                    <ViewPageBtnExcluir OnClick="@(() => ViewLayout_Excluir(new List<object>() { ViewModel }))" />
+                    <ViewPageBtnExcluir OnClick="ViewPageBtnExcluir_Click" />
                 </BtnExcluir>
 
                 <View>
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtNome" _Label="Nome"></TextBox>
+                            <TextBox @ref="TxtNome" _Label="Nome" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 col-sm-12">
-                            <TextBox @ref="TxtTelefone" _Label="Telefone"></TextBox>
+                            <TextBox @ref="TxtTelefone" _Label="Telefone" />
                         </div>
                         <div class="col-md-8 col-sm-12">
-                            <TextBox @ref="TxtEmail" _Label="E-mail" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
+                            <TextBox @ref="TxtEmail" _Label="E-mail" _CharacterCasing="CharacterCasing.LowerCase" />
                         </div>
                     </div>
                 </View>
             </EditItemViewLayout>
         </ViewPages>
 
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-                @{
-                    var item = (Usuario)context;
-
-                    <ListItemText Primary="@item.Login">
-                        <SecondaryContent>
-                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                @item.Login
-                            </Typography>
-                            — I'll be in your neighborhood
-                        </SecondaryContent>
-                    </ListItemText>
-                }
-            </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="Contato.Nome" HeaderText="Nome" Width="220" />
-                <GridColumn Field="Contato.Telefone" HeaderText="Telefone" Width="120" />
-                <GridColumn Field="Contato.Email" HeaderText="E-mail" Width="400" />
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="PessoaContato" Height="400px" CheckBoxWidth="38" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (PessoaContato)context;
+
+                        <ListItemText Primary="@item.Contato.Email">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Contato.Email
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="Contato.Nome" HeaderText="Nome" Width="200" />
+                    <GridColumn Field="Contato.Telefone" HeaderText="Telefone" Width="100" />
+                    <GridColumn Field="Contato.Email" HeaderText="E-mail" Width="400" />
+                </Columns>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>
-
-@*@inherits ViewPessoaContatoPage
-
-    <ListItemViewLayout @ref="ListItemViewLayout"
-                        TValue="PessoaContato"
-                        Simples="true"
-                        Height="300px"
-                        OnPageLoad="ViewLayout_PageLoad"
-                        OnItemView="ViewLayout_ItemView"
-                        OnDelete="ViewLayout_Delete">
-        <View>
-            <EditItemViewLayout @ref="EditItemViewLayout"
-                                ListItemViewLayout="ListItemViewLayout"
-                                Title="Contato"
-                                Simples="true"
-                                Width="540px"
-                                OnLimpar="ViewLayout_Limpar"
-                                OnCarregar="ViewLayout_Carregar"
-                                OnSalvar="ViewLayout_Salvar"
-                                OnExcluir="@(() => ViewLayout_Delete(new List<object>() { EditItemViewLayout.ViewModal }))">
-                <View>
-                    <Box Padding="3">
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <TextBox @ref="TxtNome" _Label="Nome" _AutoFocus="true"></TextBox>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 col-sm-12">
-                                <TextBox @ref="TxtTelefone" _Label="Telefone"></TextBox>
-                            </div>
-                            <div class="col-md-8 col-sm-12">
-                                <TextBox @ref="TxtEmail" _Label="E-mail" _CharacterCasing="CharacterCasing.LowerCase"></TextBox>
-                            </div>
-                        </div>
-
-                    </Box>
-                </View>
-            </EditItemViewLayout>
-        </View>
-        <ItemView>
-            @{
-                var item = (PessoaContato)context;
-
-                <ListItemText Primary="@item.Contato.Nome">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.Contato.Nome
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>
-        <GridView>
-            <GridColumn Field="Contato.Nome" HeaderText="Nome" Width="220"></GridColumn>
-            <GridColumn Field="Contato.Telefone" HeaderText="Telefone" Width="120"></GridColumn>
-            <GridColumn Field="Contato.Email" HeaderText="E-mail" Width="400"></GridColumn>
-        </GridView>
-    </ListItemViewLayout>*@

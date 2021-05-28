@@ -5,23 +5,43 @@
         <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
     </BtnLimpar>
     <BtnSalvar>
-        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
     </BtnSalvar>
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
-         
+
                 <div class="row">
                     <div class="col-md-3">
-                        <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" _AutoFocus="true" />
+                        <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" />
+                    </div>
+                    <div class="col-md-6">
+                        <ViewPesquisa @ref="ViewPesquisaPessoa" _Label="Fornecedor" />
                     </div>
                     <div class="col-md-3">
                         <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change" />
                     </div>
                 </div>
-              
-                <div class="row">
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <ViewPesquisa @ref="ViewPesquisaPlanoConta" _Label="Plano de conta" />
+                    </div>
+                    <div class="col-md-6">
+                        <ViewPesquisa @ref="ViewPesquisaCentroCusto" _Label="Centro de custo" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <ViewPesquisa @ref="ViewPesquisaContaBancaria" _Label="Conta Bancária" />
+                    </div>
+                    <div class="col-md-6">
+                        <ViewPesquisa @ref="ViewPesquisaFormaPagamento" _Label="Forma de pagamento" />
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-2">
                         <NumericBox @ref="TxtValor" _Label="Valor" OnKeyUp="TxtValor_KeyUp" />
                     </div>
@@ -40,7 +60,6 @@
                     <div class="col-md-2" style="display: @(TxtParcelas?.Value > 1 && DplPeriodo?.SelectedValue == "0" ? "block" : "none")">
                         <NumericBox @ref="TxtPeriodo" _Label="Repetir a cada" _Digits="0" OnKeyUp="TxtPeriodo_KeyUp" />
                     </div>
-
                 </div>
 
                 <br />
@@ -67,7 +86,7 @@
                         </SfGrid>
                     </div>
                 </div>
-                    
+
             </TabPage>
         </TabSet>
     </View>

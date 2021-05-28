@@ -5,19 +5,87 @@
     <CascadingValue Value=this>
 
         @if (HelpDisplay.Display.Width <= (int)LayoutSize.Small)
-        { 
-            <style>
-                .fab-button {
-                    right: 16px;
-                    bottom: 16px;
-                    position: fixed;
-                }
-            </style>
+        {
+
+            <ViewModal @ref="ViewModal" Overlay="true" Title="@Title" Width="@Width">
+
+                <AppBar Style="position: relative;">
+                    <Toolbar>
+                        <IconButton Edge="@IconButtonEdge.Start" Color="@Color.Inherit" OnClick="ViewModal.Hide" aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography Variant="@TypographyVariant.H6" Style="flex: 1; margin-left: 16px;">
+                            @Title
+                        </Typography>
+
+                        @BtnSalvar
+
+                        @*<Button @ref="BtnSalvar.Button" Color="@Color.Inherit" OnClick="@BtnSalvar_Click" Disabled="BtnSalvar.Disabled">
+                            @BtnSalvar.Label
+                        </Button>
+                        @if (ItemViewMode == ItemViewMode.Edit)
+                        {
+                            <Button @ref="BtnExcluir.Button" Color="@Color.Inherit" OnClick="@BtnExcluir_Click" Disabled="BtnExcluir.Disabled">
+                                @BtnExcluir.Label
+                            </Button>
+                        }
+
+                        <IconButton Color="@Color.Inherit" OnClick="@ItemViewButtonOpen_Show" RootRef="@ItemViewOpenButtonRef">
+                            <MoreVertIcon />
+                        </IconButton>
+
+                        <Skclusive.Material.Menu.Menu Open="@ItemViewButtonOpen" AnchorRef="@ItemViewOpenButtonRef" OnClose="@ItemViewOpen_Close">
+                            @if (!Simples)
+                            {
+                                <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); BtnLimpar_Click(); })">
+                                    Limpar
+                                </MenuItem>
+                            }
+                            @if (ItemViewMode == ItemViewMode.Edit)
+                            {
+                                @foreach (var item in ItemViewButtons.Where(c => c.Visible))
+                                {
+                                    <MenuItem OnClick="@(() => { ItemViewOpen_Close(null); item.OnClick(); })">
+                                        @item.Label
+                                    </MenuItem>
+                                }
+                            }
+                        </Skclusive.Material.Menu.Menu>*@
+
+                    </Toolbar>
+                </AppBar>
+
+                @View
+
+            </ViewModal>
+
+            @*<ViewModal @ref="ViewModal" Overlay="true" FullScreen="true" Title="@Title" Width="@Width" ZIndex="ZIndex">
+
+                <div class="box-header with-border">
+
+                    @BtnLimpar
+
+                    @BtnSalvar
+
+                    @if (ItemViewMode == ItemViewMode.Edit)
+                    {
+                        @BtnExcluir
+                    }
+
+                </div>
+
+                <br />
+
+                <Divider />
+
+                @View
+
+            </ViewModal>*@
         }
 
         @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
         {
-            <ViewModal @ref="ViewModal" Overlay="true" FullScreen="true" Title="@Title" Width="@Width" ZIndex="ZIndex">
+            <ViewModal @ref="ViewModal" Overlay="true" Title="@Title" Top="@Top" Width="@Width">
 
                 <div class="box-header with-border">
 

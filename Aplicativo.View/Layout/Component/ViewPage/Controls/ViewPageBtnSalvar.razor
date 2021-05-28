@@ -1,12 +1,15 @@
-﻿@inherits ViewPageBtnSalvarComponent;
+﻿@typeparam Type;
 
+@inherits ViewPageBtnSalvarComponent<Type>;
 @*<SfToast ID="toast_default" @ref="Toast" Timeout="5000" ShowCloseButton="true">
-    <ToastPosition X="Center" Y="Bottom"></ToastPosition>
-</SfToast>*@
+        <ToastPosition X="Center" Y="Bottom"></ToastPosition>
+    </SfToast>*@
 
 @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
-
+    <Button Color="@Color.Inherit" OnClick="@BtnSalvar_Click">
+        @Text
+    </Button>
 }
 
 @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)

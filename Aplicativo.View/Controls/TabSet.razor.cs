@@ -1,5 +1,6 @@
 ﻿using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Aplicativo.View.Controls
 
     public class ITab
     {
+        public ElementReference Element { get; set; }
         public string Id { get; set; }
         public bool Visible { get; set; }
         public RenderFragment ChildContent { get; set; }
@@ -37,6 +39,8 @@ namespace Aplicativo.View.Controls
                 await Active(Tab.Id);
             }
 
+            StateHasChanged();
+
         }
 
         public async void RemoveTab(ITab Tab)
@@ -54,18 +58,16 @@ namespace Aplicativo.View.Controls
         public async Task Active(string Id)
         {
 
-            foreach(var Item in Tabs)
-            {
-                Item.Visible = false;
-            }
-
-            var Tab = Tabs.FirstOrDefault(c => c.Id == Id);
-
-            Tab.Visible = true;
-
             _Id = Id;
 
+            Tabs.ForEach(c => c.Visible = false);
+
+            Tabs.Where(c => c.Id == _Id).ToList().ForEach(c => c.Visible = true);
+
+            StateHasChanged();
+
             await Changed.InvokeAsync(null);
+
             StateHasChanged();
 
         }

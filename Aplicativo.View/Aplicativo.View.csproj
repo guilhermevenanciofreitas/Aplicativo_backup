@@ -7,6 +7,7 @@
     <EnableDefaultCssItems>false</EnableDefaultCssItems>
     <WwwRootResourcePath>wwwroot</WwwRootResourcePath>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,6 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorPro.BlazorSize" Version="3.2.1" />
     <PackageReference Include="ChartJs.Blazor" Version="1.1.0" />
     <PackageReference Include="Microsoft.MobileBlazorBindings" Version="0.5.50-preview" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -49,9 +51,8 @@
     <PackageReference Include="Skclusive.Material.Theme" Version="5.2.0" />
     <PackageReference Include="Skclusive.Material.Transition" Version="5.2.0" />
     <PackageReference Include="Skclusive.Material.Typography" Version="5.2.0" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="18.4.0.43" />
-    <PackageReference Include="Syncfusion.Blazor.Notifications" Version="18.4.0.43" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="18.4.0.43" />
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.1.0.65" />
+    <PackageReference Include="Syncfusion.Blazor.Notifications" Version="19.1.0.65" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>

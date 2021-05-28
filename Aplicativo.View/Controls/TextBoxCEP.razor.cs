@@ -30,7 +30,6 @@ namespace Aplicativo.View.Controls
         [Parameter] public string _Text { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
-        [Parameter] public bool _AutoFocus { get; set; } = false;
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
 
         [Parameter] public EventCallback OnInput { get; set; }

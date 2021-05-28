@@ -58,22 +58,22 @@
     }
 </style>
 
-<button class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Cadastros</button>
+<div class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Cadastros</div>
 <div class="Menu-Accordion-Item">
     <Navigation Items="@Cadastros" />
 </div>
 
-<button class="Menu-Accordion"><MoneyIcon />&nbsp;&nbsp; Financeiro</button>
+<div class="Menu-Accordion"><MoneyIcon />&nbsp;&nbsp; Financeiro</div>
 <div class="Menu-Accordion-Item">
     <Navigation Items="@Financeiro" />
 </div>
 
-<button class="Menu-Accordion">Fiscal</button>
+<div class="Menu-Accordion"><MoneyIcon />&nbsp;&nbsp; Fiscal</div>
 <div class="Menu-Accordion-Item">
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <Navigation Items="@Fiscal" />
 </div>
 
-<button class="Menu-Accordion"><SettingsIcon />&nbsp;&nbsp; Configuracao</button>
+<div class="Menu-Accordion"><SettingsIcon />&nbsp;&nbsp; Configuracao</div>
 <div class="Menu-Accordion-Item">
     <Navigation Items="@Configuracoes" />
 </div>
@@ -156,6 +156,11 @@
             Path = "Financeiro/ContasReceber",
             Prefix = false
         },
+
+    };
+
+    private static List<NavigationItem> Fiscal = new List<NavigationItem>
+    {
 
     };
 

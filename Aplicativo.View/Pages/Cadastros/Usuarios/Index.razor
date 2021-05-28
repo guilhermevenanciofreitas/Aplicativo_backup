@@ -1,55 +1,55 @@
 ﻿@attribute [Page("Cadastros/Usuarios")]
 @attribute [LoginRequired(true)]
 
-@inherits IndexPage
+@inherits IndexPage;
 
-<ComponentLayout OnLoad="Component_Load">
-    <ListItemViewLayout @ref="ListItemViewLayout" Title="Usuários">
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="Usuario" Title="Usuários">
 
         <ViewPages>
-            <ViewUsuario @ref="View"></ViewUsuario>
+            <ViewUsuario @ref="View" ListView="ListView" />
         </ViewPages>
 
-        <BtnPesquisa>
-            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
-                <ListViewBtnFiltro>
-                    <ViewFiltro />
-                </ListViewBtnFiltro>
-            </ListViewBtnPesquisa>
-        </BtnPesquisa>
-
         <BtnNovo>
-            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
         </BtnNovo>
 
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
+        </BtnPesquisa>
+
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
         </BtnExcluir>
 
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-                @{
-                    var item = (Usuario)context;
-
-                    <ListItemText Primary="@item.Login">
-                        <SecondaryContent>
-                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                @item.Login
-                            </Typography>
-                            — I'll be in your neighborhood
-                        </SecondaryContent>
-                    </ListItemText>
-                }
-            </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
-                <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
-                <GridColumn Field="Login" HeaderText="Login" Width="300"></GridColumn>
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="Usuario" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (Usuario)context;
+
+                        <ListItemText Primary="@item.Login">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Login
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="Login" HeaderText="Login" Width="300" />
+                    <GridColumn Field="Login" HeaderText="Login" Width="300" />
+                    <GridColumn Field="Login" HeaderText="Login" Width="300" />
+                </Columns>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>

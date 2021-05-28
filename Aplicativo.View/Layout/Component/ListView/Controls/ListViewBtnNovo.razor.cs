@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace Aplicativo.View.Layout.Component.ListView.Controls
 {
-    public class ListViewBtnNovoComponent : ComponentBase
+    public class ListViewBtnNovoComponent<Type> : ComponentBase
     {
+
+        [Parameter] public ListItemViewLayout<Type> ListItemViewLayout { get; set; }
 
         [Parameter] public string Text { get; set; } = "Novo";
 

@@ -1,6 +1,6 @@
 ﻿@inherits DatePickerComponent
 
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
     <TextField Type="date"
                Value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-dd") : "")"
@@ -11,14 +11,13 @@
                Shrink="true"
                FullWidth="true" />
 }
-else
-{
 
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
     @if (_Label != null)
     {
         <label for="@Element.Id">@_Label</label>
     }
 
     <input type="date" id="@Element.Id" class="form-control" @ref="@Element" value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-dd") : "")" @onchange="Change" placeholder="@_PlaceHolder" readonly="@_ReadOnly" @onfocusin="DatePicker_Enter" @onfocusout="DatePicker_Leave" />
-
 }

@@ -1,92 +1,55 @@
 ﻿@inherits IndexPage
 
-<ComponentLayout OnLoad="Component_Load">
-    <ListItemViewLayout @ref="ListItemViewLayout" Title="@TitleList">
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="TituloDetalhe" Title="@TitleList">
 
         <ViewPages>
-            <AddTitulo @ref="Add"></AddTitulo>
-            <ViewTituloDetalhe @ref="View"></ViewTituloDetalhe>
+            <AddTitulo @ref="Add" ListView="ListView" />
+            <ViewTituloDetalhe @ref="View" ListView="ListView" />
         </ViewPages>
 
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
         <BtnPesquisa>
-            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
-                <ListViewBtnFiltro>
-                    <ViewFiltro />
-                </ListViewBtnFiltro>
-            </ListViewBtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
         </BtnPesquisa>
 
         <BtnNovo>
-            <ListViewBtnNovo OnClick="BtnNovo_Click" />
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnNovo_Click" />
         </BtnNovo>
 
-        @*<BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
-        </BtnExcluir>*@
-
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-                @{
-                    var item = (Usuario)context;
-
-                    <ListItemText Primary="@item.Login">
-                        <SecondaryContent>
-                            <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                @item.Login
-                            </Typography>
-                            — I'll be in your neighborhood
-                        </SecondaryContent>
-                    </ListItemText>
-                }
-            </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="40"></GridColumn>
-                <GridColumn Field="nParcela" HeaderText="Parcela" Width="30"></GridColumn>
-                <GridColumn Field="Pessoa.NomeFantasia" HeaderText="Nome fantasia" Width="100"></GridColumn>
-                <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="40" Format="dd/MM/yyyy"></GridColumn>
-                <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="40" Format="dd/MM/yyyy"></GridColumn>
-                <GridColumn Field="vLiquido" HeaderText="Valor" Width="40" Format="C2"></GridColumn>
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" CheckBoxVisible="false" Type="TituloDetalhe" OnDoubleClick="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (TituloDetalhe)context;
+
+                        <ListItemText Primary="@item.nDocumento">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Pessoa.NomeFantasia
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="40" />
+                    <GridColumn Field="nParcela" HeaderText="Parcela" Width="30" />
+                    <GridColumn Field="Pessoa.NomeFantasia" HeaderText="Nome fantasia" Width="100" />
+                    <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="40" Format="dd/MM/yyyy" />
+                    <GridColumn Field="ContaBancaria.Descricao" HeaderText="Conta bancária" Width="80" />
+                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="Forma de pagamento" Width="80" />
+                    <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="40" Format="dd/MM/yyyy" />
+                    <GridColumn Field="vLiquido" HeaderText="Valor" Width="40" Format="C2" TextAlign="TextAlign.Right" />
+                </Columns>
+            </ListViewGridView>
         </GridView>
+
     </ListItemViewLayout>
 </ComponentLayout>
-
-@*@inherits IndexPage<TituloDetalhe>
-
-    <ListItemViewLayout @ref="ListItemViewLayout"
-                        TValue="TituloDetalhe"
-                        OnPageLoad="ViewLayout_PageLoad"
-                        OnPesquisar="ViewLayout_Pesquisar"
-                        OnItemView="ViewLayout_ItemView"
-                        OnDelete="ViewLayout_Delete">
-        <View>
-            <AddTitulo @ref="Add" ListItemViewLayout="ListItemViewLayout"></AddTitulo>
-            <ViewTituloDetalhe @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewTituloDetalhe>
-        </View>
-        <ItemView>
-            @{
-                var item = (TituloDetalhe)context;
-
-                <ListItemText Primary="@item.Observacao">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.Observacao
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>
-        <GridView>
-            <GridColumn Field="nDocumento" HeaderText="Número Doc." Width="40"></GridColumn>
-            <GridColumn Field="nParcela" HeaderText="Parcela" Width="30"></GridColumn>
-            <GridColumn Field="Pessoa.NomeFantasia" HeaderText="Nome fantasia" Width="100"></GridColumn>
-            <GridColumn Field="DataEmissao" HeaderText="Emissão" Width="40" Format="dd/MM/yyyy"></GridColumn>
-            <GridColumn Field="DataVencimento" HeaderText="Vencimento" Width="40" Format="dd/MM/yyyy"></GridColumn>
-            <GridColumn Field="vLiquido" HeaderText="Valor" Width="40" Format="C2"></GridColumn>
-        </GridView>
-    </ListItemViewLayout>*@

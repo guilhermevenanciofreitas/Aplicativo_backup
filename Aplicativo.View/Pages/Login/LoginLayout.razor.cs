@@ -1,4 +1,3 @@
-using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Components;
 
 namespace Aplicativo.View.Pages.Login
@@ -7,6 +6,11 @@ namespace Aplicativo.View.Pages.Login
     {
 
         [Parameter] public RenderFragment ChildContent { get; set; }
+
+        protected void Page_Resize(object args)
+        {
+            StateHasChanged();
+        }
 
     }
 }

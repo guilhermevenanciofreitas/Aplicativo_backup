@@ -1,10 +1,16 @@
-﻿@inherits ListViewBtnNovoComponent;
+﻿@typeparam Type
+
+@inherits ListViewBtnNovoComponent<Type>;
 
 @if (Visible)
 {
     @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
     {
-
+        <Scale Class="fab-button" In=@(!ListItemViewLayout.ListViewGridView.ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))>
+            <Fab Color="@Color.Primary" OnClick="ButtonNovo_Click" Style="background-color: #5cb85c">
+                <AddIcon></AddIcon>
+            </Fab>
+        </Scale>
     }
 
     @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)

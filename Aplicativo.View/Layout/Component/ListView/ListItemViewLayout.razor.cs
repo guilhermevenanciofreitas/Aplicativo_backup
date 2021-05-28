@@ -1,6 +1,8 @@
 ﻿using Aplicativo.View.Layout.Component.ListView.Controls;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Aplicativo.View.Layout.Component.ListView
 {
@@ -19,10 +21,16 @@ namespace Aplicativo.View.Layout.Component.ListView
         [Parameter] public RenderFragment GridView { get; set; }
 
         public ViewFiltro ViewFiltro { get; set; }
-        public ListViewBtnNovo ListViewBtnNovo { get; set; }
+        public ListViewBtnNovo<Type> ListViewBtnNovo { get; set; }
         public ListViewBtnExcluir<Type> ListViewBtnExcluir { get; set; }
         public ListViewBtnPesquisa ListViewBtnPesquisa { get; set; }
         public ListViewGridView<Type> ListViewGridView { get; set; }
+
+        public List<Type> Items
+        {
+            get => ListViewGridView.ListItemView;
+            set => ListViewGridView.ListItemView = value;
+        }
 
         protected void Page_Resize(object args)
         {
@@ -33,7 +41,6 @@ namespace Aplicativo.View.Layout.Component.ListView
         {
             StateHasChanged();
         }
-
 
     }
 }

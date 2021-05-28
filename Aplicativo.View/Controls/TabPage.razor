@@ -1,10 +1,11 @@
 ﻿@inherits TabPageControl
 
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
     <Tab Label="@Title" OnClick="Active" Class="@(Visible ? "Tab-Selected" : "")" Style="@(Visible ? "color: #1976d2; border-bottom: 3px solid #1976d2;" : "")" />
 }
-else
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
     <li class="nav-item">
         <span class="nav-link@(Visible ? " active" : "")" style="cursor: pointer" @onclick="Active"><font size="4">@Title</font></span>

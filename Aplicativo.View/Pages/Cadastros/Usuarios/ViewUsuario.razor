@@ -1,20 +1,24 @@
 ﻿@inherits ViewUsuarioPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="ViewLayout_Load" Width="900px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="Page_Load" Width="900px">
+    
     <BtnLimpar>
-        <ViewPageBtnLimpar Visible="BtnLimpar" OnClick="ViewLayout_Limpar" />
+        <ViewPageBtnLimpar Visible="BtnLimpar" OnClick="BtnLimpar_Click" />
     </BtnLimpar>
+
     <BtnSalvar>
-        <ViewPageBtnSalvar OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
+
     <BtnExcluir>
-        <ViewPageBtnExcluir Visible="BtnExcluir" OnClick="ViewLayout_Excluir" />
+        <ViewPageBtnExcluir Visible="BtnExcluir" OnClick="BtnExcluir_Click" />
     </BtnExcluir>
+
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
                 <div class="row">
-                    <div class="col-md-1 col-sm-6">
+                    <div class="col-md-2 col-sm-6">
                         <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
                     </div>
                     <div class="col-md-5 col-sm-6">
@@ -40,63 +44,5 @@
             </TabPage>
         </TabSet>
     </View>
+
 </EditItemViewLayout>
-
-@*<EditItemViewLayout @ref="EditItemViewLayout"
-                    ListItemViewLayout="ListItemViewLayout"
-                    Title="Usuário"
-                    Width="1250px"
-                    OnPageLoad="ViewLayout_PageLoad"
-                    OnLimpar="ViewLayout_Limpar"
-                    OnCarregar="ViewLayout_Carregar"
-                    OnSalvar="ViewLayout_Salvar"
-                    OnExcluir="ViewLayout_Excluir">
-    <View>
-
-        <TabSet @ref="TabSet" Changed="StateHasChanged">
-            <TabPage Id="Principal" Title="Principal">
-                <Box Padding="3">
-
-                    <div class="row">
-                        <div class="col-md-1 col-sm-6">
-                            <div class="form-group">
-                                <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true"></TextBox>
-                            </div>
-                        </div>
-                        <div class="col-md-5 col-sm-6">
-                            <div class="form-group">
-                                <TextBox @ref="TxtLogin" _Label="Login" _AutoFocus="true"></TextBox>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha"></TextBox>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
-                                <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha"></TextBox>
-                            </div>
-                        </div>
-                    </div>
-
-                </Box>
-            </TabPage>
-            <TabPage Id="Email" Title="Email">
-                <Box Padding="3">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="form-group">
-                                <ViewUsuarioEmail @ref="ViewUsuarioEmail"></ViewUsuarioEmail>
-                            </div>
-                        </div>
-                    </div>
-                </Box>
-            </TabPage>
-        </TabSet>
-
-    </View>
-</EditItemViewLayout>*@

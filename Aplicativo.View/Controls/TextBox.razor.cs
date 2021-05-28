@@ -35,7 +35,6 @@ namespace Aplicativo.View.Controls
         [Parameter] public string _Mask { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
-        [Parameter] public bool _AutoFocus { get; set; } = false;
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
 
         [Parameter] public EventCallback OnInput { get; set; }
@@ -86,6 +85,16 @@ namespace Aplicativo.View.Controls
             }
         }
 
+        public string Mask
+        {
+            get => _Mask;
+            set 
+            {
+                _Mask = value;
+                App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
+            }
+        }
+
         public string PlaceHolder
         {
             get
@@ -112,10 +121,10 @@ namespace Aplicativo.View.Controls
             }
         }
 
-        public void SetMask(string Mask)
-        {
-            App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, Mask);
-        }
+        //public void SetMask(string Mask)
+        //{
+        //    App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, Mask);
+        //}
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -130,15 +139,18 @@ namespace Aplicativo.View.Controls
 
                     if (!string.IsNullOrEmpty(_Mask))
                     {
-                        if (HelpParametros.Template == Template.Mobile)
-                        {
-                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
-                        }
-                        else
-                        {
-                            await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
-                        }
-                        
+
+                        //if (HelpParametros.Template == Template.Mobile)
+                        //{
+                        //    await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", TextField.RootRef.Current.Value, _Mask);
+                        //}
+                        //else
+                        //{
+                        //    await App.JSRuntime.InvokeVoidAsync("ElementReference.Mask", Element, _Mask);
+                        //}
+
+                        Mask = _Mask;
+
                     }
 
                 }
@@ -152,7 +164,6 @@ namespace Aplicativo.View.Controls
         public void Focus()
         {
             Element.Focus();
-            //StateHasChanged();
         }
 
         protected async Task TextBox_Input(ChangeEventArgs args)

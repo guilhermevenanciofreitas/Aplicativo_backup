@@ -16,16 +16,20 @@ namespace Aplicativo.View.Controls
 
         protected bool Visible => ContainerTabSet.Tabs.FirstOrDefault(c => c.Id == Id)?.Visible == true ? true : false;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await base.OnInitializedAsync();
+            await base.OnAfterRenderAsync(firstRender);
 
-            ContainerTabSet.AddTab(new ITab()
+            if (firstRender)
             {
-                Id = Id,
-                Visible = false,
-                ChildContent = ChildContent,
-            });
+                ContainerTabSet.AddTab(new ITab()
+                {
+                    Id = Id,
+                    Visible = false,
+                    ChildContent = ChildContent,
+                });
+            }
+            
         }
 
         protected async Task Active()

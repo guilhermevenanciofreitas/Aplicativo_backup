@@ -3,85 +3,52 @@
 
 @inherits IndexPage
 
-<ComponentLayout OnLoad="Component_Load">
-    <ListItemViewLayout @ref="ListItemViewLayout" Title="Produtos">
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="Produto" Title="Produtos">
 
         <ViewPages>
-            <ViewProduto @ref="View"></ViewProduto>
+            <ViewProduto @ref="View" />
         </ViewPages>
 
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
         <BtnPesquisa>
-            <ListViewBtnPesquisa OnPesquisar="ViewLayout_Pesquisar">
-                <ListViewBtnFiltro>
-                    <ViewFiltro />
-                </ListViewBtnFiltro>
-            </ListViewBtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
         </BtnPesquisa>
 
         <BtnNovo>
-            <ListViewBtnNovo OnClick="ViewLayout_ItemView" />
+            <ListViewBtnNovo ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" Type="Produto" OnClick="BtnExcluir_Click" />
         </BtnExcluir>
 
-        <!--<View>-->
-        @*<ViewUsuario @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewUsuario>*@
-        <!--</View>-->
-        @*<ItemView>
-            @{
-                var item = (Usuario)context;
-
-                <ListItemText Primary="@item.Login">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.Login
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>*@
-
         <GridView>
-            <GridViewItem OnDoubleClick="ViewLayout_ItemView">
-                <GridColumn Field="Codigo" HeaderText="Código" Width="50"></GridColumn>
-                <GridColumn Field="Descricao" HeaderText="Descricao" Width="300"></GridColumn>
-            </GridViewItem>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="Produto" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (Produto)context;
+
+                        <ListItemText Primary="@item.Descricao">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Descricao
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="Codigo" HeaderText="Código" Width="50"></GridColumn>
+                    <GridColumn Field="Descricao" HeaderText="Descricao" Width="300"></GridColumn>
+                </Columns>
+            </ListViewGridView>
         </GridView>
     </ListItemViewLayout>
 </ComponentLayout>
-
-@*@page "/Cadastros/Produtos"
-
-    @inherits IndexPage<Produto>
-
-    <ListItemViewLayout @ref="ListItemViewLayout"
-                        TValue="Produto"
-                        OnPageLoad="ViewLayout_PageLoad"
-                        OnPesquisar="ViewLayout_Pesquisar"
-                        OnItemView="ViewLayout_ItemView"
-                        OnDelete="ViewLayout_Delete">
-        <View>
-            <ViewProduto @ref="View" ListItemViewLayout="ListItemViewLayout"></ViewProduto>
-        </View>
-        <ItemView>
-            @{
-                var item = (Produto)context;
-
-                <ListItemText Primary="@item.Descricao">
-                    <SecondaryContent>
-                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                            @item.Descricao
-                        </Typography>
-                        — I'll be in your neighborhood
-                    </SecondaryContent>
-                </ListItemText>
-            }
-        </ItemView>
-        <GridView>
-            <GridColumn Field="Codigo" HeaderText="Código" Width="50"></GridColumn>
-            <GridColumn Field="Descricao" HeaderText="Descricao" Width="300"></GridColumn>
-        </GridView>
-    </ListItemViewLayout>*@

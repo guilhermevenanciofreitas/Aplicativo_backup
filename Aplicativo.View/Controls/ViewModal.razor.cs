@@ -10,17 +10,17 @@ namespace Aplicativo.View.Controls
     public class ViewModalControl : ComponentBase
     {
 
+        protected bool Open { get; set; } = false;
+
         protected ElementReference DivModal { get; set; }
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        [Parameter] public bool FullScreen { get; set; } = true;
+        [Parameter] public string Top { get; set; } = "0px";
 
-        [Parameter] public int ZIndex { get; set; } = 8000;
+        [Parameter] public string Width { get; set; }
 
-        public bool Open { get; set; } = false;
-
-        private bool Confirmed { get; set; }
+        [Parameter] public string Title { get; set; }
 
         [Parameter] public bool Overlay { get; set; } = true;
 
@@ -28,98 +28,26 @@ namespace Aplicativo.View.Controls
 
         [Parameter] public EventCallback OnHide { get; set; }
 
-        [Parameter] public EventCallback OnConfirm { get; set; }
-
-        public void Show()
+        public async Task Show()
         {
-
-            ExecutingAsync = false;
-
-            Confirmed = false;
-            Open = true;
-            StateHasChanged();
-
-            OnLoad.InvokeAsync(null);
-
-        }
-
-        public void Hide()
-        {
-            Confirmed = false;
-            Open = false;
-            if (ExecutingAsync) FinishConfirmToken();
-
-            OnHide.InvokeAsync(null);
-
-        }
-
-        public void Confirm()
-        {
-            Confirmed = true;
-            Open = false;
-            FinishConfirmToken();
-
-            OnConfirm.InvokeAsync(null);
-
-        }
-
-        private void FinishConfirmToken()
-        {
-
-            if (FinishConfirm.Token.CanBeCanceled)
+            try
             {
-                FinishConfirm.Cancel();
+                Open = true;
+                await App.JSRuntime.InvokeVoidAsync("Modal.Show", DivModal);
+                await OnLoad.InvokeAsync(null);
             }
-
-            RaiseChange();
-
-            StateHasChanged();
-
-        }
-
-
-
-
-
-        [Parameter]
-        public EventCallback OnStateChanged { get; set; }
-
-        internal async virtual void RaiseChange()
-        {
-            await OnStateChanged.InvokeAsync(null);
-        }
-
-
-        private CancellationTokenSource FinishConfirm;
-
-        private string _stationName;
-
-        public string StationName
-        {
-            get => _stationName;
-            set
+            catch (Exception ex)
             {
-                _stationName = value;
-                RaiseChange();
+                await HelpErro.Show(new Error(ex));
             }
         }
 
-        public Worker Working() => new Worker(this);
-
-
-
-        private bool ExecutingAsync { get; set; } = false;
-
-        public async Task<bool> ShowAsync()
+        public async Task ShowAsync()
         {
             try
             {
 
-                ExecutingAsync = true;
-
-                Confirmed = false;
-
-                Open = true;
+                await Show();
 
                 using (FinishConfirm = new CancellationTokenSource())
                 {
@@ -127,34 +55,40 @@ namespace Aplicativo.View.Controls
                 }
 
             }
-            catch (TaskCanceledException) 
+            catch (Exception)
             {
-                
+                //await HelpErro.Show(new Error(ex));
             }
-
-            ExecutingAsync = false;
-
-            return Confirmed;
-
         }
 
-    }
-
-
-    public sealed class Worker : IDisposable
-    {
-        private ViewModalControl _parent;
-
-        public Worker(ViewModalControl parent)
+        public async Task Hide()
         {
-            _parent = parent;
-            _parent.RaiseChange();
+            try
+            {
+
+                Open = false;
+                await App.JSRuntime.InvokeVoidAsync("Modal.Hide", DivModal);
+                await OnHide.InvokeAsync(null);
+
+                FinishConfirmToken();
+
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(new Error(ex));
+            }
         }
 
-        public void Dispose()
+        private void FinishConfirmToken()
         {
-            _parent.RaiseChange();
+            if (FinishConfirm?.Token.CanBeCanceled ?? false)
+            {
+                FinishConfirm.Cancel();
+            }
         }
+
+        private CancellationTokenSource FinishConfirm;
+
     }
 
 }

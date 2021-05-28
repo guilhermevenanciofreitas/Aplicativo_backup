@@ -1,22 +1,23 @@
 ﻿@inherits TabSetControl
 
-@if (HelpParametros.Template == Template.Mobile)
+@if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
 {
-    <AppBar Position="@AppBarPosition.Static" Color="Color.Inherit">
-        <Tabs>
-            <CascadingValue Value=this>
-                @ChildContent
-            </CascadingValue>
-        </Tabs>
-    </AppBar>
-}
-else
-{
-    <CascadingValue Value=this>
-        <ul class="nav nav-tabs">
+<AppBar Position="@AppBarPosition.Static" Color="Color.Inherit">
+    <Tabs>
+        <CascadingValue Value=this>
             @ChildContent
-        </ul>
-    </CascadingValue>
+        </CascadingValue>
+    </Tabs>
+</AppBar>
+}
+
+@if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
+{
+<CascadingValue Value=this>
+    <ul class="nav nav-tabs">
+        @ChildContent
+    </ul>
+</CascadingValue>
 }
 
 @if (Tabs != null)

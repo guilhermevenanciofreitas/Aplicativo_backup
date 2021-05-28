@@ -2,7 +2,9 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout;
+using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -16,9 +18,12 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
     public partial class ViewTituluDetalhePage : ComponentBase
     {
 
+        public TituloDetalhe ViewModel = new TituloDetalhe();
+
         private decimal pJuros = 0;
         private decimal pMulta = 0;
 
+        [Parameter] public ListItemViewLayout<TituloDetalhe> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
@@ -29,6 +34,12 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public TextBox TxtNumeroDocumento { get; set; }
         public DatePicker DtpEmissao { get; set; }
         public DatePicker DtpVencimento { get; set; }
+
+        public ViewPesquisa ViewPesquisaPessoa { get; set; }
+        public ViewPesquisa ViewPesquisaPlanoConta { get; set; }
+        public ViewPesquisa ViewPesquisaCentroCusto { get; set; }
+        public ViewPesquisa ViewPesquisaContaBancaria { get; set; }
+        public ViewPesquisa ViewPesquisaFormaPagamento { get; set; }
 
 
         public NumericBox TxtTotal { get; set; }
@@ -55,11 +66,15 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             var Query = new HelpQuery<TituloDetalhe>();
 
+            Query.AddInclude("Pessoa");
+            Query.AddInclude("PlanoConta");
+            Query.AddInclude("CentroCusto");
             Query.AddInclude("ContaBancaria");
             Query.AddInclude("ContaBancaria.ContaBancariaFormaPagamento");
+            Query.AddInclude("FormaPagamento");
             Query.AddWhere("TituloDetalheID == @0", ((TituloDetalhe)args).TituloDetalheID);
 
-            var ViewModel = await Query.FirstOrDefault();
+            ViewModel = await Query.FirstOrDefault();
 
             var ContaBancariaFormaPagamento = ViewModel.ContaBancaria.ContaBancariaFormaPagamento.FirstOrDefault(c => c.ContaBancariaID == ViewModel.ContaBancariaID && c.FormaPagamentoID == ViewModel.FormaPagamentoID);
 
@@ -71,6 +86,20 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             DtpEmissao.Value = ViewModel.DataEmissao;
             DtpVencimento.Value = ViewModel.DataVencimento;
 
+            ViewPesquisaPessoa.Value = ViewModel.PessoaID.ToStringOrNull();
+            ViewPesquisaPessoa.Text = ViewModel.Pessoa?.NomeFantasia?.ToStringOrNull();
+
+            ViewPesquisaPlanoConta.Value = ViewModel.PlanoContaID.ToStringOrNull();
+            ViewPesquisaPlanoConta.Text = ViewModel.PlanoConta?.Descricao.ToStringOrNull();
+
+            ViewPesquisaCentroCusto.Value = ViewModel.CentroCustoID.ToStringOrNull();
+            ViewPesquisaCentroCusto.Text = ViewModel.CentroCusto?.Descricao.ToStringOrNull();
+
+            ViewPesquisaContaBancaria.Value = ViewModel.ContaBancariaID.ToStringOrNull();
+            ViewPesquisaContaBancaria.Text = ViewModel.ContaBancaria?.Descricao.ToStringOrNull();
+
+            ViewPesquisaFormaPagamento.Value = ViewModel.FormaPagamentoID.ToStringOrNull();
+            ViewPesquisaFormaPagamento.Text = ViewModel.FormaPagamento?.Descricao.ToStringOrNull();
 
 
             TxtTotal.Value = ViewModel.vTotal ?? 0;
@@ -110,13 +139,54 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task ViewLayout_Salvar()
         {
 
-            var ViewModel = new TituloDetalhe();
+            if (TxtNumeroDocumento.Text.ToStringOrNull() == null)
+            {
+                throw new EmptyException("Informe o número documento!", TxtNumeroDocumento.Element);
+            }
+
+            if (DtpEmissao.Value == null)
+            {
+                throw new EmptyException("Informe a data de emissão!", DtpEmissao.Element);
+            }
+
+            if (DtpVencimento.Value == null)
+            {
+                throw new EmptyException("Informe a data de vencimento!", DtpVencimento.Element);
+            }
+
+            if (ViewPesquisaPessoa.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe o fornecedor!", ViewPesquisaPessoa.Element);
+            }
+
+            if (ViewPesquisaPlanoConta.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe o plano de contas!", ViewPesquisaPlanoConta.Element);
+            }
+
+            if (ViewPesquisaContaBancaria.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe a conta bancária!", ViewPesquisaContaBancaria.Element);
+            }
+
+            if (ViewPesquisaFormaPagamento.Value.ToIntOrNull() == null)
+            {
+                throw new EmptyException("Informe a forma de pagamento!", ViewPesquisaFormaPagamento.Element);
+            }
+
 
             ViewModel.TituloDetalheID = TxtCodigo.Text.ToIntOrNull();
-
+            
             ViewModel.nDocumento = TxtNumeroDocumento.Text.ToStringOrNull();
             ViewModel.DataEmissao = DtpEmissao.Value;
             ViewModel.DataVencimento = DtpVencimento.Value;
+
+            ViewModel.PessoaID = ViewPesquisaPessoa.Value.ToIntOrNull();
+
+            ViewModel.PlanoContaID = ViewPesquisaPlanoConta.Value.ToIntOrNull();
+            ViewModel.CentroCustoID = ViewPesquisaCentroCusto.Value.ToIntOrNull();
+            ViewModel.ContaBancariaID = ViewPesquisaContaBancaria.Value.ToIntOrNull();
+            ViewModel.FormaPagamentoID = ViewPesquisaFormaPagamento.Value.ToIntOrNull();
 
             ViewModel.vTotal = TxtTotal.Value;
 

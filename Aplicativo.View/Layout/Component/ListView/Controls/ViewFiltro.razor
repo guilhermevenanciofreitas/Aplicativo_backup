@@ -7,7 +7,7 @@
 
 @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
-    <ViewModal @ref="ViewModal" FullScreen="false" Title="@Title" Width="500px">
+    <ViewModal @ref="ViewModal" Title="@Title" Width="500px" Top="100px">
 
         <DialogContent Style="padding: 16px; width: 460px">
             <div style="height: 360px;">
@@ -27,7 +27,7 @@
                 }
             </div>
         </DialogContent>
-        <DialogActions Style="marging: 0px; padding: 8px;">
+        <DialogActions>
             <Button Variant="@ButtonVariant.Contained" OnClick="ViewFiltro_Confirmar" Style="color: #fff; background-color: #5cb85c;">
                 <StartIcon>
                     <CheckIcon />

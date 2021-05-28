@@ -6,7 +6,11 @@
 {
     @if (HelpDisplay.Display.Width > 0 && HelpDisplay.Display.Width <= (int)LayoutSize.Small)
     {
-
+        <Scale Class="fab-button" In=@(ListItemViewLayout.ListViewGridView.ListItemView.Any(c => Convert.ToBoolean(c.GetType().GetProperty("Selected").GetValue(c)) == true))>
+            <Fab Style="color: #fff; background-color: #df4759;" OnClick="ButtonExcluir_Click">
+                <DeleteIcon></DeleteIcon>
+            </Fab>
+        </Scale>
     }
 
     @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
