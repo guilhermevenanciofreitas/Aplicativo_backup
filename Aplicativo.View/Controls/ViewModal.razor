@@ -24,7 +24,10 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">@Title</h5>
-                            <button type="button" class="btn-close" @onclick="Hide"></button>
+                            <div class="form-check-inline">
+                                @*<button type="button" class="btn-close" @onclick="Hide"></button>*@
+                                <button type="button" class="btn-close" @onclick="Hide"></button>
+                            </div>
                         </div>
                         <div class="modal-body">
                             @ChildContent

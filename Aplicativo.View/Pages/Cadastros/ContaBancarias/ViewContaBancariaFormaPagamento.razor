@@ -1,6 +1,6 @@
 ﻿@inherits ViewContaBancariaFormaPagamentoPage
 
-<ComponentLayout>
+<ComponentLayout OnLoad="Page_Load">
     <ListItemViewLayout @ref="ListView" Type="ContaBancariaFormaPagamento">
 
         <BtnNovo>
@@ -8,22 +8,26 @@
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ViewLayout_Excluir" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="E-mail" Width="650px" Top="100px">
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Forma de pagamento" Width="480px" Top="100px">
 
                 <BtnSalvar>
-                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
                 </BtnSalvar>
 
                 <BtnExcluir>
-                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="@(() => ViewLayout_Excluir(new List<object>() { ViewModel }))" />
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
                 </BtnExcluir>
 
                 <View>
-
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" />
+                        </div>
+                    </div>
                 </View>
             </EditItemViewLayout>
         </ViewPages>
@@ -45,7 +49,7 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="ContaBancariaID" Width="200" />
+                    <GridColumn Field="FormaPagamento.Descricao" HeaderText="Descrição" Width="340" />
                 </Columns>
             </ListViewGridView>
         </GridView>

@@ -35,10 +35,12 @@ namespace Aplicativo.View.Controls
         [Parameter] public string _Mask { get; set; }
         [Parameter] public string _PlaceHolder { get; set; }
         [Parameter] public bool _ReadOnly { get; set; }
+        [Parameter] public int? _TabIndex { get; set; }
         [Parameter] public CharacterCasing _CharacterCasing { get; set; } = CharacterCasing.UpperCase;
 
         [Parameter] public EventCallback OnInput { get; set; }
         [Parameter] public EventCallback OnKeyUp { get; set; }
+        [Parameter] public EventCallback OnLeave { get; set; }
 
         public string Label
         {
@@ -184,6 +186,18 @@ namespace Aplicativo.View.Controls
             try
             {
                 await OnKeyUp.InvokeAsync(args);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(new Error(ex));
+            }
+        }
+
+        protected async Task TextBox_Leave()
+        {
+            try
+            {
+                await OnLeave.InvokeAsync(null);
             }
             catch (Exception ex)
             {

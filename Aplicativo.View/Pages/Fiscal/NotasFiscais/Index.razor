@@ -1,0 +1,53 @@
+﻿@attribute [Page("Fiscal/NotasFiscais")]
+@attribute [LoginRequired(true)]
+
+@inherits IndexPage;
+
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="NotaFiscal" Title="Usuários">
+
+        <ViewPages>
+            <ViewNotaFiscal @ref="View" ListView="ListView" />
+        </ViewPages>
+
+        <BtnNovo>
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
+        </BtnNovo>
+
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
+        </BtnPesquisa>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+        </BtnExcluir>
+
+        <GridView>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscal" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (NotaFiscal)context;
+
+                        <ListItemText Primary="@item.CEP">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.CEP
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="CEP" HeaderText="Login" Width="300" />
+                </Columns>
+            </ListViewGridView>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

@@ -8,6 +8,6 @@
 @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
     <li class="nav-item">
-        <span class="nav-link@(Visible ? " active" : "")" style="cursor: pointer" @onclick="Active"><font size="4">@Title</font></span>
+        <span class="nav-link@(Visible ? " active" : "")" style="cursor: pointer" @onclick="Active" onselectstart='return false'><font size="4">@Title</font></span>
     </li>
 }

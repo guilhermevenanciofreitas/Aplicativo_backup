@@ -1,0 +1,71 @@
+﻿@inherits ViewPedidoVendaPage;
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Pedido de venda" OnLoad="Page_Load" Width="1250px">
+    
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
+    </BtnLimpar>
+
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+    </BtnSalvar>
+
+    <BtnExcluir>
+        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+    </BtnExcluir>
+
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+                    <div class="col-md-1 col-sm-6">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <ViewPesquisa @ref="ViewPesquisaCliente" Tipo="Pessoa" _Label="Cliente" _Title="Procurar cliente" OnChange="ViewPesquisaCliente_Change" />
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <TextBox @ref="TxtCNPJ" _Label="CNPJ" _ReadOnly="true" _TabIndex="-1" />
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <TextBox @ref="TxtTelefone" _Label="Telefone" _ReadOnly="true" _TabIndex="-1" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <ViewPesquisa @ref="ViewPesquisaVendedor" Tipo="Pessoa" _Label="Vendedor" _Title="Procurar vendedor" />
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <DatePicker @ref="DtpData" _Label="Data" />
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <DatePicker @ref="DtpExpedicao" _Label="Expedição" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewPedidoVendaItem @ref="ViewPedidoVendaItem" />
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Pagamento" Title="Pagamento">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewPedidoVendaPagamento @ref="ViewPedidoVendaPagamento" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Frete" Title="Frete">
+                <div class="row">
+                    <div class="col-md-5 col-sm-12">
+                        <ViewPesquisa @ref="ViewPesquisaTransportadora" Tipo="Pessoa" _Label="Transportadora" _Title="Procurar transportadora" />
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

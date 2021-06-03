@@ -13,6 +13,7 @@ namespace Aplicativo.View.Pages.Login.Entrar
     public partial class IndexPage : ComponentBase
     {
 
+        #region Elements
         public TextBox TxtName { get; set; }
 
         public DropDownList DplEmpresa { get; set; }
@@ -20,6 +21,7 @@ namespace Aplicativo.View.Pages.Login.Entrar
         public TextBox TxtSenha { get; set; }
 
         public CheckBox ChkManterConectado { get; set; }
+        #endregion
 
         protected async Task Page_Load()
         {
@@ -75,6 +77,7 @@ namespace Aplicativo.View.Pages.Login.Entrar
 
                 var QueryUsuario = new HelpQuery<Usuario>();
 
+                QueryUsuario.AddInclude("Funcionario");
                 QueryUsuario.AddWhere("Login == @0", TxtUsuario.Text);
                 QueryUsuario.AddWhere("Ativo == @0", true);
 

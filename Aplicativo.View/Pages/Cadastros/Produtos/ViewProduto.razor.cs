@@ -18,6 +18,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
     public partial class ViewProdutoPage : ComponentBase
     {
 
+        public int? ProdutoID { get; set; } = null;
+
         public Produto ViewModel = new Produto();
 
         [Parameter] public ListItemViewLayout<Produto> ListView { get; set; }
@@ -61,10 +63,14 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             var Query = new HelpQuery<Produto>();
 
             Query.AddInclude("ProdutoFornecedor");
+            Query.AddInclude("ProdutoFornecedor.Fornecedor");
             Query.AddWhere("ProdutoID == @0", ((Produto)args).ProdutoID);
 
             ViewModel = await Query.FirstOrDefault();
 
+            EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
+
+            ProdutoID = ViewModel.ProdutoID;
             TxtCodigo.Text = ViewModel.Codigo.ToStringOrNull();
             TxtDescricao.Text = ViewModel.Descricao.ToStringOrNull();
 
@@ -81,11 +87,13 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         protected async Task BtnLimpar_Click()
         {
 
-            ViewModel.ProdutoID = null;
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
+
+            ProdutoID = null;
 
             EditItemViewLayout.LimparCampos(this);
 
-            ViewProdutoFornecedor.ListView.Items = ViewProdutoFornecedor.ListView.Items.ToList();
+            ViewProdutoFornecedor.ListView.Items = new List<ProdutoFornecedor>();
 
             await TabSet.Active("Principal");
 
@@ -102,10 +110,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
                 throw new EmptyException("Informe a descrição!", TxtDescricao.Element);
             }
 
-
-            var ViewModel = new Produto();
-
             //Principal
+            ViewModel.ProdutoID = ProdutoID;
             ViewModel.Codigo = TxtCodigo.Text.ToStringOrNull();
             ViewModel.Descricao = TxtDescricao.Text.ToStringOrNull();
 
@@ -117,14 +123,21 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             //Fornecedores
             ViewModel.ProdutoFornecedor = ViewProdutoFornecedor.ListView.Items.ToList();
 
+            foreach(var item in ViewModel.ProdutoFornecedor)
+            {
+                item.Fornecedor = null;
+            }
+
             var Query = new HelpQuery<Produto>();
 
             ViewModel = await Query.Update(ViewModel);
 
+            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
+
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                TxtCodigo.Text = ViewModel.ProdutoID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {
@@ -145,9 +158,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         public async Task Excluir(List<int> args)
         {
 
-            var Query = new HelpQuery<Pessoa>();
+            var Query = new HelpQuery<Produto>();
 
-            Query.AddWhere("PessoaID IN (" + string.Join(",", args.ToArray()) + ")");
+            Query.AddWhere("ProdutoID IN (" + string.Join(",", args.ToArray()) + ")");
 
             var ViewModel = await Query.ToList();
 

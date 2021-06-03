@@ -70,7 +70,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         }
 
-        protected void ViewPageBtnSalvar_Click()
+        protected async Task ViewPageBtnSalvar_Click()
         {
 
             if (string.IsNullOrEmpty(TxtCEP.Text))
@@ -96,16 +96,16 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
                 ListView.Items.Add(ViewModel);
             }
 
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void ViewPageBtnExcluir_Click()
+        protected async Task ViewPageBtnExcluir_Click()
         {
 
             Excluir(new List<PessoaEndereco>() { ViewModel });
 
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 

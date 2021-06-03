@@ -26,6 +26,8 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         #region Elements
         public TextBox TxtCodigo { get; set; }
         public TextBox TxtLogin { get; set; }
+        public ViewPesquisa<Pessoa> ViewPesquisaFuncionario { get; set; }
+
         public TextBox TxtSenha { get; set; }
         public TextBox TxtConfirmarSenha { get; set; }
 
@@ -37,19 +39,29 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         protected async Task Page_Load(object args)
         {
 
+            ViewPesquisaFuncionario.AddWhere("IsFuncionario == @0", true);
+            ViewPesquisaFuncionario.AddWhere("Ativo == @0", true);
+
             await BtnLimpar_Click();
 
             if (args == null) return;
 
             var Query = new HelpQuery<Usuario>();
 
+            Query.AddInclude("Funcionario");
             Query.AddInclude("UsuarioEmail");
             Query.AddWhere("UsuarioID == @0", ((Usuario)args).UsuarioID);
             
             ViewModel = await Query.FirstOrDefault();
 
+            EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
+
             TxtCodigo.Text = ViewModel.UsuarioID.ToStringOrNull();
             TxtLogin.Text = ViewModel.Login.ToStringOrNull();
+
+            ViewPesquisaFuncionario.Value = ViewModel.FuncionarioID.ToStringOrNull();
+            ViewPesquisaFuncionario.Text = ViewModel.Funcionario?.NomeFantasia.ToStringOrNull();
+
             TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
             TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
 
@@ -60,7 +72,11 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         protected async Task BtnLimpar_Click()
         {
 
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
+
             EditItemViewLayout.LimparCampos(this);
+
+            ViewPesquisaFuncionario.Clear();
 
             ViewUsuarioEmail.ListView.Items = new List<UsuarioEmail>();
 
@@ -87,9 +103,18 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
             ViewModel.UsuarioID = TxtCodigo.Text.ToIntOrNull();
             ViewModel.Login = TxtLogin.Text.ToStringOrNull();
+
+            ViewModel.FuncionarioID = ViewPesquisaFuncionario.Value.ToIntOrNull();
+            ViewModel.Funcionario = null;
+
             ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
 
             ViewModel.UsuarioEmail = ViewUsuarioEmail.ListView.Items.ToList();
+
+            foreach(var item in ViewModel.UsuarioEmail)
+            {
+
+            }
 
 
             var Query = new HelpQuery<Usuario>();
@@ -99,7 +124,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                TxtCodigo.Text = ViewModel.UsuarioID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {

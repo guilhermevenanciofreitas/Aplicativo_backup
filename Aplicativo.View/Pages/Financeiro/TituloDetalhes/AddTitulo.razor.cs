@@ -19,6 +19,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
     public partial class AddTituloPage : ComponentBase
     {
 
+        [Parameter] public Tipo Tipo { get; set; }
         [Parameter] public ListItemViewLayout<TituloDetalhe> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
@@ -29,7 +30,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public TextBox TxtDocumento { get; set; }
         public DatePicker DtpEmissao { get; set; }
 
-        public ViewPesquisa ViewPesquisaPessoa { get; set; }
+        public ViewPesquisa<Pessoa> ViewPesquisaPessoa { get; set; }
 
         public NumericBox TxtValor { get; set; }
         public DatePicker DtpVencimento { get; set; }
@@ -37,10 +38,10 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public DropDownList DplPeriodo { get; set; }
         public NumericBox TxtPeriodo { get; set; }
 
-        public ViewPesquisa ViewPesquisaPlanoConta { get; set; }
-        public ViewPesquisa ViewPesquisaContaBancaria { get; set; }
-        public ViewPesquisa ViewPesquisaFormaPagamento { get; set; }
-        public ViewPesquisa ViewPesquisaCentroCusto { get; set; }
+        public ViewPesquisa<PlanoConta> ViewPesquisaPlanoConta { get; set; }
+        public ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria { get; set; }
+        public ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento { get; set; }
+        public ViewPesquisa<CentroCusto> ViewPesquisaCentroCusto { get; set; }
 
 
         public SfGrid<TituloDetalhe> GridViewTituloDetalhe { get; set; }
@@ -48,10 +49,22 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         #endregion
 
-        protected async Task ViewLayout_Load(object args)
+        protected async Task Page_Load(object args)
         {
 
-            await ViewLayout_Limpar();
+            switch (Tipo)
+            {
+                case Tipo.Pagar:
+                    ViewPesquisaPessoa.Label = "Recebedor";
+                    break;
+                case Tipo.Receber:
+                    ViewPesquisaPessoa.Label = "Pagador";
+                    break;
+            }
+
+            ViewPesquisaPessoa.Refresh();
+
+            await BtnLimpar_Click();
 
             DplPeriodo.Items.Clear();
             DplPeriodo.Add("30", "Mensalmente");
@@ -59,10 +72,14 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             DplPeriodo.Add("7", "Semanalmente");
             DplPeriodo.Add("0", "Personalizado");
 
+            StateHasChanged();
+
         }
 
-        protected async Task ViewLayout_Limpar()
+        protected async Task BtnLimpar_Click()
         {
+
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
 
             EditItemViewLayout.LimparCampos(this);
 
@@ -76,7 +93,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         }
 
-        protected async Task ViewLayout_Salvar()
+        protected async Task BtnSalvar_Click()
         {
 
             if (TxtDocumento.Text.ToStringOrNull() == null)
@@ -131,10 +148,19 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             {
 
                 item.PessoaID = ViewPesquisaPessoa.Value.ToIntOrNull();
+                item.Pessoa = null;
+
                 item.PlanoContaID = ViewPesquisaPlanoConta.Value.ToIntOrNull();
+                item.PlanoConta = null;
+
                 item.ContaBancariaID = ViewPesquisaContaBancaria.Value.ToIntOrNull();
+                item.ContaBancaria = null;
+
                 item.FormaPagamentoID = ViewPesquisaFormaPagamento.Value.ToIntOrNull();
+                item.FormaPagamento = null;
+
                 item.CentroCustoID = ViewPesquisaCentroCusto.Value.ToIntOrNull();
+                item.CentroCusto = null;
 
                 Titulo.TituloDetalhe.Add(item);
 
@@ -144,7 +170,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             await Query.Update(Titulo);
 
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 

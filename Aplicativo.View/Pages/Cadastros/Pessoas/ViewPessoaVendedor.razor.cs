@@ -6,6 +6,7 @@ using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,10 +20,18 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
         public ListItemViewLayout<PessoaVendedor> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
-        public TextBox TxtVendedor { get; set; }
-
+        
+        #region Elements
+        public ViewPesquisa<Pessoa> ViewPesquisaVendedor { get; set; }
+        #endregion
 
         #region ListView
+        protected void Page_Load(object args)
+        {
+            ViewPesquisaVendedor.AddWhere("IsFuncionario == @0", true);
+            ViewPesquisaVendedor.AddWhere("Ativo == @0", true);
+        }
+
         protected async Task ViewLayout_ItemView(object args)
         {
             await ViewLayout_Carregar(args);
@@ -37,6 +46,8 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             EditItemViewLayout.LimparCampos(this);
 
+            ViewPesquisaVendedor.Clear();
+
         }
 
         protected async Task ViewLayout_Carregar(object args)
@@ -50,44 +61,52 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             ViewModel = (PessoaVendedor)args;
 
-            TxtVendedor.Text = ViewModel.Vendedor.NomeFantasia.ToStringOrNull();
+            ViewPesquisaVendedor.Value = ViewModel.VendedorID.ToStringOrNull();
+            ViewPesquisaVendedor.Text = ViewModel.Vendedor?.NomeFantasia.ToStringOrNull();
 
         }
 
-        protected void BtnSalvar_Click()
+        protected async Task ViewPageBtnSalvar_Click()
         {
 
-            var ListItemView = ListView.Items;
-
-            ViewModel.VendedorID = null;
+            ViewModel.VendedorID = ViewPesquisaVendedor.Value.ToIntOrNull();
+            ViewModel.Vendedor = new Pessoa() { NomeFantasia = ViewPesquisaVendedor.Text };
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
-                ListItemView.Add(ViewModel);
+                ListView.Items.Add(ViewModel);
             }
 
-            ListView.Items = ListItemView;
-
-            EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        protected void BtnExcluir_Click(object args)
+
+        protected async Task ViewPageBtnExcluir_Click()
         {
 
-            var ListItemView = ListView.Items;
+            Excluir(new List<PessoaVendedor>() { ViewModel });
 
-            foreach (var item in ((IEnumerable)args).Cast<PessoaVendedor>().ToList())
+            await EditItemViewLayout.ViewModal.Hide();
+
+        }
+
+        protected void ListViewBtnExcluir_Click(object args)
+        {
+
+            Excluir(((IEnumerable)args).Cast<PessoaVendedor>().ToList());
+
+        }
+
+        public void Excluir(List<PessoaVendedor> args)
+        {
+            foreach (var item in args)
             {
-                ListItemView.Remove(item);
+                ListView.Items.Remove(item);
             }
-
-            ListView.Items = ListItemView;
-
-            EditItemViewLayout.ViewModal.Hide();
-
         }
 
         #endregion
+
     }
 }

@@ -71,9 +71,8 @@ namespace Aplicativo.View.Layout.Component.ViewPage
 
             var DropDownList = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(DropDownList)).ToList();
 
-            var ViewPesquisa = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(ViewPesquisa)).ToList();
-
             var TextBoxCEP = Page.GetType().GetProperties().Where(c => c.PropertyType == typeof(TextBoxCEP)).ToList();
+
 
             foreach (var item in TextBox)
             {
@@ -108,11 +107,6 @@ namespace Aplicativo.View.Layout.Component.ViewPage
             foreach (var item in DropDownList)
             {
                 ((DropDownList)item.GetValue(Page)).SelectedValue = null;
-            }
-
-            foreach (var item in ViewPesquisa)
-            {
-                ((ViewPesquisa)item.GetValue(Page)).Clear();
             }
 
             foreach (var item in TextBoxCEP)

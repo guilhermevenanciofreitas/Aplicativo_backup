@@ -1,0 +1,48 @@
+﻿@inherits ViewNotaFiscalPage;
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Nota fiscal" OnLoad="Page_Load" Width="900px">
+    
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
+    </BtnLimpar>
+
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+    </BtnSalvar>
+
+    <BtnExcluir>
+        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+    </BtnExcluir>
+
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+                    <div class="col-md-2 col-sm-6">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-5 col-sm-6">
+                        <TextBox @ref="TxtLogin" _Label="Login" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" />
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Email" Title="Email">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        @*<ViewUsuarioEmail @ref="ViewUsuarioEmail" />*@
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

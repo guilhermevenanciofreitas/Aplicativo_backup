@@ -23,6 +23,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         private decimal pJuros = 0;
         private decimal pMulta = 0;
 
+        [Parameter] public Tipo Tipo { get; set; }
         [Parameter] public ListItemViewLayout<TituloDetalhe> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
@@ -35,11 +36,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public DatePicker DtpEmissao { get; set; }
         public DatePicker DtpVencimento { get; set; }
 
-        public ViewPesquisa ViewPesquisaPessoa { get; set; }
-        public ViewPesquisa ViewPesquisaPlanoConta { get; set; }
-        public ViewPesquisa ViewPesquisaCentroCusto { get; set; }
-        public ViewPesquisa ViewPesquisaContaBancaria { get; set; }
-        public ViewPesquisa ViewPesquisaFormaPagamento { get; set; }
+        public ViewPesquisa<Pessoa> ViewPesquisaPessoa { get; set; }
+        public ViewPesquisa<PlanoConta> ViewPesquisaPlanoConta { get; set; }
+        public ViewPesquisa<CentroCusto> ViewPesquisaCentroCusto { get; set; }
+        public ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria { get; set; }
+        public ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento { get; set; }
 
 
         public NumericBox TxtTotal { get; set; }
@@ -75,6 +76,8 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             Query.AddWhere("TituloDetalheID == @0", ((TituloDetalhe)args).TituloDetalheID);
 
             ViewModel = await Query.FirstOrDefault();
+
+            EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
 
             var ContaBancariaFormaPagamento = ViewModel.ContaBancaria.ContaBancariaFormaPagamento.FirstOrDefault(c => c.ContaBancariaID == ViewModel.ContaBancariaID && c.FormaPagamentoID == ViewModel.FormaPagamentoID);
 
@@ -125,6 +128,8 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         protected async Task BtnLimpar_Click()
         {
+
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
 
             EditItemViewLayout.LimparCampos(this);
 
@@ -182,11 +187,19 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             ViewModel.DataVencimento = DtpVencimento.Value;
 
             ViewModel.PessoaID = ViewPesquisaPessoa.Value.ToIntOrNull();
+            ViewModel.Pessoa = null;
 
             ViewModel.PlanoContaID = ViewPesquisaPlanoConta.Value.ToIntOrNull();
+            ViewModel.PlanoConta = null;
+
             ViewModel.CentroCustoID = ViewPesquisaCentroCusto.Value.ToIntOrNull();
+            ViewModel.CentroCusto = null;
+
             ViewModel.ContaBancariaID = ViewPesquisaContaBancaria.Value.ToIntOrNull();
+            ViewModel.ContaBancaria = null;
+
             ViewModel.FormaPagamentoID = ViewPesquisaFormaPagamento.Value.ToIntOrNull();
+            ViewModel.FormaPagamento = null;
 
             ViewModel.vTotal = TxtTotal.Value;
 
@@ -210,11 +223,12 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             ViewModel = await Query.Update(ViewModel);
 
+            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                TxtCodigo.Text = ViewModel.TituloDetalheID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {

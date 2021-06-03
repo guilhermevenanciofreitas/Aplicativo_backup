@@ -6,6 +6,7 @@ using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,6 +79,9 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             var Query = new HelpQuery<Pessoa>();
 
+            Query.AddInclude("Vendedores");
+            Query.AddInclude("Vendedores.Vendedor");
+
             Query.AddInclude("PessoaEndereco");
             Query.AddInclude("PessoaEndereco.Endereco");
 
@@ -89,9 +93,11 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             ViewModel = await Query.FirstOrDefault();
 
+            EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
 
             TxtCodigo.Text = ViewModel.PessoaID.ToStringOrNull();
             DplTipo.SelectedValue = ((int?)ViewModel.TipoPessoaID).ToStringOrNull();
+            TxtCNPJ.Text = ViewModel.CNPJ_Formatado.ToStringOrNull();
             TxtRazaoSocial.Text = ViewModel.RazaoSocial.ToStringOrNull();
             TxtNomeFantasia.Text = ViewModel.NomeFantasia.ToStringOrNull();
             ChkCliente.Checked = ViewModel.IsCliente.ToBoolean();
@@ -106,7 +112,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             DtpAbertura.Value = ViewModel.Abertura;
 
 
-            ViewPessoaVendedor.ListView.Items = ViewModel.Vendedor.ToList();
+            ViewPessoaVendedor.ListView.Items = ViewModel.Vendedores.ToList();
             ViewPessoaEndereco.ListView.Items = ViewModel.PessoaEndereco.ToList();
             ViewPessoaContato.ListView.Items = ViewModel.PessoaContato.ToList();
 
@@ -114,6 +120,8 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
         protected async Task BtnLimpar_Click()
         {
+
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
 
             EditItemViewLayout.LimparCampos(this);
 
@@ -132,6 +140,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
                     break;
                 case Tipo.Funcionario:
                     ChkFuncionario.Checked = true;
+                    DplTipo.SelectedValue = ((int)TipoPessoa.Fisica).ToString();
                     break;
             }
 
@@ -184,6 +193,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             ViewModel.PessoaID = TxtCodigo.Text.ToIntOrNull();
             ViewModel.TipoPessoaID = (TipoPessoa?)DplTipo.SelectedValue.ToIntOrNull();
+            ViewModel.CNPJ = TxtCNPJ.Text?.Replace("-", "")?.Replace(".","")?.Replace("/", "")?.ToStringOrNull();
             ViewModel.RazaoSocial = TxtRazaoSocial.Text.ToStringOrNull();
             ViewModel.NomeFantasia = TxtNomeFantasia.Text.ToStringOrNull();
             ViewModel.IsCliente = ChkCliente.Checked;
@@ -196,19 +206,35 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
             ViewModel.Sexo = (Sexo?)DplSexo.SelectedValue.ToIntOrNull();
             ViewModel.Abertura = DtpAbertura.Value;
 
-            ViewModel.Vendedor = ViewPessoaVendedor.ListView.Items.ToList();
+            ViewModel.Vendedores = ViewPessoaVendedor.ListView.Items.ToList();
             ViewModel.PessoaEndereco = ViewPessoaEndereco.ListView.Items.ToList();
             ViewModel.PessoaContato = ViewPessoaContato.ListView.Items.ToList();
 
+            foreach(var item in ViewModel.Vendedores)
+            {
+                item.Vendedor = null;
+            }
+
+            foreach(var item in ViewModel.PessoaEndereco)
+            {
+
+            }
+
+            foreach(var item in ViewModel.PessoaContato)
+            {
+
+            }
 
             var Query = new HelpQuery<Pessoa>();
 
             ViewModel = await Query.Update(ViewModel);
 
+            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
+
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                TxtCodigo.Text = ViewModel.PessoaID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {

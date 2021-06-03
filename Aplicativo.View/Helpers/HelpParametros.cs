@@ -79,7 +79,7 @@ namespace Aplicativo.View.Helpers
                     var EmpresaID = Dados[1].ToInt();
 
                     var QueryUsuario = new HelpQuery<Usuario>();
-                    QueryUsuario.AddInclude("Pessoa");
+                    QueryUsuario.AddInclude("Funcionario");
                     QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
 
                     var Usuario = await QueryUsuario.FirstOrDefault();

@@ -1,11 +1,11 @@
 ﻿@inherits AddTituloPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Título" OnLoad="ViewLayout_Load" Width="870px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Título" OnLoad="Page_Load" Width="870px">
     <BtnLimpar>
-        <ViewPageBtnLimpar OnClick="ViewLayout_Limpar" />
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
     </BtnLimpar>
     <BtnSalvar>
-        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewLayout_Salvar" />
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
@@ -16,7 +16,7 @@
                         <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaPessoa" _Label="Fornecedor" />
+                        <ViewPesquisa @ref="ViewPesquisaPessoa" Tipo="Pessoa" _Label="Fornecedor" />
                     </div>
                     <div class="col-md-3">
                         <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change" />
@@ -25,19 +25,19 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaPlanoConta" _Label="Plano de conta" />
+                        <ViewPesquisa @ref="ViewPesquisaPlanoConta" Tipo="PlanoConta" _Label="Plano de conta" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaCentroCusto" _Label="Centro de custo" />
+                        <ViewPesquisa @ref="ViewPesquisaCentroCusto" Tipo="CentroCusto" _Label="Centro de custo" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaContaBancaria" _Label="Conta Bancária" />
+                        <ViewPesquisa @ref="ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta Bancária" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaFormaPagamento" _Label="Forma de pagamento" />
+                        <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" />
                     </div>
                 </div>
 

@@ -28,7 +28,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
         #region Elements
         public TextBox TxtCodigo { get; set; }
-        public TextBox TxtFornecedor { get; set; }
+        public ViewPesquisa<Pessoa> ViewPesquisaFornecedor { get; set; }
         public DropDownList DplUnidadeMedida { get; set; }
         public NumericBox TxtContem { get; set; }
         public NumericBox TxtPreco { get; set; }
@@ -36,6 +36,12 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         #endregion
 
         #region ListView
+        protected void Page_Load()
+        {
+            ViewPesquisaFornecedor.AddWhere("IsFornecedor == @0", true);
+            ViewPesquisaFornecedor.AddWhere("Ativo == @0", true);
+        }
+
         protected async Task ViewLayout_ItemView(object args)
         {
             await ViewLayout_Carregar(args);
@@ -66,7 +72,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ViewModel = (ProdutoFornecedor)args;
 
             TxtCodigo.Text = ViewModel.CodigoFornecedor.ToStringOrNull();
-            TxtFornecedor.Text = ViewModel.Fornecedor?.NomeFantasia.ToStringOrNull();
+            ViewPesquisaFornecedor.Value = ViewModel.FornecedorID.ToStringOrNull();
+            ViewPesquisaFornecedor.Text = ViewModel.Fornecedor?.NomeFantasia.ToStringOrNull();
             TxtContem.Value = ViewModel.Contem ?? 0;
             TxtPreco.Value = ViewModel.Preco ?? 0;
 
@@ -78,6 +85,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         {
 
             ViewModel.CodigoFornecedor = TxtCodigo.Text.ToStringOrNull();
+            ViewModel.FornecedorID = ViewPesquisaFornecedor.Value.ToIntOrNull();
+            ViewModel.Fornecedor = new Pessoa() { NomeFantasia = ViewPesquisaFornecedor.Text };
             ViewModel.UnidadeMedidaID = DplUnidadeMedida.SelectedValue.ToIntOrNull();
             ViewModel.Contem = TxtContem.Value;
             ViewModel.Preco = TxtPreco.Value;
@@ -113,6 +122,21 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             {
                 ListView.Items.Remove(item);
             }
+        }
+
+        protected void TxtContem_KeyUp()
+        {
+            Calcular();
+        }
+
+        protected void TxtPreco_KeyUp()
+        {
+            Calcular();
+        }
+
+        private void Calcular()
+        {
+            TxtTotal.Value = TxtContem.Value * TxtPreco.Value;
         }
 
         #endregion

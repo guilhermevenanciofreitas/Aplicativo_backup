@@ -187,9 +187,9 @@ namespace Aplicativo.Utils.Helpers
 
         }
 
-        public static string FormataString(this object valor, string mascara)
+        public static string StringFormat(this object valor, string mascara)
         {
-            return FormataString(valor.ToString(), mascara);
+            return StringFormat(valor.ToString(), mascara);
         }
 
         public static string StringFormat(this string valor, string mascara)

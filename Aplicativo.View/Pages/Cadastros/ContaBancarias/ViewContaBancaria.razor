@@ -1,6 +1,6 @@
 ﻿@inherits ViewContaBancariaPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="Page_Load" Width="1250px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Usuário" OnLoad="Page_Load" Width="620px">
     <BtnLimpar>
         <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
     </BtnLimpar>
@@ -8,7 +8,7 @@
         <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
     <BtnExcluir>
-        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewLayout_Excluir" />
+        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
     </BtnExcluir>
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
@@ -20,13 +20,13 @@
                     </div>
 
                     <div class="col-md-10 col-sm-12">
-                        <TextBox @ref="TxtDescricao" _Label="Descrição" _AutoFocus="true" />
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" />
                     </div>
 
                 </div>
             </TabPage>
             <TabPage Id="FormasPagamento" Title="Formas de pagamento">
-                <ViewContaBancariaFormaPagamento @ref="ViewContaBancariaFormaPagamento"></ViewContaBancariaFormaPagamento>
+                <ViewContaBancariaFormaPagamento @ref="ViewContaBancariaFormaPagamento" />
             </TabPage>
         </TabSet>
     </View>

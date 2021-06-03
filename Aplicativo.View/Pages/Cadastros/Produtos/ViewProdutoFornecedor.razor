@@ -1,6 +1,6 @@
 ﻿@inherits ViewProdutoFornecedorPage
 
-<ComponentLayout>
+<ComponentLayout OnLoad="Page_Load">
     <ListItemViewLayout @ref="ListView" Type="ProdutoFornecedor">
 
         <BtnNovo>
@@ -28,7 +28,7 @@
                             <TextBox @ref="TxtCodigo" _Label="Cód. Fornec." />
                         </div>
                         <div class="col-md-9 col-sm-12">
-                            <TextBox @ref="TxtFornecedor" _Label="Fornecedor" />
+                            <ViewPesquisa @ref="ViewPesquisaFornecedor" Tipo="Pessoa" _Label="Fornecedor" _Title="Procurar fornecedor" />
                         </div>
                     </div>
 
@@ -37,10 +37,10 @@
                             <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida" />
                         </div>
                         <div class="col-md-2 col-sm-12">
-                            <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3" />
+                            <NumericBox @ref="TxtContem" _Label="Contém" _Digits="3" OnKeyUp="TxtContem_KeyUp" />
                         </div>
                         <div class="col-md-3 col-sm-12">
-                            <NumericBox @ref="TxtPreco" _Label="Preço Un." />
+                            <NumericBox @ref="TxtPreco" _Label="Preço Un." OnKeyUp="TxtPreco_KeyUp" />
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true" />

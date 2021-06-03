@@ -119,6 +119,12 @@ namespace Aplicativo.Server
 
         //public DbSet<PagamentoDetalhe> PagamentoDetalhe { get; set; }
 
+        public DbSet<PedidoVenda> PedidoVenda { get; set; }
+
+        public DbSet<PedidoVendaItem> PedidoVendaItem { get; set; }
+
+        public DbSet<PedidoVendaPagamento> PedidoVendaPagamento { get; set; }
+
         public DbSet<Pessoa> Pessoa { get; set; }
 
         public DbSet<PessoaArquivo> PessoaArquivo { get; set; }
@@ -198,7 +204,7 @@ namespace Aplicativo.Server
 
             modelBuilder.Entity<PessoaVendedor>()
                 .HasOne(x => x.Pessoa)
-                .WithMany(e => e.Vendedor)
+                .WithMany(e => e.Vendedores)
                 .HasForeignKey(x => x.PessoaID);
 
             modelBuilder.Entity<PessoaVendedor>()

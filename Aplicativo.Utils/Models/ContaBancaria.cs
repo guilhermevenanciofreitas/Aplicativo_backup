@@ -54,6 +54,5 @@ namespace Aplicativo.Utils.Models
 
         public virtual ICollection<ContaBancariaFormaPagamento> ContaBancariaFormaPagamento { get; set; }
 
-
     }
 }

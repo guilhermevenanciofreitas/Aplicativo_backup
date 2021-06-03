@@ -1,6 +1,6 @@
 ﻿@inherits ViewPessoaVendedorPage
 
-<ComponentLayout>
+<ComponentLayout OnLoad="Page_Load">
     <ListItemViewLayout @ref="ListView" Type="PessoaVendedor">
 
         <BtnNovo>
@@ -8,24 +8,24 @@
         </BtnNovo>
 
         <BtnExcluir>
-            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="Vendedor" Width="650px" Top="100px">
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Vendedor" Width="480px" Top="100px">
 
                 <BtnSalvar>
-                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
                 </BtnSalvar>
 
                 <BtnExcluir>
-                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="@(() => BtnExcluir_Click(new List<object>() { ViewModel }))" />
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
                 </BtnExcluir>
 
                 <View>
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtVendedor" _Label="Vendedor"></TextBox>
+                            <ViewPesquisa @ref="ViewPesquisaVendedor" Tipo="Pessoa" _Label="Vendedor" _Title="Procurar vendedor" />
                         </div>
                     </div>
                 </View>

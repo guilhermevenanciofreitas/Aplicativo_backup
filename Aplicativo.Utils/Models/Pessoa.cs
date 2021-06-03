@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aplicativo.Utils.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,7 +27,7 @@ namespace Aplicativo.Utils.Models
         public Pessoa()
         {
 
-            Vendedor = new HashSet<PessoaVendedor>();
+            Vendedores = new HashSet<PessoaVendedor>();
             Clientes = new HashSet<PessoaVendedor>();
 
             Usuario = new HashSet<Usuario>();
@@ -42,8 +43,10 @@ namespace Aplicativo.Utils.Models
 
         public TipoPessoa? TipoPessoaID { get; set; }
 
-        [StringLength(14, ErrorMessage = "CPF/CNPJ - tamanho máximo 14 caracteres")]
         public string CNPJ { get; set; }
+
+        [NotMapped]
+        public string CNPJ_Formatado => TipoPessoaID == TipoPessoa.Fisica ? CNPJ?.StringFormat("###.###.###-##") : CNPJ?.StringFormat("##.###.###/####-##");
 
         [StringLength(100)]
         public string NomeFantasia { get; set; }
@@ -88,7 +91,7 @@ namespace Aplicativo.Utils.Models
         public bool? Ativo { get; set; } = true;
 
 
-        public virtual ICollection<PessoaVendedor> Vendedor { get; set; }
+        public virtual ICollection<PessoaVendedor> Vendedores { get; set; }
 
         public virtual ICollection<PessoaVendedor> Clientes { get; set; }
 

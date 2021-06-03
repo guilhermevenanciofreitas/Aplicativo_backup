@@ -20,8 +20,8 @@ namespace Aplicativo.Utils.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? UsuarioID { get; set; }
 
-        [ForeignKey("Pessoa")]
-        public int? PessoaID { get; set; }
+        [ForeignKey("Funcionario")]
+        public int? FuncionarioID { get; set; }
 
         [StringLength(30)]
         public string Login { get; set; }
@@ -31,7 +31,7 @@ namespace Aplicativo.Utils.Models
 
         public bool Ativo { get; set; } = true;
 
-        public virtual Pessoa Pessoa { get; set; }
+        public virtual Pessoa Funcionario { get; set; }
 
         public ICollection<UsuarioEmail> UsuarioEmail { get; set; }
 

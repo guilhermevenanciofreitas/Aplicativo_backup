@@ -1,5 +1,4 @@
 @inherits MenuLayout;
-
 @*<Navigation Items="@Items" />*@
 
 <style>
@@ -7,6 +6,7 @@
         padding: 0px !important;
         background-color: #1D2B36;
     }
+
     .ListItemText-Root {
         flex: 1 1 auto;
         min-width: 0;
@@ -29,13 +29,13 @@
         transition: 0.4s;
     }
 
-    .Menu-Accordion:after {
-        content: '\002B';
-        color: #777;
-        font-weight: bold;
-        float: right;
-        margin-left: 5px;
-    }
+        .Menu-Accordion:after {
+            content: '\002B';
+            color: #777;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
 
         .Menu-Accordion.active:after {
             content: "\2212";
@@ -63,6 +63,11 @@
     <Navigation Items="@Cadastros" />
 </div>
 
+<div class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Comercial</div>
+<div class="Menu-Accordion-Item">
+    <Navigation Items="@Comercial" />
+</div>
+
 <div class="Menu-Accordion"><MoneyIcon />&nbsp;&nbsp; Financeiro</div>
 <div class="Menu-Accordion-Item">
     <Navigation Items="@Financeiro" />
@@ -79,9 +84,10 @@
 </div>
 
 @code
-{
+{ 
+
     private static List<NavigationItem> Cadastros = new List<NavigationItem>
-    {
+        {
         new NavigationItem
         {
             Title = "Clientes",
@@ -140,6 +146,18 @@
 
     };
 
+    private static List<NavigationItem> Comercial = new List<NavigationItem>
+        {
+
+        new NavigationItem
+        {
+            Title = "Vendas",
+            Path = "Comercial/Vendas",
+            Prefix = false
+        },
+
+    };
+
     private static List<NavigationItem> Financeiro = new List<NavigationItem>
     {
 
@@ -162,6 +180,20 @@
     private static List<NavigationItem> Fiscal = new List<NavigationItem>
     {
 
+        new NavigationItem
+        {
+            Title = "Notas fiscais",
+            Path = "Fiscal/NotasFiscais",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Conhec. Transp.",
+            Path = "Fiscal/ConhecimentosTransportes",
+            Prefix = false
+        },
+
     };
 
     private static List<NavigationItem> Configuracoes = new List<NavigationItem>
@@ -174,6 +206,6 @@
             Prefix = false
         },
 
-    };
-
+    }; 
+    
 }

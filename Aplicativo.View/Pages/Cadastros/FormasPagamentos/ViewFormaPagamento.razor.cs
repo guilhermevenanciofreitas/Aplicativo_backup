@@ -7,6 +7,7 @@ using Aplicativo.View.Layout;
 using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -42,6 +43,8 @@ namespace Aplicativo.View.Pages.Cadastros.FormasPagamentos
 
             var ViewModel = await Query.FirstOrDefault();
 
+            EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
+
             TxtCodigo.Text = ViewModel.FormaPagamentoID.ToStringOrNull();
             TxtDescricao.Text = ViewModel.Descricao.ToStringOrNull();
 
@@ -49,6 +52,8 @@ namespace Aplicativo.View.Pages.Cadastros.FormasPagamentos
 
         protected async Task BtnLimpar_Click()
         {
+
+            EditItemViewLayout.ItemViewMode = ItemViewMode.New;
 
             EditItemViewLayout.LimparCampos(this);
 
@@ -76,11 +81,12 @@ namespace Aplicativo.View.Pages.Cadastros.FormasPagamentos
 
             ViewModel = await Query.Update(ViewModel);
 
+            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                TxtCodigo.Text = ViewModel.FormaPagamentoID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {

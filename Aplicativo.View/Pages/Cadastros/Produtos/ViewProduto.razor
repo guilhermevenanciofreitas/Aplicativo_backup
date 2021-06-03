@@ -1,21 +1,25 @@
 ﻿@inherits ViewProdutoPage
 
 <EditItemViewLayout @ref="EditItemViewLayout" Title="Produto" OnLoad="Page_Load" Width="1250px">
+
     <BtnLimpar>
         <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
     </BtnLimpar>
+    
     <BtnSalvar>
         <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
+    
     <BtnExcluir>
         <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
     </BtnExcluir>
+    
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
                 <div class="row">
-                    <div class="col-md-1 col-sm-6">
-                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    <div class="col-md-2 col-sm-6">
+                        <TextBox @ref="TxtCodigo" _Label="Código" />
                     </div>
                     <div class="col-md-5 col-sm-6">
                         <TextBox @ref="TxtDescricao" _Label="Descrição" />

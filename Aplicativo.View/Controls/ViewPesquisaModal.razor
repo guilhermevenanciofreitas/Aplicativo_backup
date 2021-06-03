@@ -1,0 +1,47 @@
+﻿@typeparam Tipo;
+
+@inherits ViewPesquisaModalControl<Tipo>;
+
+@*<ViewModal @ref="ViewModal" Overlay="true" Width="600px">*@
+    <div class="row" style="margin-top: 0px !important; margin-bottom: 12px;">
+        <div class="col-md-2">
+            <center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR4shDI-JeP0Rev1JDKdsi1bBpwQ9hfJbf9TE-AeCKtHEzfIgT8&usqp=CAU" width="70" /></center>
+        </div>
+        <div class="col-md-4">
+            <DropDownList @ref="DplCampo" _Label="Campo" OnChange="DplCampo_Change" />
+            @*<label>Campo</label>*@
+            @*<select @ref="DplCampo.Element" @bind="DplCampo.Value" class="form-control select2" style="width: 100%;">
+                @foreach (var item in Columns)
+                {
+                    <option value="@item.Field" selected>@item.HeaderText</option>
+                }
+            </select>*@
+        </div>
+        <div class="col-md-6">
+            <TextBox @ref="TxtPesquisa" _Label="Pesquisar" OnInput="TxtPesquisa_Input" />
+            @*<label>Pesquisar</label>*@
+            @*<input type="text" @ref="TxtPesquisa.Element" @bind="TxtPesquisa.Text" class="form-control" autofocus />*@
+        </div>
+    </div>
+
+    <SfGrid @ref="GridView" DataSource="ListView" AllowFiltering="true" AllowReordering="true" AllowResizing="true" AllowSorting="true" AllowPaging="true" Width="100%" Height="580px">
+        <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
+        <GridPageSettings PageSize="12"></GridPageSettings>
+        <GridEvents OnRecordClick="GridView_RowClick" TValue="Tipo"></GridEvents>
+        <GridColumns>
+            @foreach (var item in Columns)
+            {
+                if (item.FieldFormat == null)
+                {
+                    <GridColumn Field="@item.Field" HeaderText="@item.HeaderText" AutoFit="true" />
+                }
+                else
+                {
+                    <GridColumn Field="@item.FieldFormat" HeaderText="@item.HeaderText" AutoFit="true" />
+                }
+
+            }
+        </GridColumns>
+    </SfGrid>
+
+@*</ViewModal>*@ 

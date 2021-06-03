@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Sistema.Server.Controllers
 {
@@ -67,14 +69,10 @@ namespace Sistema.Server.Controllers
 
                     var Obj = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Item), Type);
 
-                    var Virtuals = Obj.GetType().GetProperties().Where(c => c.GetGetMethod().IsVirtual && (!c.PropertyType.IsGenericType && c.PropertyType.GetType() != typeof(ICollection<>))).ToList();
-
-                    foreach(var Item2 in Virtuals)
-                    {
-                        Obj.GetType().GetProperty(Item2.Name).SetValue(Obj, null);
-                    }
+                    //SetNull(Obj);
 
                     List.Add(Obj);
+
                 }
 
                 Update(db, List, RemoveIncludes);
@@ -92,47 +90,27 @@ namespace Sistema.Server.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("[action]")]
-        //public Response Delete([FromBody] Request Request)
+        //private void SetNull(object Obj)
         //{
 
-        //    var Response = new Response();
+        //    var Virtuals = Obj.GetType().GetProperties().Where(c => c.GetGetMethod()?.IsVirtual ?? false && (c.PropertyType.IsGenericType && c.PropertyType.GetType() != typeof(ICollection<>))).ToList();
 
-        //    try
+        //    foreach (var Item in Virtuals)
         //    {
-
-        //        var Database = Request.GetParameter("Database");
-
-        //        var db = new Context(Database);
-
-        //        var Table = Request.GetParameter("Table").ToString();
-
-        //        var List = new List<object>();
-
-        //        var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Table).ClrType;
-
-        //        foreach (var item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
-        //        {
-        //            List.Add(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(item), Type));
-        //        }
-
-
-        //        foreach(var item in List)
-        //        {
-        //            item.GetType().GetProperty("Ativo").SetValue(item, false);
-        //            db.Update(item);
-        //        }
-
-        //        db.SaveChanges();
-
-        //        return Response;
-
+        //        Obj.GetType().GetProperty(Item.Name).SetValue(Obj, null);
         //    }
-        //    catch (Exception ex)
+
+        //    var Collections = Obj.GetType().GetProperties().Where(c => c.PropertyType.IsGenericType && c.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)).ToList(); //Obj.GetType().GetProperties().Where(c => c.PropertyType.IsGenericType && c.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)).ToList();
+
+        //    foreach (var Item in Collections)
         //    {
-        //        return Exception(ex, Response);
+        //        foreach(var Item2 in ((IEnumerable)Obj.GetType().GetProperty(Item.Name).GetValue(Obj)).Cast<object>().ToList())
+        //        {
+        //            SetNull(Item2);
+        //        }
         //    }
+
         //}
+
     }
 }

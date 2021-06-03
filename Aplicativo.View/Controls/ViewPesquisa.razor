@@ -1,20 +1,28 @@
-﻿@inherits ViewPesquisaControl;
+﻿@typeparam Tipo;
+
+@inherits ViewPesquisaControl<Tipo>;
 
 @if (_Label != null)
 {
     <label>@_Label</label>
 }
 
-<div class="pesquisa-container">
-    <div class="pesquisa-codigo">
-        <TextBox @ref="TxtCodigo" />
+<ViewModal @ref="ViewModal" Title="@_Title" Overlay="true" Width="700px" Top="50px" OnHide="ViewModal_Hide">
+    <ViewPesquisaModal @ref="ViewPesquisaModal" Tipo="Tipo" OnClick="ViewPesquisaModal_Click" />
+</ViewModal>
+
+<ComponentLayout OnLoad="Page_Load">
+    <div class="pesquisa-container">
+        <div class="pesquisa-codigo">
+            <TextBox @ref="TxtCodigo" OnLeave="TxtCodigo_Leave" OnKeyUp="TxtCodigo_KeyUp" />
+        </div>
+        <div class="pesquisa-button">
+            <center>
+                <button type="button" class="btn btn-primary pesquisa-btnpesquisa" tabindex="-1" @onclick="BtnPesquisar_Click"><SearchIcon Style="margin: -5px -5px -5px -5px;" /></button>
+            </center>
+        </div>
+        <div class="pesquisa-descricao">
+            <TextBox @ref="TxtDescricao" _ReadOnly="true" _TabIndex="-1" />
+        </div>
     </div>
-    <div class="pesquisa-button">
-        <center>
-            <button type="button" class="btn btn-primary pesquisa-btnpesquisa" tabindex="-1"><SearchIcon Style="margin: -5px -5px -5px -5px;" /></button>
-        </center>
-    </div>
-    <div class="pesquisa-descricao">
-        <TextBox @ref="TxtDescricao" _ReadOnly="true" />
-    </div>
-</div>
+</ComponentLayout>
