@@ -7,6 +7,7 @@ using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -225,9 +226,14 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
 
             }
 
-            var Query = new HelpQuery<Pessoa>();
+            var HelpUpdate = new HelpUpdate();
 
-            ViewModel = await Query.Update(ViewModel);
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<Pessoa>(Changes[0]);
+
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -266,7 +272,7 @@ namespace Aplicativo.View.Pages.Cadastros.Pessoas
                 item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
     }

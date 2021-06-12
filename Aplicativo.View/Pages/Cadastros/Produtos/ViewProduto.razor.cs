@@ -128,9 +128,17 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
                 item.Fornecedor = null;
             }
 
-            var Query = new HelpQuery<Produto>();
+            var HelpUpdate = new HelpUpdate();
 
-            ViewModel = await Query.Update(ViewModel);
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<Produto>(Changes[0]);
+
+            //var Query = new HelpQuery<Produto>();
+
+            //ViewModel = await Query.Update(ViewModel);
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -169,7 +177,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
                 item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
 

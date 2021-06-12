@@ -2,6 +2,7 @@
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout.Component.ListView;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,9 +49,9 @@ namespace Aplicativo.View.Layout.Component.ViewPage
                 
             }
 
-            await ViewModal.Show();
-
             await OnLoad.InvokeAsync(args);
+
+            await ViewModal.Show();
 
         }
 
@@ -117,6 +118,11 @@ namespace Aplicativo.View.Layout.Component.ViewPage
         }
 
         protected void Page_Resize(object args)
+        {
+            StateHasChanged();
+        }
+
+        public void Refresh()
         {
             StateHasChanged();
         }

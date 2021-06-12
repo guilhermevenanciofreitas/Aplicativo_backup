@@ -101,15 +101,7 @@ namespace Aplicativo.View.Pages.Login.Entrar
                 var EmpresaID = DplEmpresa.SelectedValue;
 
 
-                var QueryEmpresa = new HelpQuery<Empresa>();
-
-                QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
-
-                var Empresa = await QueryEmpresa.FirstOrDefault();
-
-
-                HelpParametros.Parametros.UsuarioLogado = Usuario;
-                HelpParametros.Parametros.EmpresaLogada = Empresa;
+                await HelpParametros.CarregarParametros(UsuarioID.ToIntOrNull(), EmpresaID.ToIntOrNull());
 
                 if (ChkManterConectado.Checked)
                 {

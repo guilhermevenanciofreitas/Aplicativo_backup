@@ -14,15 +14,11 @@
 
 @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
 {
+    @if (_Label != null)
+    {
+        <label for="@Element.Id">@_Label</label>
+    }
 
-    <div class="form-group">
-        @if (_Label != null)
-        {
-            <label for="@Element.Id">@_Label</label>
-        }
-
-        <input type="datetime-local" id="@Element.Id" class="form-control" @ref="@Element" value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-ddTHH:mm") : "")" @onchange="Change" placeholder="@_PlaceHolder" readonly="@_ReadOnly" />
-
-    </div>
+    <input type="datetime-local" id="@Element.Id" class="form-control" style="padding: .375rem .35rem;" @ref="@Element" value="@(Value.HasValue ? Value.Value.ToString("yyyy-MM-ddTHH:mm") : "")" @onchange="Change" placeholder="@_PlaceHolder" readonly="@_ReadOnly" />
 
 }

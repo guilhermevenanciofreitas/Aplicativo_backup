@@ -1,4 +1,10 @@
-﻿.overlay {
+﻿.link {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.overlay {
     position: fixed;
     display: none;
     width: 100%;

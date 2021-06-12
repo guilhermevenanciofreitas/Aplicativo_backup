@@ -132,7 +132,11 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
 
         [Parameter] public EventCallback OnItemView { get; set; }
 
-        [Parameter] public bool AllowGrouping { get; set; }
+        [Parameter] public bool AllowGrouping { get; set; } = false;
+
+        [Parameter] public bool AllowPaging { get; set; } = true;
+
+        [Parameter] public bool ShowRegistroSelecionados { get; set; } = true;
 
         protected async void GridViewItem_DoubleClick(RecordDoubleClickEventArgs<Type> ItemView)
         {

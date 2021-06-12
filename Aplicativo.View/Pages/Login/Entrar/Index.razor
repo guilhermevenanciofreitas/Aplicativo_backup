@@ -7,7 +7,7 @@
 <ComponentLayout OnLoad="Page_Load">
     <LoginLayout>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <Typography Class="auth-form-title" Variant="TypographyVariant.H3">Login</Typography>
             </div>
         </div>
@@ -15,10 +15,10 @@
         <br />
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <label>Domínio</label>
                 <div class="input-group">
-                    <TextBox @ref="TxtName" _ReadOnly="true" />
+                    <TextBox @ref="TxtName" _ReadOnly="true" _Type="TextBoxType.String" />
                     <button class="btn btn-outline-secondary" type="button" @onclick="BtnAlterarDominio_Click"><EditIcon /> Alterar</button>
                 </div>
             </div>
@@ -27,25 +27,25 @@
         <hr />
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <DropDownList @ref="DplEmpresa" _Label="Empresa" />
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <TextBox @ref="TxtUsuario" _Label="Usuário" />
+            <div class="col-md-12 col-sm-12">
+                <TextBox @ref="TxtUsuario" _Label="Usuário" _Type="TextBoxType.String" />
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <TextBox @ref="TxtSenha" _Label="Senha" _Type="TextBoxType.Password" />
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <CheckBox @ref="ChkManterConectado" _Label="Manter conectado" />
             </div>
         </div>

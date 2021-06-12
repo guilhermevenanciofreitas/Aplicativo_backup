@@ -4,7 +4,33 @@
     <ListItemViewLayout @ref="ListView" Type="TituloDetalhe">
 
         <BtnNovo>
+
+            @if (Math.Round(vTotal_Pagamento, 2) != Math.Round(vTotal_Items, 2))
+            {
+
+                @if (vTotal_Pagamento < vTotal_Items)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Ainda falta informar <b>@((vTotal_Items - vTotal_Pagamento).ToString("C2"))</b>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        O valor informado está maior que os itens em <b>@((vTotal_Pagamento - vTotal_Items).ToString("C2"))</b>
+                    </div>
+                }
+            }
+
+            @if (Math.Round(vTotal_Pagamento, 2) == Math.Round(vTotal_Items, 2))
+            {
+                <div class="alert alert-success" role="alert">
+                    Valor informado corretamente!
+                </div>
+            }
+
             <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
+
         </BtnNovo>
 
         <BtnExcluir>
@@ -12,15 +38,11 @@
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="Pagamento" Width="820px" Top="100px">
+            <EditItemViewLayout @ref="NewItemViewLayout" Title="Pagamento" Width="820px" Top="100px">
 
                 <BtnSalvar>
-                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnNewSalvar_Click" />
                 </BtnSalvar>
-
-                <BtnExcluir>
-                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
-                </BtnExcluir>
 
                 <View>
                     <!--<div class="row">-->
@@ -54,31 +76,57 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <ViewPesquisa @ref="ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta bancária" _Title="Procurar conta bancária" OnChange="ViewPesquisaContaBancaria_Change" />
+                            @if (Informacoes == false)
+                            {
+                                <span class="link" @onclick="BtnMaisInformacoes_Click">[+] Informações</span>
+                            }
+                            @if (Informacoes == true)
+                            {
+                                <span class="link" @onclick="BtnMenosInformacoes_Click">[-] Informações</span>
+                            }
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div style="display: @(Informacoes ? "block" : "none")">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ViewPesquisa @ref="New_ViewPesquisaPlanoConta" Tipo="PlanoConta" _Label="Plano de conta" _Title="Procurar plano de conta" />
+                            </div>
+                            <div class="col-md-6">
+                                <ViewPesquisa @ref="New_ViewPesquisaCentroCusto" Tipo="CentroCusto" _Label="Centro de custo" _Title="Procurar centro de custo" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ViewPesquisa @ref="New_ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta bancária" _Title="Procurar conta bancária" OnChange="ViewPesquisaNew_ContaBancaria_Change" />
                         </div>
                         <div class="col-md-6">
-                            <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" OnChange="ViewPesquisaFormaPagamento_Change" />
+                            <ViewPesquisa @ref="New_ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" OnChange="ViewPesquisaNew_FormaPagamento_Change" OnBeforePesquisar="ViewPesquisaNew_FormaPagamento_BeforePesquisar" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-2">
-                            <NumericBox @ref="TxtValor" _Label="Valor" OnKeyUp="TxtValor_KeyUp" />
+                            <NumericBox @ref="New_TxtValor" _Label="Valor" OnKeyUp="TxtValor_KeyUp" />
                         </div>
                         <div class="col-md-3">
-                            <DatePicker @ref="DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change" />
+                            <DatePicker @ref="New_DtpVencimento" _Label="Vencimento" OnChange="DtpVencimento_Change" />
                         </div>
 
                         <div class="col-md-2">
-                            <NumericBox @ref="TxtParcelas" _Label="Parcelas" _Digits="0" OnKeyUp="TxtParcelas_KeyUp" />
+                            <NumericBox @ref="New_TxtParcelas" _Label="Parcelas" _Digits="0" OnKeyUp="TxtParcelas_KeyUp" />
                         </div>
 
-                        <div class="col-md-3" style="display: @(TxtParcelas?.Value > 1 ? "block" : "none")">
-                            <DropDownList @ref="DplPeriodo" _Label="Período" OnChange="DplPeriodo_Change" />
+                        <div class="col-md-3" style="display: @(New_TxtParcelas?.Value > 1 ? "block" : "none")">
+                            <DropDownList @ref="New_DplPeriodo" _Label="Período" OnChange="DplPeriodo_Change" />
                         </div>
 
-                        <div class="col-md-2" style="display: @(TxtParcelas?.Value > 1 && DplPeriodo?.SelectedValue == "0" ? "block" : "none")">
-                            <NumericBox @ref="TxtPeriodo" _Label="Repetir a cada" _Digits="0" OnKeyUp="TxtPeriodo_KeyUp" />
+                        <div class="col-md-2" style="display: @(New_TxtParcelas?.Value > 1 && New_DplPeriodo?.SelectedValue == "0" ? "block" : "none")">
+                            <NumericBox @ref="New_TxtPeriodo" _Label="Repetir a cada" _Digits="0" OnKeyUp="TxtPeriodo_KeyUp" />
                         </div>
                     </div>
 
@@ -107,6 +155,65 @@
                         </div>
                     </div>
                 </View>
+            </EditItemViewLayout>
+
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Pagamento" Width="820px" Top="100px">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnEditSalvar_Click" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
+                </BtnExcluir>
+
+                <View>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (Informacoes == false)
+                            {
+                                <span class="link" @onclick="BtnMaisInformacoes_Click">[+] Informações</span>
+                            }
+                            @if (Informacoes == true)
+                            {
+                                <span class="link" @onclick="BtnMenosInformacoes_Click">[-] Informações</span>
+                            }
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div style="display: @(Informacoes ? "block" : "none")">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ViewPesquisa @ref="Edit_ViewPesquisaPlanoConta" Tipo="PlanoConta" _Label="Plano de conta" _Title="Procurar plano de conta" />
+                            </div>
+                            <div class="col-md-6">
+                                <ViewPesquisa @ref="Edit_ViewPesquisaCentroCusto" Tipo="CentroCusto" _Label="Centro de custo" _Title="Procurar centro de custo" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ViewPesquisa @ref="Edit_ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta bancária" _Title="Procurar conta bancária" OnChange="ViewPesquisaEdit_ContaBancaria_Change" />
+                        </div>
+                        <div class="col-md-6">
+                            <ViewPesquisa @ref="Edit_ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" OnChange="ViewPesquisaEdit_FormaPagamento_Change" OnBeforePesquisar="ViewPesquisaEdit_FormaPagamento_BeforePesquisar" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <NumericBox @ref="Edit_TxtValor" _Label="Valor" />
+                        </div>
+                        <div class="col-md-3">
+                            <DatePicker @ref="Edit_DtpVencimento" _Label="Vencimento" />
+                        </div>
+                    </div>
+                </View>
+
             </EditItemViewLayout>
         </ViewPages>
 

@@ -93,9 +93,14 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
             }
 
 
-            var Query = new HelpQuery<ContaBancaria>();
+            var HelpUpdate = new HelpUpdate();
 
-            ViewModel = await Query.Update(ViewModel);
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<ContaBancaria>(Changes[0]);
+
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -134,7 +139,7 @@ namespace Aplicativo.View.Pages.Cadastros.ContaBancarias
                 item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
 

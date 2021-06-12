@@ -56,13 +56,17 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             {
                 case Tipo.Pagar:
                     ViewPesquisaPessoa.Label = "Recebedor";
+                    ViewPesquisaPessoa.Title = "Procurar recebedor";
+                    ViewPesquisaPlanoConta.AddWhere("PlanoContaTipoID == @0", 2);
                     break;
                 case Tipo.Receber:
                     ViewPesquisaPessoa.Label = "Pagador";
+                    ViewPesquisaPessoa.Title = "Procurar pagador";
+                    ViewPesquisaPlanoConta.AddWhere("PlanoContaTipoID == @0", 1);
                     break;
             }
 
-            ViewPesquisaPessoa.Refresh();
+            ViewPesquisaContaBancaria_Change(null);
 
             await BtnLimpar_Click();
 
@@ -83,6 +87,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             EditItemViewLayout.LimparCampos(this);
 
+            DtpEmissao.Value = DateTime.Today;
             DtpVencimento.Value = DateTime.Today;
             TxtParcelas.Value = 1;
             TxtParcelas_KeyUp();
@@ -166,9 +171,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             }
 
-            var Query = new HelpQuery<Titulo>();
+            var HelpUpdate = new HelpUpdate();
 
-            await Query.Update(Titulo);
+            HelpUpdate.Add(Titulo);
+
+            await HelpUpdate.SaveChanges();
 
             await EditItemViewLayout.ViewModal.Hide();
 
@@ -255,6 +262,58 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             GridViewTituloDetalhe.Refresh();
 
         }
+
+        protected void ViewPesquisaFormaPagamento_BeforePesquisar()
+        {
+            if (ViewPesquisaContaBancaria.Value.ToIntOrNull() == null)
+            {
+                ViewPesquisaFormaPagamento.Clear();
+                ViewPesquisaContaBancaria.Focus();
+                throw new Exception("Informe a conta bancária!");
+            }
+        }
+
+        protected void ViewPesquisaContaBancaria_Change(object args)
+        {
+            ContaBancaria_Change(args, ViewPesquisaFormaPagamento, ViewPesquisaContaBancaria);
+        }
+
+        protected void ViewPesquisaFormaPagamento_Change(object args)
+        {
+            FormaPagamento_Change(args, ViewPesquisaContaBancaria, ViewPesquisaFormaPagamento);
+        }
+
+
+        private void ContaBancaria_Change(object args, ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento, ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria)
+        {
+            var Predicate = "ContaBancariaFormaPagamento.Any(ContaBancariaID == @0)";
+
+            if (args == null)
+            {
+                ViewPesquisaFormaPagamento.Where.Remove(ViewPesquisaFormaPagamento.Where.FirstOrDefault(c => c.Predicate == Predicate));
+                ViewPesquisaFormaPagamento.AddWhere(Predicate, 0);
+                ViewPesquisaFormaPagamento.Clear();
+            }
+            else
+            {
+                ViewPesquisaFormaPagamento.Where.Remove(ViewPesquisaFormaPagamento.Where.FirstOrDefault(c => c.Predicate == Predicate));
+                ViewPesquisaFormaPagamento.AddWhere(Predicate, ViewPesquisaContaBancaria.Value.ToIntOrNull());
+            }
+        }
+
+        private void FormaPagamento_Change(object args, ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria, ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento)
+        {
+            if (args != null)
+            {
+                if (ViewPesquisaContaBancaria.Value.ToIntOrNull() == null)
+                {
+                    App.JSRuntime.InvokeVoidAsync("alert", "Informe a conta bancária!");
+                    ViewPesquisaFormaPagamento.Clear();
+                    ViewPesquisaContaBancaria.Focus();
+                }
+            }
+        }
+
 
         protected async Task GridViewTituloDetalheDtpVencimento_Change(object args, TituloDetalhe TituloDetalhe)
         {

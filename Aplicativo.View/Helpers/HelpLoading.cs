@@ -1,4 +1,7 @@
-﻿using Microsoft.JSInterop;
+﻿using Aplicativo.View.Layout.Component.ViewPage;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using System;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Helpers

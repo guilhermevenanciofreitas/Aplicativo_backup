@@ -77,9 +77,14 @@ namespace Aplicativo.View.Pages.Cadastros.FormasPagamentos
             ViewModel.FormaPagamentoID = TxtCodigo.Text.ToIntOrNull();
             ViewModel.Descricao = TxtDescricao.Text.ToStringOrNull();
 
-            var Query = new HelpQuery<FormaPagamento>();
+            var HelpUpdate = new HelpUpdate();
 
-            ViewModel = await Query.Update(ViewModel);
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<FormaPagamento>(Changes[0]);
+
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -118,7 +123,7 @@ namespace Aplicativo.View.Pages.Cadastros.FormasPagamentos
                 item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
 

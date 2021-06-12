@@ -1,6 +1,6 @@
 ﻿@inherits ViewNotaFiscalPage;
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="Nota fiscal" OnLoad="Page_Load" Width="900px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Nota fiscal" OnLoad="Page_Load" Width="1250px">
     
     <BtnLimpar>
         <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
@@ -17,28 +17,294 @@
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
+
+                <br />
+                <div class="alert alert-success" role="alert">
+                    Válido para o SPED Fiscal
+                </div>
+
                 <div class="row">
-                    <div class="col-md-2 col-sm-6">
-                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
-                    </div>
-                    <div class="col-md-5 col-sm-6">
-                        <TextBox @ref="TxtLogin" _Label="Login" />
+                    <div class="col-md-12 col-sm-12">
+                        <b>Informações</b>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3 col-sm-12">
-                        <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" />
+                    <div class="col-md-5 col-sm-5">
+                        <TextBox _Label="Chave de acesso" _Mask="9999 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999" />
                     </div>
-                    <div class="col-md-3 col-sm-12">
-                        <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" />
+                    <div class="col-md-2 col-sm-2">
+                        <DropDownList _Label="Modelo" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <TextBox _Label="Natureza de operação" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox @ref="TxtNumero" _Label="Número" />
+                    </div>
+                    <div class="col-md-2 col-sm-1">
+                        <TextBox @ref="TxtSerie" _Label="Série" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <DropDownList @ref="DplTipo" _Label="Tipo" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <DropDownList @ref="DplFinalidade" _Label="Finalidade" />
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <DateTimePicker @ref="DtpEmissao" _Label="Data Emissão" />
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <DateTimePicker @ref="DtpEntradaSaida" _Label="Data Entrada/Saída" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Cálculo do imposto</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <NumericBox _Label="Base calculo ICMS" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor ICMS" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Base calculo ICMS Subst." />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor ICMS Subst." />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor aprox. tributos" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Total dos produtos" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor Frete" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor Seguro" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Desconto" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Outras desp. acess." />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Valor do IPI" />
+                    </div>
+                    <div class="col-md-2">
+                        <NumericBox _Label="Total da nota" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <TextArea _Label="Informações complementares" _Rows="4" />
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Emitente" Title="Emitente">
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Dados do emitente</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="CPF/CNPJ" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Razão social" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Inscrição estadual" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Telefone" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Endereço do emitente</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBoxCEP _Label="CEP" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <TextBox _Label="Logradouro" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Número" />
+                    </div>
+                    <div class="col-sm-3 col-sm-3">
+                        <TextBox _Label="Complemento" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Bairro" />
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Destinatário" Title="Destinatário">
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Dados do destinatário</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="CPF/CNPJ" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Razão social" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Inscrição estadual" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Telefone" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Endereço do destinatário</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBoxCEP _Label="CEP" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <TextBox _Label="Logradouro" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Número" />
+                    </div>
+                    <div class="col-sm-3 col-sm-3">
+                        <TextBox _Label="Complemento" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Bairro" />
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Transportadora" Title="Transportadora">
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Dados da transportadora</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="CPF/CNPJ" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Razão social" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Inscrição estadual" />
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <b>Endereço da transportadora</b>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-2">
+                        <TextBoxCEP _Label="CEP" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <TextBox _Label="Logradouro" />
+                    </div>
+                    <div class="col-md-2 col-sm-2">
+                        <TextBox _Label="Número" />
+                    </div>
+                    <div class="col-sm-3 col-sm-3">
+                        <TextBox _Label="Complemento" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <TextBox _Label="Bairro" />
+                    </div>
+                    <div class="col-md-1 col-sm-1">
+                        <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
+                    </div>
+                    <div class="col-md-5 col-sm-5">
+                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Produtos" Title="Produtos">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewNotaFiscalItem />
                     </div>
                 </div>
             </TabPage>
-            <TabPage Id="Email" Title="Email">
+            <TabPage Id="Cobranca" Title="Cobrança">
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        @*<ViewUsuarioEmail @ref="ViewUsuarioEmail" />*@
+
                     </div>
                 </div>
             </TabPage>

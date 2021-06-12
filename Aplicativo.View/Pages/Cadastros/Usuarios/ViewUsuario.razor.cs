@@ -117,9 +117,9 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
             }
 
 
-            var Query = new HelpQuery<Usuario>();
+            //var Query = new HelpQuery<Usuario>();
 
-            ViewModel = await Query.Update(ViewModel);
+            //ViewModel = await Query.Update(ViewModel);
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
@@ -156,7 +156,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
                 item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
 

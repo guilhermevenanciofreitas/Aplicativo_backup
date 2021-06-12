@@ -1,0 +1,50 @@
+﻿@inherits ViewFaturamentoPage;
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Faturamento" OnLoad="Page_Load" Width="900px">
+    
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" Text="Faturar" OnClick="BtnFaturar_Click" />
+    </BtnSalvar>
+
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            @*<TabPage Id="Pedidos" Title="Pedidos">
+                
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <SfGrid @ref="GridViewPedidoVenda" DataSource="ListPedidoVenda" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
+                            <GridFilterSettings Type="FilterType.Excel" />
+                            <GridPageSettings PageSize="30"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Width="65" Field="PedidoVendaID" HeaderText="Número" />
+                                <GridColumn Width="200" Field="Cliente.NomeFantasia" HeaderText="Número" />
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+
+            </TabPage>*@
+            <TabPage Id="NotasFiscais" Title="Notas fiscais">
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <SfGrid @ref="GridViewNotaFiscal" DataSource="ListNotaFiscal" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
+                            <GridFilterSettings Type="FilterType.Excel" />
+                            <GridPageSettings PageSize="30"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Width="65" Field="cNF" HeaderText="Número" />
+                                <GridColumn Width="200" Field="dest_xNome" HeaderText="Cliente" />
+                                <GridColumn Width="100" Field="vProd" HeaderText="Total" Format="C2" TextAlign="TextAlign.Right" />
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+
+            </TabPage>
+            <TabPage Id="Boletos" Title="Boletos">
+                
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

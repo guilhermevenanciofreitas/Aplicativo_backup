@@ -19,8 +19,25 @@ namespace Aplicativo.View.Helpers
 
         public static Parametros Parametros = new Parametros();
 
-        public static void GetParametros(int UsuarioID, int EmpresaID)
+        public static async Task CarregarParametros(int? UsuarioID, int? EmpresaID)
         {
+
+            var QueryUsuario = new HelpQuery<Usuario>();
+            QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
+
+            var QueryEmpresa = new HelpQuery<Empresa>();
+            QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
+
+            var QueryEstado = new HelpQuery<Estado>();
+            var QueryUnidadeMedida = new HelpQuery<UnidadeMedida>();
+
+
+
+            Parametros.UsuarioLogado = await QueryUsuario.FirstOrDefault();
+            Parametros.EmpresaLogada = await QueryEmpresa.FirstOrDefault();
+
+            Parametros.Estado = await QueryEstado.ToList();
+            Parametros.UnidadeMedida = await QueryUnidadeMedida.ToList();
 
             //using (var db = new Context())
             //{
@@ -47,7 +64,7 @@ namespace Aplicativo.View.Helpers
             //            }).FirstOrDefault();
             //}
 
-                
+
         }
 
         public static async Task<bool> VerificarUsuarioLogado()
@@ -78,20 +95,7 @@ namespace Aplicativo.View.Helpers
                     var UsuarioID = Dados[0].ToInt();
                     var EmpresaID = Dados[1].ToInt();
 
-                    var QueryUsuario = new HelpQuery<Usuario>();
-                    QueryUsuario.AddInclude("Funcionario");
-                    QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
-
-                    var Usuario = await QueryUsuario.FirstOrDefault();
-
-
-                    var QueryEmpresa = new HelpQuery<Empresa>();
-                    QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
-
-                    var Empresa = await QueryEmpresa.FirstOrDefault();
-
-                    Parametros.UsuarioLogado = Usuario;
-                    Parametros.EmpresaLogada = Empresa;
+                    await CarregarParametros(UsuarioID, EmpresaID);
 
                     return true;
 

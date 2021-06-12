@@ -16,7 +16,7 @@
                         <TextBox @ref="TxtDocumento" _Label="Número Doc." OnInput="TxtDocumento_Input" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaPessoa" Tipo="Pessoa" _Label="Fornecedor" />
+                        <ViewPesquisa @ref="ViewPesquisaPessoa" Tipo="Pessoa" />
                     </div>
                     <div class="col-md-3">
                         <DatePicker @ref="DtpEmissao" _Label="Emissão" OnChange="DtpEmissao_Change" />
@@ -25,19 +25,19 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaPlanoConta" Tipo="PlanoConta" _Label="Plano de conta" />
+                        <ViewPesquisa @ref="ViewPesquisaPlanoConta" Tipo="PlanoConta" _Label="Plano de conta" _Title="Procurar plano de conta" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaCentroCusto" Tipo="CentroCusto" _Label="Centro de custo" />
+                        <ViewPesquisa @ref="ViewPesquisaCentroCusto" Tipo="CentroCusto" _Label="Centro de custo" _Title="Procurar centro de custo" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta Bancária" />
+                        <ViewPesquisa @ref="ViewPesquisaContaBancaria" Tipo="ContaBancaria" _Label="Conta bancária" _Title="Procurar conta bancária" OnChange="ViewPesquisaContaBancaria_Change" />
                     </div>
                     <div class="col-md-6">
-                        <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" />
+                        <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" OnChange="ViewPesquisaFormaPagamento_Change" OnBeforePesquisar="ViewPesquisaFormaPagamento_BeforePesquisar" />
                     </div>
                 </div>
 

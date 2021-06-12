@@ -25,8 +25,6 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             var Query = new HelpQuery<NotaFiscal>();
 
-            Query.AddWhere("Ativo == @0", true);
-
             ListView.Items = await Query.ToList();
             
         }

@@ -1,18 +1,18 @@
-﻿@attribute [Page("Fiscal/NotasFiscais")]
+﻿@attribute [Page("Comercial/Faturamento")]
 @attribute [LoginRequired(true)]
 
 @inherits IndexPage;
 
 <ComponentLayout OnLoad="Page_Load">
-    <ListItemViewLayout @ref="ListView" Type="NotaFiscal" Title="Notas fiscais">
+    <ListItemViewLayout @ref="ListView" Type="PedidoVenda" Title="Faturamento">
 
         <ViewPages>
-            <ViewNotaFiscal @ref="View" ListView="ListView" />
+            <ViewFaturamento @ref="View" ListView="ListView" />
         </ViewPages>
 
-        <BtnNovo>
-            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
-        </BtnNovo>
+        <BtnOneMoreSelected>
+            <ListViewBtnCustom ListItemViewLayout="ListView" Text="Faturar" OnClick="BtnFaturar_Click"></ListViewBtnCustom>
+        </BtnOneMoreSelected>
 
         <BtnFiltro>
             <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
@@ -24,20 +24,20 @@
             <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
         </BtnPesquisa>
 
-        <BtnExcluir>
+        @*<BtnExcluir>
             <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
-        </BtnExcluir>
+        </BtnExcluir>*@
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscal" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="PedidoVenda" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
-                        var item = (NotaFiscal)context;
+                        var item = (PedidoVenda)context;
 
-                        <ListItemText Primary="@item.CEP">
+                        <ListItemText Primary="@item.PedidoVendaID.ToString()">
                             <SecondaryContent>
                                 <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                    @item.CEP
+                                    @item.PedidoVendaID
                                 </Typography>
                                 — I'll be in your neighborhood
                             </SecondaryContent>
@@ -45,10 +45,10 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="nNF" HeaderText="Número" Width="100" />
-                    <GridColumn Field="xNome" HeaderText="Emitente" Width="200" />
-                    <GridColumn Field="dest_xNome" HeaderText="Destinatário" Width="200" />
-                    <GridColumn Field="vNF" HeaderText="Valor" Width="120" Format="C2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="PedidoVendaID" HeaderText="Número" Width="80" />
+                    <GridColumn Field="Data" HeaderText="Data" Width="80" Format="dd/MM/yyyy" />
+                    <GridColumn Field="Cliente.NomeFantasia" HeaderText="Cliente" Width="300" />
+                    <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Vendedor" Width="300" />
                 </Columns>
             </ListViewGridView>
         </GridView>

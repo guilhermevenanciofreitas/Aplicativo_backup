@@ -73,6 +73,8 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             Query.AddInclude("PedidoVendaPagamento");
             Query.AddInclude("PedidoVendaPagamento.Titulo");
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe");
+            Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.PlanoConta");
+            Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.CentroCusto");
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.ContaBancaria");
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.FormaPagamento");
             Query.AddInclude("Transportadora");
@@ -103,7 +105,11 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             {
                 ViewPedidoVendaPagamento.ListView.Items = ViewModel.PedidoVendaPagamento?.FirstOrDefault()?.Titulo?.TituloDetalhe?.ToList();
             }
-            
+
+            ViewPedidoVendaItem_Save();
+
+            ViewPedidoVendaItem.CalcularTotais();
+
 
         }
 
@@ -126,7 +132,14 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             ViewPesquisaTransportadora.Clear();
 
             ViewPedidoVendaItem.ListView.Items = new List<PedidoVendaItem>();
+
+            ViewPedidoVendaPagamento.vTotal_Items = 0;
+            ViewPedidoVendaPagamento.vTotal_Pagamento = 0;
             ViewPedidoVendaPagamento.ListView.Items = new List<TituloDetalhe>();
+
+            ViewPedidoVendaItem_Save();
+
+            ViewPedidoVendaItem.CalcularTotais();
 
             await TabSet.Active("Principal");
 
@@ -194,7 +207,13 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
                 }
             }
 
-            ViewModel = await Query.Update(ViewModel);
+            var HelpUpdate = new HelpUpdate();
+
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<PedidoVenda>(Changes[0]);
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -233,7 +252,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
                 //item.Ativo = false;
             }
 
-            await Query.Update(ViewModel, false);
+            //await Query.Update(ViewModel, false);
 
         }
 
@@ -264,6 +283,18 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             TxtCNPJ.Text = Pessoa.CNPJ?.StringFormat(Mask);
             TxtTelefone.Text = Pessoa.PessoaContato?.FirstOrDefault()?.Contato?.Telefone;
+
+        }
+
+        protected decimal vTotal_Items { get; set; } = 0;
+
+        protected void ViewPedidoVendaItem_Save()
+        {
+
+            vTotal_Items = ViewPedidoVendaItem.ListView.Items.Sum(c => c.vTotal ?? 0);
+            
+            ViewPedidoVendaPagamento.vTotal_Items = vTotal_Items;
+            ViewPedidoVendaPagamento.CalculaPagamento();
 
         }
 

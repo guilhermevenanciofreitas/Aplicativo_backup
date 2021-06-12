@@ -19,8 +19,13 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
         public PedidoVendaItem ViewModel { get; set; } = new PedidoVendaItem();
 
+        public decimal vDesconto { get; set; } = 0;
+        public decimal vTotal { get; set; } = 0;
+
         public ListItemViewLayout<PedidoVendaItem> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
+
+        [Parameter] public EventCallback OnSave { get; set; }
 
         #region Elements
         public ViewPesquisa<Produto> ViewPesquisaProduto { get; set; }
@@ -101,6 +106,10 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             await EditItemViewLayout.ViewModal.Hide();
 
+            CalcularTotais();
+
+            await OnSave.InvokeAsync(null);
+
         }
 
         protected async Task ViewPageBtnExcluir_Click()
@@ -110,12 +119,20 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             await EditItemViewLayout.ViewModal.Hide();
 
+            CalcularTotais();
+
+            await OnSave.InvokeAsync(null);
+
         }
 
         protected void ListViewBtnExcluir_Click(object args)
         {
 
             Excluir(((IEnumerable)args).Cast<PedidoVendaItem>().ToList());
+
+            CalcularTotais();
+
+            OnSave.InvokeAsync(null);
 
         }
 
@@ -125,6 +142,12 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             {
                 ListView.Items.Remove(item);
             }
+        }
+
+        public void CalcularTotais()
+        {
+            vDesconto = ListView.Items.Sum(c => (c.Quantidade ?? 0) * (c.vDesconto ?? 0));
+            vTotal = ListView.Items.Sum(c => c.vTotal ?? 0);
         }
 
 

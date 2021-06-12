@@ -12,6 +12,7 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+
     .Account-Setting {
         position: absolute;
         bottom: -4px;
@@ -23,8 +24,7 @@
 
 <Aplicativo.View.Pages.Cadastros.Usuarios.ViewUsuario @ref="ViewUsuario" BtnLimpar="false" BtnExcluir="false" />
 
-<MainLayout
-    TopbarClass="App-Topbar">
+<MainLayout TopbarClass="App-Topbar">
     <LogoContent>
         <Logo Class="App-Logo" />
     </LogoContent>
@@ -56,7 +56,7 @@
             <br />
             <p class="Typography-Root Typography-Body2" style="color: #fff">@HelpParametros.Parametros?.UsuarioLogado?.Funcionario?.NomeFantasia</p>
         </center>
-        
+
         <br />
 
         <Divider />

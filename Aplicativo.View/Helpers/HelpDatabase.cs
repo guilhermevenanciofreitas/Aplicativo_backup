@@ -1,5 +1,6 @@
 ﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,34 +48,67 @@ namespace Aplicativo.View.Helpers
 
         }
 
-        public static async Task<T> Update<T>(this HelpQuery<T> Query, T Object, bool RemoveIncludes = true, string Link = "api/Default/Update")
+        //public static async Task<object> Update<T>(HelpUpdate HelpUpdate, string Link = "api/Default/Update")
+        //{
+        //    return (await Update(new List<HelpUpdate> { HelpUpdate }, Link)).FirstOrDefault();
+        //}
+
+        //public static async Task<List<object>> Update(List<HelpUpdate> HelpUpdate, string Link = "api/Default/Update")
+        //{
+
+        //    var Database = ""; //Query.Database;
+
+        //    //if (Query.Database == null)
+        //    //{
+        //        Database = HelpConexao.GetDatabase();
+
+        //        if (Database == null)
+        //        {
+        //            throw new Exception("Nenhuma conexão informada!");
+        //        }
+        //    //}
+
+        //    var Request = new Request();
+
+        //    Request.Parameters.Add(new Parameters("Database", Database));
+        //    Request.Parameters.Add(new Parameters("Update", HelpUpdate));
+
+        //    return await HelpHttp.Send<List<object>>(Link, Request);
+
+        //}
+
+        public static async Task<List<Dictionary<string, object>>> SaveChanges(this HelpUpdate HelpUpdate, string Link = "api/Default/Update")
         {
-            return (await Update(Query, new List<T> { Object }, RemoveIncludes, Link)).FirstOrDefault();
-        }
 
-        public static async Task<List<T>> Update<T>(this HelpQuery<T> Query, List<T> Object, bool RemoveIncludes = true, string Link = "api/Default/Update")
-        {
+            var Database = ""; //Query.Database;
 
-            var Database = Query.Database;
+            //if (Query.Database == null)
+            //{
+            Database = HelpConexao.GetDatabase();
 
-            if (Query.Database == null)
+            if (Database == null)
             {
-                Database = HelpConexao.GetDatabase();
-
-                if (Database == null)
-                {
-                    throw new Exception("Nenhuma conexão informada!");
-                }
+                throw new Exception("Nenhuma conexão informada!");
             }
+            //}
 
             var Request = new Request();
 
             Request.Parameters.Add(new Parameters("Database", Database));
-            Request.Parameters.Add(new Parameters("Table", typeof(T).Name));
-            Request.Parameters.Add(new Parameters(typeof(T).Name, Object));
-            Request.Parameters.Add(new Parameters("RemoveIncludes", RemoveIncludes));
+            Request.Parameters.Add(new Parameters("Update", HelpUpdate.Update));
 
-            return await HelpHttp.Send<List<T>>(Link, Request);
+            return await HelpHttp.Send<List<Dictionary<string, object>>>(Link, Request);
+
+            //for(var i = 0; i < Items.Count; i++)
+            //{
+            //    //await App.JSRuntime.InvokeVoidAsync("console.log", Items[i]);
+            //    HelpUpdate.Update[i].Object = Items[i];
+            //}
+
+            //foreach(var Item in Items){
+
+            //}
+
 
         }
 
