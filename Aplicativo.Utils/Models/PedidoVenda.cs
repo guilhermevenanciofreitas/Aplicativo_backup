@@ -31,7 +31,15 @@ namespace Aplicativo.Utils.Models
 
         public DateTime? Data { get; set; }
 
+        public DateTime? Finalizado { get; set; }
+
+        public DateTime? Faturamento { get; set; }
+
+        public DateTime? Conferencia { get; set; }
+
         public DateTime? Expedicao { get; set; }
+
+        public DateTime? Entregue { get; set; }
 
         [ForeignKey("Transportadora")]
         public int? TransportadoraID { get; set; }

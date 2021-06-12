@@ -1,11 +1,43 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Aplicativo.Utils.Helpers
 {
+
+    public class HelpUpdate
+    {
+
+        public List<Update> Update { get; set; } = new List<Update>();
+
+        public void AddRange<T>(List<T> Object, bool RemoveIncludes = false)
+        {
+            foreach(var item in Object)
+            {
+                Add(item, RemoveIncludes);
+            }
+        }
+
+        public void Add<T>(T Object, bool RemoveIncludes = false)
+        {
+            Update.Add(new Update() { Object = Object, Table = typeof(T).Name, RemoveIncludes = RemoveIncludes });
+        }
+
+        public T Bind<T>(Dictionary<string, object> Object) where T : class
+        {
+
+            var json = JsonConvert.SerializeObject(Object);
+
+            return JsonConvert.DeserializeObject<T>(json);
+
+        }
+
+    }
+
     public class HelpQuery<T> : IDisposable
     {
 
@@ -74,6 +106,17 @@ namespace Aplicativo.Utils.Helpers
 
         public string Predicate { get; set; }
         public object[] Args { get; set; }
+
+    }
+
+    public class Update
+    {
+
+        public object Object { get; set; }
+
+        public string Table { get; set; }
+
+        public bool RemoveIncludes { get; set; }
 
     }
 

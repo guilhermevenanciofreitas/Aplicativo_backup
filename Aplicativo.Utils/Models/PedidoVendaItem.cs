@@ -9,6 +9,11 @@ namespace Aplicativo.Utils.Models
     public partial class PedidoVendaItem : _Extends
     {
 
+        public PedidoVendaItem()
+        {
+            PedidoVendaItemNotaFiscalItem = new HashSet<PedidoVendaItemNotaFiscalItem>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? PedidoVendaItemID { get; set; }
@@ -34,6 +39,8 @@ namespace Aplicativo.Utils.Models
         public virtual PedidoVenda PedidoVenda { get; set; }
 
         public virtual Produto Produto { get; set; }
+
+        public virtual ICollection<PedidoVendaItemNotaFiscalItem> PedidoVendaItemNotaFiscalItem { get; set; }
 
     }
 }

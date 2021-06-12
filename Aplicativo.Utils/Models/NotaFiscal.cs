@@ -48,13 +48,11 @@ namespace Aplicativo.Utils.Models
         [StringLength(44)]
         public string chNFe { get; set; }
 
+        //[NotMapped]
+        //public int? _serie => Convert.ToInt32(chNFe?.Substring(23, 2));
 
-        [NotMapped]
-        public int? _serie => Convert.ToInt32(chNFe.Substring(23, 2));
-
-        [NotMapped]
-        public long? _nNF => Convert.ToInt64(chNFe.Substring(26, 8));
-
+        //[NotMapped]
+        //public long? _nNF => Convert.ToInt64(chNFe?.Substring(26, 8));
 
         public byte? nSeqEvento { get; set; }
 

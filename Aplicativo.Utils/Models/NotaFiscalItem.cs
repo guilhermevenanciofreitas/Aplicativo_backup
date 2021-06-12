@@ -12,6 +12,11 @@ namespace Aplicativo.Utils.Models
     public partial class NotaFiscalItem : _Extends
     {
 
+        public NotaFiscalItem()
+        {
+            PedidoVendaItemNotaFiscalItem = new HashSet<PedidoVendaItemNotaFiscalItem>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? NotaFiscalItemID { get; set; }
@@ -35,21 +40,23 @@ namespace Aplicativo.Utils.Models
         public string xProd { get; set; }
 
         [StringLength(8)]
-        public string NCM { get; set; }
+        public string Codigo_NCM { get; set; }
 
         [StringLength(7)]
-        public string CEST { get; set; }
+        public string Codigo_CEST { get; set; }
 
-        public int? CFOP { get; set; }
+        [ForeignKey("CFOP")]
+        [StringLength(5)]
+        public string Codigo_CFOP { get; set; }
 
 
         //Tributação
 
         public int? orig { get; set; }
 
-        public string CST { get; set; }
+        public string Codigo_CST { get; set; }
 
-        public string CSOSN { get; set; }
+        public string Codigo_CSOSN { get; set; }
 
 
 
@@ -81,6 +88,11 @@ namespace Aplicativo.Utils.Models
         public decimal? vProd { get; set; }
 
         public virtual NotaFiscal NotaFiscal { get; set; }
+
+
+        public virtual CFOP CFOP { get; set; }
+
+        public virtual ICollection<PedidoVendaItemNotaFiscalItem> PedidoVendaItemNotaFiscalItem { get; set; }
 
 
     }
