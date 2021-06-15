@@ -16,6 +16,8 @@ namespace Aplicativo.View.Controls
 
         public List<Where> Where { get; set; } = new List<Where>();
 
+        public int? Take { get; set; }
+
         public List<Column> Columns { get; set; } = new List<Column>();
 
         public DropDownList DplCampo { get; set; }
@@ -41,6 +43,11 @@ namespace Aplicativo.View.Controls
             foreach(var where in Where)
             {
                 Query.AddWhere(where.Predicate, where.Args);
+            }
+
+            if (Take != null)
+            {
+                Query.AddTake(Take);
             }
 
             if (!string.IsNullOrEmpty(TxtPesquisa.Text))

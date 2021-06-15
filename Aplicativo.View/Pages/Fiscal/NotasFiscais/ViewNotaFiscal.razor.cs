@@ -35,7 +35,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
         public DropDownList Emit_TxtUF { get; set; }
         public ViewPesquisa<Municipio> Emit_ViewPesquisaMunicipio { get; set; }
 
-        //public ViewUsuarioEmail ViewUsuarioEmail { get; set; }
+
+
+        public ViewNotaFiscalItem ViewNotaFiscalItem { get; set; }
+
         #endregion
 
         protected void InitializeComponents()
@@ -68,6 +71,11 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             var Query = new HelpQuery<NotaFiscal>();
 
             Query.AddInclude("NotaFiscalItem");
+
+            Query.AddInclude("NotaFiscalItem.CFOP");
+            Query.AddInclude("NotaFiscalItem.NCM");
+            Query.AddInclude("NotaFiscalItem.CEST");
+
             Query.AddWhere("NotaFiscalID == @0", ((NotaFiscal)args).NotaFiscalID);
             
             ViewModel = await Query.FirstOrDefault();
@@ -77,7 +85,7 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             //TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
             //TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
 
-            //ViewUsuarioEmail.ListView.Items = ViewModel.UsuarioEmail.ToList();
+            ViewNotaFiscalItem.ListView.Items = ViewModel.NotaFiscalItem.ToList();
             
         }
 
@@ -86,7 +94,7 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             EditItemViewLayout.LimparCampos(this);
 
-            //ViewUsuarioEmail.ListView.Items = new List<UsuarioEmail>();
+            ViewNotaFiscalItem.ListView.Items = new List<NotaFiscalItem>();
 
             await TabSet.Active("Principal");
 
@@ -113,17 +121,21 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             //ViewModel.Login = TxtLogin.Text.ToStringOrNull();
             //ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
 
-            //ViewModel.UsuarioEmail = ViewUsuarioEmail.ListView.Items.ToList();
+            ViewModel.NotaFiscalItem = ViewNotaFiscalItem.ListView.Items.ToList();
 
 
-            //var Query = new HelpQuery<NotaFiscal>();
+            var HelpUpdate = new HelpUpdate();
 
-            //ViewModel = await Query.Update(ViewModel);
+            HelpUpdate.Add(ViewModel);
+
+            var Changes = await HelpUpdate.SaveChanges();
+
+            ViewModel = HelpUpdate.Bind<NotaFiscal>(Changes[0]);
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                //TxtCodigo.Text = ViewModel.NotaFiscalID.ToStringOrNull();
+                await Page_Load(ViewModel);
             }
             else
             {

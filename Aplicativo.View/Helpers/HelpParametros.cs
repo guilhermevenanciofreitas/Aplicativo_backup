@@ -23,6 +23,7 @@ namespace Aplicativo.View.Helpers
         {
 
             var QueryUsuario = new HelpQuery<Usuario>();
+            QueryUsuario.AddInclude("Funcionario");
             QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
 
             var QueryEmpresa = new HelpQuery<Empresa>();

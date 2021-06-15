@@ -34,6 +34,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         public DropDownList DplUnidadeMedida { get; set; }
 
         public DropDownList DplOrigem { get; set; }
+        public ViewPesquisa<NCM> ViewPesquisaNCM { get; set; }
+        public ViewPesquisa<CEST> ViewPesquisaCEST { get; set; }
 
         public ViewProdutoFornecedor ViewProdutoFornecedor { get; set; }
         #endregion
@@ -62,6 +64,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             var Query = new HelpQuery<Produto>();
 
+            Query.AddInclude("NCM");
+            Query.AddInclude("CEST");
+
             Query.AddInclude("ProdutoFornecedor");
             Query.AddInclude("ProdutoFornecedor.Fornecedor");
             Query.AddWhere("ProdutoID == @0", ((Produto)args).ProdutoID);
@@ -78,6 +83,12 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             //Tributação
             DplOrigem.SelectedValue = ViewModel.Origem.ToStringOrNull();
+
+            ViewPesquisaNCM.Value = ViewModel.Codigo_NCM;
+            ViewPesquisaNCM.Text = ViewModel.NCM?.Descricao;
+
+            ViewPesquisaCEST.Value = ViewModel.Codigo_CEST;
+            ViewPesquisaCEST.Text = ViewModel.CEST?.Descricao;
 
             //Fornecedores
             ViewProdutoFornecedor.ListView.Items = ViewModel.ProdutoFornecedor.ToList();
@@ -119,6 +130,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             //Tributação
             ViewModel.Origem = DplOrigem.SelectedValue.ToIntOrNull();
+            ViewModel.Codigo_NCM = ViewPesquisaNCM.Value;
+            ViewModel.Codigo_CEST = ViewPesquisaCEST.Value;
+
 
             //Fornecedores
             ViewModel.ProdutoFornecedor = ViewProdutoFornecedor.ListView.Items.ToList();

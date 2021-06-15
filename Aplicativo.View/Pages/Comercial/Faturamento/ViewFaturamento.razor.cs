@@ -65,8 +65,16 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
                         var NotaFiscalItem = new NotaFiscalItem()
                         {
+                            cProd = PedidoVendaItem.ProdutoID.ToStringOrNull(),
+                            xProd = PedidoVendaItem.Produto.Descricao,
                             qCom = PedidoVendaItem.Quantidade - QuantidadeFaturado,
                             vUnCom = PedidoVendaItem.vTotal / PedidoVendaItem.Quantidade,
+
+                            orig = PedidoVendaItem.Produto.Origem,
+                            Codigo_CFOP = "5.102",
+                            Codigo_NCM = PedidoVendaItem.Produto.Codigo_NCM,
+                            Codigo_CEST = PedidoVendaItem.Produto.Codigo_CEST,
+
                         };
 
                         NotaFiscalItem.PedidoVendaItemNotaFiscalItem.Add(new PedidoVendaItemNotaFiscalItem()

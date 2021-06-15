@@ -229,6 +229,28 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
         }
 
+        public async Task Finalizar(List<int> args)
+        {
+
+            var Query = new HelpQuery<PedidoVenda>();
+
+            Query.AddWhere("PedidoVendaID IN (" + string.Join(",", args.ToArray()) + ")");
+
+            var ViewModel = await Query.ToList();
+
+            foreach (var item in ViewModel)
+            {
+                item.Finalizado = DateTime.Now;
+            }
+
+            var HelpUpdate = new HelpUpdate();
+
+            HelpUpdate.AddRange(ViewModel);
+
+            await HelpUpdate.SaveChanges();
+
+        }
+
         protected async Task BtnExcluir_Click()
         {
 

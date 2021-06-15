@@ -26,6 +26,9 @@ namespace Aplicativo.View.Controls
         [Parameter] public EventCallback OnChange { get; set; }
         [Parameter] public EventCallback OnBeforePesquisar { get; set; }
 
+        [Parameter] public string _Mask { get; set; }
+        [Parameter] public string Width_Codigo { get; set; } = "65px";
+
         public string Label
         {
             get => _Label;
@@ -129,6 +132,32 @@ namespace Aplicativo.View.Controls
                     ViewPesquisaModal.Columns.Add(new Column("Nome", "Nome", typeof(string)));
                     ViewPesquisaModal.Refresh();
                     ViewPesquisaModal.DplCampo.SelectedValue = "Nome";
+                    break;
+
+                case "CFOP":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "NCM":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "CEST":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
                     break;
             }
 
@@ -299,6 +328,66 @@ namespace Aplicativo.View.Controls
                         TxtDescricao.Text = (Municipio as Municipio).Nome;
 
                         await OnChange.InvokeAsync(Municipio);
+
+                        break;
+
+                    case "CFOP":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CFOP = await Query.FirstOrDefault();
+
+                        if (CFOP == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CFOP as CFOP).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CFOP as CFOP).Descricao;
+
+                        await OnChange.InvokeAsync(CFOP);
+
+                        break;
+
+                    case "NCM":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var NCM = await Query.FirstOrDefault();
+
+                        if (NCM == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (NCM as NCM).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (NCM as NCM).Descricao;
+
+                        await OnChange.InvokeAsync(NCM);
+
+                        break;
+
+                    case "CEST":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CEST = await Query.FirstOrDefault();
+
+                        if (CEST == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CEST as CEST).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CEST as CEST).Descricao;
+
+                        await OnChange.InvokeAsync(CEST);
 
                         break;
                 }

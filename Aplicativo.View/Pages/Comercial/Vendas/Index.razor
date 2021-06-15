@@ -14,6 +14,10 @@
             <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
         </BtnNovo>
 
+        <BtnOneMoreSelected>
+            <ListViewBtnCustom ListItemViewLayout="ListView" Text="Finalizar" OnClick="BtnFinalizar_Click" />
+        </BtnOneMoreSelected>
+
         <BtnFiltro>
             <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
                 <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />

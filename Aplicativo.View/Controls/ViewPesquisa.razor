@@ -13,8 +13,8 @@
 
 <ComponentLayout OnLoad="Page_Load">
     <div class="pesquisa-container">
-        <div class="pesquisa-codigo">
-            <TextBox @ref="TxtCodigo" OnLeave="TxtCodigo_Leave" OnKeyUp="TxtCodigo_KeyUp" />
+        <div class="pesquisa-codigo" style="width: @Width_Codigo">
+            <TextBox @ref="TxtCodigo" OnLeave="TxtCodigo_Leave" OnKeyUp="TxtCodigo_KeyUp" _Mask="@_Mask" />
         </div>
         <div class="pesquisa-button">
             <center>

@@ -1,7 +1,7 @@
 ﻿@inherits ViewNotaFiscalItemPage
 
 <ComponentLayout>
-    <ListItemViewLayout @ref="ListView" Type="PedidoVendaItem">
+    <ListItemViewLayout @ref="ListView" Type="NotaFiscalItem">
 
         <BtnNovo>
             <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
@@ -24,53 +24,140 @@
 
                 <View>
 
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <TextBox _Label="Código" />
-                        </div>
-                        <div class="col-md-9 col-sm-12">
-                            <TextBox _Label="Descrição" />
-                        </div>
-                    </div>
+                    <TabSet @ref="TabPrincipal" Changed="StateHasChanged">
+                        <TabPage Id="Item" Title="Item">
 
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <NumericBox _Label="Quantidade" _Digits="3" />
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <NumericBox _Label="Preço un." />
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <NumericBox _Label="Desc. (R$)" />
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <NumericBox _Label="Total" _ReadOnly="true" />
-                        </div>
-                    </div>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-12">
+                                    <TextBox @ref="TxtCodigo" _Label="Código" />
+                                </div>
+                                <div class="col-md-9 col-sm-12">
+                                    <TextBox @ref="TxtDescricao" _Label="Descrição" />
+                                </div>
+                            </div>
 
-                    <br />
-                    <br />
+                            <div class="row">
+                                <div class="col-md-3 col-sm-12">
+                                    <NumericBox @ref="TxtQuantidade" _Label="Quantidade" _Digits="3" />
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <NumericBox @ref="TxtPreco" _Label="Preço un. (R$)" />
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <NumericBox @ref="TxtDesconto" _Label="Desc.  un. (R$)" />
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true" />
+                                </div>
+                            </div>
 
-                    <TabSet Changed="StateHasChanged">
-                        <TabPage Id="ICMS" Title="ICMS">
+                            <br />
+                            <br />
+
+                            <TabSet @ref="TabImpostos" Changed="StateHasChanged">
+                                <TabPage Id="ICMS" Title="ICMS">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa Tipo="CFOP" _Label="CST ICMS" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Base de calculo" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Aliq. ICMS (%)" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Valor ICMS (R$)" />
+                                        </div>
+                                    </div>
+                                </TabPage>
+                                <TabPage Id="ICMSST" Title="ICMS ST">
+
+                                </TabPage>
+                                <TabPage Id="IPI" Title="IPI">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa Tipo="CFOP" _Label="CST IPI" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Base de calculo" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Aliq. IPI (%)" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Valor IPI (R$)" />
+                                        </div>
+                                    </div>
+                                </TabPage>
+                                <TabPage Id="PIS" Title="PIS">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa Tipo="CFOP" _Label="CST PIS" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Base de calculo" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Aliq. PIS (%)" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Valor PIS (R$)" />
+                                        </div>
+                                    </div>
+                                </TabPage>
+                                <TabPage Id="COFINS" Title="COFINS">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa Tipo="CFOP" _Label="CST COFINS" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Base de calculo" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Aliq. COFINS (%)" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox _Label="Valor COFINS (R$)" />
+                                        </div>
+                                    </div>
+                                </TabPage>
+                                <TabPage Id="ISSQN" Title="ISSQN">
+
+                                </TabPage>
+                                <TabPage Id="II" Title="II">
+
+                                </TabPage>
+                            </TabSet>
 
                         </TabPage>
-                        <TabPage Id="ICMSST" Title="ICMS ST">
+                        <TabPage Id="Impostos" Title="Inf. impostos">
 
-                        </TabPage>
-                        <TabPage Id="IPI" Title="IPI">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <ViewPesquisa @ref="ViewPesquisaCFOP" Tipo="CFOP" _Label="CFOP" _Title="Procurar CFOP" Width_Codigo="90px" _Mask="9.999" />
+                                </div>
+                            </div>
 
-                        </TabPage>
-                        <TabPage Id="PIS" Title="PIS">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <ViewPesquisa @ref="ViewPesquisaNCM" Tipo="NCM" _Label="NCM" _Title="Procurar NCM" Width_Codigo="130px" _Mask="9999.99.99" />
+                                </div>
+                            </div>
 
-                        </TabPage>
-                        <TabPage Id="COFINS" Title="COFINS">
-
-                        </TabPage>
-                        <TabPage Id="ISSQN" Title="ISSQN">
-
-                        </TabPage>
-                        <TabPage Id="II" Title="II">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <ViewPesquisa @ref="ViewPesquisaCEST" Tipo="CEST" _Label="CEST" _Title="Procurar CEST" Width_Codigo="130px" _Mask="99.999.99" />
+                                </div>
+                            </div>
 
                         </TabPage>
                     </TabSet>
@@ -80,10 +167,10 @@
         </ViewPages>
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="PedidoVendaItem" Height="350px" CheckBoxWidth="45" OnItemView="ViewLayout_ItemView" ShowRegistroSelecionados="false" AllowPaging="false" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscalItem" Height="350px" CheckBoxWidth="45" OnItemView="ViewLayout_ItemView" ShowRegistroSelecionados="false" AllowPaging="false" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
-                        var item = (PedidoVendaItem)context;
+                        var item = (NotaFiscalItem)context;
                         
                         <ListItemText Primary="@item.ProdutoID.ToString()">
                             <SecondaryContent>
@@ -96,13 +183,14 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="ProdutoID" HeaderText="Código" Width="85" />
-                    <GridColumn Field="Produto.Descricao" HeaderText="Descrição" Width="300" />
-                    <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="105" Format="N3" TextAlign="TextAlign.Right" />
-                    <GridColumn Field="vPreco" HeaderText="Preço" Width="90" Format="C2" TextAlign="TextAlign.Right" />
-                    <GridColumn Field="pDesconto" HeaderText="Desc. (%)" Width="100" Format="N2" TextAlign="TextAlign.Right" />
-                    <GridColumn Field="DescontoTotal" HeaderText="Desc. total" Width="100" Format="C2" TextAlign="TextAlign.Right" />
-                    <GridColumn Field="vTotal" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="cProd" HeaderText="Código" Width="85" />
+                    <GridColumn Field="xProd" HeaderText="Descrição" Width="200" />
+                    @*<GridColumn Field="Produto.Descricao" HeaderText="Descrição" Width="300" />
+        <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="105" Format="N3" TextAlign="TextAlign.Right" />
+        <GridColumn Field="vPreco" HeaderText="Preço" Width="90" Format="C2" TextAlign="TextAlign.Right" />
+        <GridColumn Field="pDesconto" HeaderText="Desc. (%)" Width="100" Format="N2" TextAlign="TextAlign.Right" />
+        <GridColumn Field="DescontoTotal" HeaderText="Desc. total" Width="100" Format="C2" TextAlign="TextAlign.Right" />
+        <GridColumn Field="vTotal" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right" />*@
                 </Columns>
             </ListViewGridView>
 
