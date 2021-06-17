@@ -44,6 +44,14 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
             Query.AddInclude("Cliente");
             Query.AddInclude("PedidoVendaItem");
             Query.AddInclude("PedidoVendaItem.Produto");
+            Query.AddInclude("PedidoVendaItem.PedidoVendaItemConferenciaItem");
+            Query.AddInclude("PedidoVendaItem.PedidoVendaItemConferenciaItem.ConferenciaItem");
+            Query.AddInclude("PedidoVendaItem.PedidoVendaItemConferenciaItem.ConferenciaItem.EstoqueMovimentoItem");
+            Query.AddInclude("PedidoVendaItem.PedidoVendaItemConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada");
+
+            Query.AddInclude("PedidoVendaItem.Produto.Tributacao");
+            Query.AddInclude("PedidoVendaItem.Produto.Tributacao.TributacaoOperacao");
+
             Query.AddInclude("PedidoVendaItem.PedidoVendaItemNotaFiscalItem");
             Query.AddInclude("PedidoVendaItem.PedidoVendaItemNotaFiscalItem.NotaFiscalItem");
             Query.AddInclude("PedidoVendaPagamento");
@@ -55,13 +63,16 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
             foreach (var PedidoVenda in ListPedidoVenda)
             {
+
                 foreach (var PedidoVendaItem in PedidoVenda.PedidoVendaItem)
                 {
 
-                    var QuantidadeFaturado = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Sum(c => c.NotaFiscalItem.qCom);
+                    var QuantidadeFaturado = PedidoVendaItem?.PedidoVendaItemNotaFiscalItem?.Sum(c => c.NotaFiscalItem.qCom ?? 0) ?? 0;
 
-                    if (QuantidadeFaturado < PedidoVendaItem.Quantidade)
+                    if (QuantidadeFaturado < (PedidoVendaItem.Quantidade ?? 0))
                     {
+
+                        var CFOP = PedidoVendaItem.Produto.Tributacao.TributacaoOperacao?.FirstOrDefault(c => c.OperacaoID == PedidoVendaItem.OperacaoID);
 
                         var NotaFiscalItem = new NotaFiscalItem()
                         {
@@ -71,11 +82,32 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                             vUnCom = PedidoVendaItem.vTotal / PedidoVendaItem.Quantidade,
 
                             orig = PedidoVendaItem.Produto.Origem,
-                            Codigo_CFOP = "5.102",
+
+                            Codigo_CFOP = CFOP.Codigo_CFOP_Estadual,
+
                             Codigo_NCM = PedidoVendaItem.Produto.Codigo_NCM,
                             Codigo_CEST = PedidoVendaItem.Produto.Codigo_CEST,
 
+                            Codigo_CST = PedidoVendaItem.Produto.Tributacao.Codigo_CST,
+                            Codigo_CSOSN = PedidoVendaItem.Produto.Tributacao.Codigo_CSOSN,
+                            Codigo_IPI = PedidoVendaItem.Produto.Tributacao.Codigo_IPI,
+                            Codigo_PIS = PedidoVendaItem.Produto.Tributacao.Codigo_PIS,
+                            Codigo_COFINS = PedidoVendaItem.Produto.Tributacao.Codigo_COFINS,
+
+                            pICMS = PedidoVendaItem.Produto.Tributacao.Aliq_ICMS ?? 0,
+                            pIPI = PedidoVendaItem.Produto.Tributacao.Aliq_IPI ?? 0,
+                            pPIS = PedidoVendaItem.Produto.Tributacao.Aliq_PIS ?? 0,
+                            pCOFINS = PedidoVendaItem.Produto.Tributacao.Aliq_COFINS ?? 0,
+
                         };
+
+                        NotaFiscalItem.vProd = (NotaFiscalItem.vUnCom - NotaFiscalItem.vDesc) * NotaFiscalItem.qCom;
+                        NotaFiscalItem.vBC = NotaFiscalItem.vProd;
+
+                        NotaFiscalItem.vICMS = (NotaFiscalItem.pICMS / 100) * NotaFiscalItem.vBC;
+                        NotaFiscalItem.vIPI = (NotaFiscalItem.pIPI / 100) * NotaFiscalItem.vBC;
+                        NotaFiscalItem.vPIS = (NotaFiscalItem.pPIS / 100) * NotaFiscalItem.vBC;
+                        NotaFiscalItem.vCOFINS = (NotaFiscalItem.pCOFINS / 100) * NotaFiscalItem.vBC;
 
                         NotaFiscalItem.PedidoVendaItemNotaFiscalItem.Add(new PedidoVendaItemNotaFiscalItem()
                         {
@@ -105,27 +137,41 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 foreach(var PedidoVendaItem in PedidoVenda.PedidoVendaItem)
                 {
 
-                    var NaoFaturado = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Where(c => c.NotaFiscalItem.NotaFiscalItemID == null);
+                    var NotaFiscalItem = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Where(c => c.NotaFiscalItem.NotaFiscalItemID == null);
 
-                    foreach(var Item in NaoFaturado)
+
+                    foreach(var Item in NotaFiscalItem)
                     {
 
-                        var vTotal = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Where(c => c.NotaFiscalItem.NotaFiscalItemID == null).Sum(c => c.NotaFiscalItem.qCom * c.NotaFiscalItem.vUnCom);
-
+                        var vDesc = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Where(c => c.NotaFiscalItem.NotaFiscalItemID == null).Sum(c => c.NotaFiscalItem.vDesc);
+                        var vProd = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.Where(c => c.NotaFiscalItem.NotaFiscalItemID == null).Sum(c => c.NotaFiscalItem.vProd);
+                        
                         var NotaFiscal = ListNotaFiscal.FirstOrDefault(c => c.cNF.ToIntOrNull() == PedidoVenda.PedidoVendaID);
 
                         if (NotaFiscal == null)
                         {
                             ListNotaFiscal.Add(new NotaFiscal() { 
-                                cNF = PedidoVenda.PedidoVendaID.ToStringOrNull(), 
+
+                                cNF = PedidoVenda.PedidoVendaID.ToStringOrNull(),
+                                
+                                CNPJCPF = HelpParametros.Parametros.EmpresaLogada.CNPJ,
+                                xFant = HelpParametros.Parametros.EmpresaLogada.NomeFantasia,
+                                xNome = HelpParametros.Parametros.EmpresaLogada.RazaoSocial,
+
+                                dest_CNPJCPF = PedidoVenda.Cliente.CNPJ,
                                 dest_xNome = PedidoVenda.Cliente.NomeFantasia,
-                                vProd = vTotal,
+
+                                vDesc = vDesc,
+                                vProd = vProd,
+
                                 NotaFiscalItem = new List<NotaFiscalItem>() { Item.NotaFiscalItem },
+
                             });
                         }
                         else
                         {
-                            NotaFiscal.vProd += vTotal;
+                            NotaFiscal.vDesc += vDesc;
+                            NotaFiscal.vProd += vProd;
                             NotaFiscal.NotaFiscalItem.Add(Item.NotaFiscalItem);
                         }
 
@@ -154,6 +200,44 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 {
                     Titulo.Ativo = true;
                     HelpUpdate.Add(Titulo);
+                }
+
+                foreach(var PedidoVendaItem in item.PedidoVendaItem)
+                {
+                    foreach(var ConferenciaItem in PedidoVendaItem.PedidoVendaItemConferenciaItem)
+                    {
+
+                        var EstoqueMovimentoItemEntrada = ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada;
+
+                        var NotaFiscamItem = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.FirstOrDefault(c => c.NotaFiscalItem.NotaFiscalItemID == null);
+
+                        var EstoqueMovimentoItem = new EstoqueMovimentoItem()
+                        {
+                            EstoqueMovimento = new EstoqueMovimento()
+                            {
+                                EstoqueMovimentoTipoID = EstoqueMovimentoTipo.Saida,
+                                Data = DateTime.Now,
+                                UsuarioID = HelpParametros.Parametros.UsuarioLogado.FuncionarioID,
+                            },
+
+                            ProdutoID = PedidoVendaItem.ProdutoID,
+                            Quantidade = NotaFiscamItem.NotaFiscalItem.qCom,
+                            NotaFiscalItemID = NotaFiscamItem.NotaFiscalItemID,
+
+                        };
+
+                        var EstoqueMovimentoItemSaida = new EstoqueMovimentoItemSaida()
+                        {
+                            EstoqueMovimentoItem = EstoqueMovimentoItem,
+                        };
+
+                        EstoqueMovimentoItemEntrada.EstoqueMovimentoItemSaida.Add(EstoqueMovimentoItemSaida);
+
+                        EstoqueMovimentoItemEntrada.Saldo -= EstoqueMovimentoItemSaida.EstoqueMovimentoItem.Quantidade;
+
+                        HelpUpdate.Add(EstoqueMovimentoItemEntrada);
+
+                    }
                 }
 
 
