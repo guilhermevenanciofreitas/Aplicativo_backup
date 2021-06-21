@@ -7,9 +7,12 @@
     </BtnSalvar>
 
     <View>
+
+        <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamento" ListView="ListView" OnConfirm="ViewPedidoVendaAndamento_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
+
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             @*<TabPage Id="Pedidos" Title="Pedidos">
-                
+
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <SfGrid @ref="GridViewPedidoVenda" DataSource="ListPedidoVenda" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
@@ -42,7 +45,7 @@
 
             </TabPage>
             <TabPage Id="Boletos" Title="Boletos">
-                
+
             </TabPage>
         </TabSet>
     </View>

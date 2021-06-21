@@ -63,6 +63,11 @@
     <Navigation Items="@Cadastros" />
 </div>
 
+<div class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Estoque</div>
+<div class="Menu-Accordion-Item">
+    <Navigation Items="@Estoque" />
+</div>
+
 <div class="Menu-Accordion"><MenuIcon />&nbsp;&nbsp; Comercial</div>
 <div class="Menu-Accordion-Item">
     <Navigation Items="@Comercial" />
@@ -84,10 +89,8 @@
 </div>
 
 @code
-{ 
-
-    private static List<NavigationItem> Cadastros = new List<NavigationItem>
-        {
+{ private static List<NavigationItem> Cadastros = new List<NavigationItem>
+            {
         new NavigationItem
         {
             Title = "Clientes",
@@ -146,8 +149,20 @@
 
     };
 
+    private static List<NavigationItem> Estoque = new List<NavigationItem>
+        {
+
+        new NavigationItem
+        {
+            Title = "Entrada",
+            Path = "Estoque/Entradas",
+            Prefix = false
+        },
+
+    };
+
     private static List<NavigationItem> Comercial = new List<NavigationItem>
-    {
+        {
 
         new NavigationItem
         {
@@ -158,8 +173,8 @@
 
         new NavigationItem
         {
-            Title = "Faturamento",
-            Path = "Comercial/Faturamento",
+            Title = "Separacao",
+            Path = "Comercial/Separacao",
             Prefix = false
         },
 
@@ -167,6 +182,13 @@
         {
             Title = "Conferencia",
             Path = "Comercial/Conferencia",
+            Prefix = false
+        },
+
+        new NavigationItem
+        {
+            Title = "Faturamento",
+            Path = "Comercial/Faturamento",
             Prefix = false
         },
 
@@ -180,7 +202,7 @@
     };
 
     private static List<NavigationItem> Financeiro = new List<NavigationItem>
-    {
+        {
 
         new NavigationItem
         {
@@ -199,7 +221,14 @@
     };
 
     private static List<NavigationItem> Fiscal = new List<NavigationItem>
-    {
+        {
+
+        new NavigationItem
+        {
+            Title = "Tributacoes",
+            Path = "Fiscal/Tributacoes",
+            Prefix = false
+        },
 
         new NavigationItem
         {
@@ -210,7 +239,7 @@
 
         new NavigationItem
         {
-            Title = "Conhec. Transp.",
+            Title = "Conhec. transp.",
             Path = "Fiscal/ConhecimentosTransportes",
             Prefix = false
         },
@@ -218,7 +247,7 @@
     };
 
     private static List<NavigationItem> Configuracoes = new List<NavigationItem>
-    {
+        {
 
         new NavigationItem
         {
@@ -227,6 +256,4 @@
             Prefix = false
         },
 
-    }; 
-    
-}
+    }; }

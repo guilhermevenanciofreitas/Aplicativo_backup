@@ -1,0 +1,58 @@
+﻿@inherits ViewEntradaPage
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Entrada" OnLoad="Page_Load" Width="1100px">
+    
+    @*<BtnLimpar>
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
+    </BtnLimpar>*@
+
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" Text="Finalizar" OnClick="BtnFinalizar_Click" />
+    </BtnSalvar>
+
+    @*<BtnExcluir>
+        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+    </BtnExcluir>*@
+
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="NotaFiscal" Title="Nota fiscal">
+                <div class="row">
+                    <div class="col-md-4 col-sm-8">
+                        <ViewPesquisa @ref="ViewPesquisaNotaFiscal" Tipo="NotaFiscal" _Label="Código/Número" _Title="Procurar nota fiscal" Width_Codigo="120px" OnChange="ViewPesquisaNotaFiscal_Change" />
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <TextBox @ref="TxtSerie" _Label="Série" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <TextBox @ref="TxtChaveAcesso" _Label="Chave de acesso" _ReadOnly="true" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <TextBox @ref="TxtCNPJ" _Label="CPF/CNPJ" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <TextBox @ref="TxtRazaoSocial" _Label="Razão social" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <TextBox @ref="TxtNomeFantasia" _Label="Nome fantasia" _ReadOnly="true" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Itens" Title="Itens">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <ViewPesquisa @ref="ViewPesquisaEstoque" Tipo="Estoque" _Label="Estoque" _Title="Procurar estoque" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewEntradaItem @ref="ViewEntradaItem" />
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

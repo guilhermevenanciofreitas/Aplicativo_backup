@@ -30,15 +30,25 @@ namespace Aplicativo.View.Helpers
             QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
 
             var QueryEstado = new HelpQuery<Estado>();
+
+            var QueryPedidoVendaStatus = new HelpQuery<PedidoVendaStatus>();
+
+
             var QueryUnidadeMedida = new HelpQuery<UnidadeMedida>();
 
+            var QueryNotaFiscalModelo = new HelpQuery<NotaFiscalModelo>();
+            
 
 
             Parametros.UsuarioLogado = await QueryUsuario.FirstOrDefault();
             Parametros.EmpresaLogada = await QueryEmpresa.FirstOrDefault();
 
+            Parametros.PedidoVendaStatus = await QueryPedidoVendaStatus.ToList();
+
             Parametros.Estado = await QueryEstado.ToList();
             Parametros.UnidadeMedida = await QueryUnidadeMedida.ToList();
+
+            Parametros.NotaFiscalModelo = await QueryNotaFiscalModelo.ToList();
 
             //using (var db = new Context())
             //{
@@ -127,7 +137,10 @@ namespace Aplicativo.View.Helpers
 
         //public List<ArquivoTipo> ArquivoTipo { get; set; } = new List<ArquivoTipo>();
 
+        public List<PedidoVendaStatus> PedidoVendaStatus { get; set; } = new List<PedidoVendaStatus>();
+
         //public List<OrdemCargaStatus> OrdemCargaStatus { get; set; } = new List<OrdemCargaStatus>();
+
 
         public List<Estado> Estado { get; set; } = new List<Estado>();
 
@@ -136,6 +149,8 @@ namespace Aplicativo.View.Helpers
         //public List<ContatoTipo> ContatoTipo { get; set; } = new List<ContatoTipo>();
 
         public List<UnidadeMedida> UnidadeMedida { get; set; } = new List<UnidadeMedida>();
+
+        public List<NotaFiscalModelo> NotaFiscalModelo { get; set; } = new List<NotaFiscalModelo>();
 
         //public List<CompraStatus> CompraStatus { get; set; } = new List<CompraStatus>();
 

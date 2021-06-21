@@ -1,0 +1,25 @@
+﻿@inherits ViewAndamentoPage;
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Andamento" OnLoad="Page_Load" Width="550px" Top="100px">
+    
+    <BtnSalvar>
+        <ViewPageBtnSalvar Type="PedidoVenda" OnClick="BtnConfirmar_Click" />
+    </BtnSalvar>
+
+    <View>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <DropDownList @ref="DplStatus" _Label="Status" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <TextArea @ref="TxtObservacao" _Label="Observação" />
+            </div>
+        </div>
+
+    </View>
+
+</EditItemViewLayout>

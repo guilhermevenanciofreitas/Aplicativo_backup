@@ -38,8 +38,12 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         #region ListView
         protected void Page_Load()
         {
+
             ViewPesquisaFornecedor.AddWhere("IsFornecedor == @0", true);
             ViewPesquisaFornecedor.AddWhere("Ativo == @0", true);
+
+            DplUnidadeMedida.LoadDropDownList("UnidadeMedidaID", "Unidade", new DropDownListItem(null, "[Selecione]"), HelpParametros.Parametros.UnidadeMedida.Where(c => c.Ativo == true).ToList());
+
         }
 
         protected async Task ViewLayout_ItemView(object args)
@@ -55,6 +59,8 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ViewModel = new ProdutoFornecedor();
 
             EditItemViewLayout.LimparCampos(this);
+
+            ViewPesquisaFornecedor.Clear();
 
             TxtCodigo.Focus();
 
@@ -76,6 +82,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ViewPesquisaFornecedor.Text = ViewModel.Fornecedor?.NomeFantasia.ToStringOrNull();
             TxtContem.Value = ViewModel.Contem ?? 0;
             TxtPreco.Value = ViewModel.Preco ?? 0;
+            TxtTotal.Value = ViewModel.Total ?? 0;
 
             DplUnidadeMedida.SelectedValue = ViewModel.UnidadeMedidaID.ToStringOrNull();
 
@@ -88,6 +95,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ViewModel.FornecedorID = ViewPesquisaFornecedor.Value.ToIntOrNull();
             ViewModel.Fornecedor = new Pessoa() { NomeFantasia = ViewPesquisaFornecedor.Text };
             ViewModel.UnidadeMedidaID = DplUnidadeMedida.SelectedValue.ToIntOrNull();
+            ViewModel.UnidadeMedida = new UnidadeMedida() { Unidade = DplUnidadeMedida.SelectedText };
             ViewModel.Contem = TxtContem.Value;
             ViewModel.Preco = TxtPreco.Value;
 

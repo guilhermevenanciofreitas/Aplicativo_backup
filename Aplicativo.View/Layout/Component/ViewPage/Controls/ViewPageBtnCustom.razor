@@ -1,6 +1,4 @@
-﻿@typeparam Type;
-
-@inherits ViewPageBtnExcluirComponent<Type>;
+﻿@inherits ViewPageBtnCustomComponent;
 
 @if (Visible)
 {
@@ -12,9 +10,9 @@
 
     @if (HelpDisplay.Display.Width > (int)LayoutSize.Small)
     {
-        <Button Variant="@ButtonVariant.Contained" OnClick="BtnExcluir_Click" Style=@("color: #fff; background-color: #df4759; width: " + Width)>
+        <Button Variant="@ButtonVariant.Contained" OnClick="BtnCustom_Click" Style=@("color: #fff; background-color: " + Color + "; width: " + Width)>
             <StartIcon>
-                <DeleteIcon />
+                <FileCopyIcon />
             </StartIcon>
             <ChildContent>
                 @Text

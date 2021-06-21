@@ -28,6 +28,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         [Parameter] public EventCallback OnSave { get; set; }
 
         #region Elements
+        public ViewPesquisa<Operacao> ViewPesquisaOperacao { get; set; }
         public ViewPesquisa<Produto> ViewPesquisaProduto { get; set; }
         public NumericBox TxtQuantidade { get; set; }
         public NumericBox TxtPreco { get; set; }
@@ -63,6 +64,9 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         protected async Task ViewLayout_Carregar(object args)
         {
 
+            ViewPesquisaOperacao.Where.Clear();
+            ViewPesquisaOperacao.AddWhere("OperacaoTipoID == @0", 2);
+
             await EditItemViewLayout.Show(args);
 
             ViewLayout_Limpar();
@@ -71,6 +75,9 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             ViewModel = (PedidoVendaItem)args;
 
+
+            ViewPesquisaOperacao.Value = ViewModel.OperacaoID.ToStringOrNull();
+            ViewPesquisaOperacao.Text = ViewModel.Operacao?.Descricao.ToStringOrNull();
             ViewPesquisaProduto.Value = ViewModel.ProdutoID.ToStringOrNull();
             ViewPesquisaProduto.Text = ViewModel.Produto?.Descricao.ToStringOrNull();
             TxtQuantidade.Value = ViewModel.Quantidade ?? 0;
@@ -90,6 +97,8 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
                 throw new EmptyException("Informe o produto!", ViewPesquisaProduto.Element);
             }
 
+            ViewModel.OperacaoID = ViewPesquisaOperacao.Value.ToIntOrNull();
+            ViewModel.Operacao = new Operacao() { Descricao = ViewPesquisaOperacao.Text };
             ViewModel.ProdutoID = ViewPesquisaProduto.Value.ToIntOrNull();
             ViewModel.Produto = new Produto() { Descricao = ViewPesquisaProduto.Text };
             ViewModel.Quantidade = TxtQuantidade.Value;

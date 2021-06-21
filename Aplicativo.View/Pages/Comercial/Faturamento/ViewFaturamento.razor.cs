@@ -4,6 +4,7 @@ using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
+using Aplicativo.View.Pages.Comercial.Vendas;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Syncfusion.Blazor.Grids;
@@ -24,6 +25,9 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
+
+        public ViewPedidoVendaAndamento ViewPedidoVendaAndamento { get; set; }
+
         public TabSet TabSet { get; set; }
 
         //public SfGrid<PedidoVenda> GridViewPedidoVenda { get; set; }
@@ -72,7 +76,7 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                     if (QuantidadeFaturado < (PedidoVendaItem.Quantidade ?? 0))
                     {
 
-                        var CFOP = PedidoVendaItem.Produto.Tributacao.TributacaoOperacao?.FirstOrDefault(c => c.OperacaoID == PedidoVendaItem.OperacaoID);
+                        var CFOP = PedidoVendaItem.Produto?.Tributacao?.TributacaoOperacao?.FirstOrDefault(c => c.OperacaoID == PedidoVendaItem.OperacaoID);
 
                         var NotaFiscalItem = new NotaFiscalItem()
                         {
@@ -83,7 +87,7 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
                             orig = PedidoVendaItem.Produto.Origem,
 
-                            Codigo_CFOP = CFOP.Codigo_CFOP_Estadual,
+                            Codigo_CFOP = CFOP?.Codigo_CFOP_Estadual,
 
                             Codigo_NCM = PedidoVendaItem.Produto.Codigo_NCM,
                             Codigo_CEST = PedidoVendaItem.Produto.Codigo_CEST,
@@ -153,6 +157,8 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                             ListNotaFiscal.Add(new NotaFiscal() { 
 
                                 cNF = PedidoVenda.PedidoVendaID.ToStringOrNull(),
+
+                                tpNF = 1,
                                 
                                 CNPJCPF = HelpParametros.Parametros.EmpresaLogada.CNPJ,
                                 xFant = HelpParametros.Parametros.EmpresaLogada.NomeFantasia,
@@ -180,64 +186,155 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 }
             }
 
-            GridViewNotaFiscal.Refresh();
+            GridViewNotaFiscal?.Refresh();
 
         }
 
         protected async Task BtnFaturar_Click()
         {
 
+            ViewPedidoVendaAndamento.IsFaturado = true;
+
+            ViewPedidoVendaAndamento.PedidoVendaID = ListPedidoVenda.Select(c => c.PedidoVendaID).ToList();
+
+            await ViewPedidoVendaAndamento.EditItemViewLayout.Show(null);
+
+        }
+
+        public async Task ViewPedidoVendaAndamento_Confirm()
+        {
+
             var HelpUpdate = new HelpUpdate();
 
 
+            //foreach (var item in ListNotaFiscal)
+            //{
+            //    item.NotaFiscalItem = null;
+            //}
+
             HelpUpdate.AddRange(ListNotaFiscal);
 
+            var EstoqueMovimento = new EstoqueMovimento()
+            {
+                EstoqueMovimentoTipoID = EstoqueMovimentoTipo.Saida,
+                Data = DateTime.Now,
+                FuncionarioID = HelpParametros.Parametros.UsuarioLogado.FuncionarioID,
+            };
 
             foreach (var item in ListPedidoVenda)
             {
 
-                foreach(var Titulo in item.PedidoVendaPagamento.Select(c => c.Titulo))
+                foreach (var Titulo in item.PedidoVendaPagamento.Select(c => c.Titulo))
                 {
                     Titulo.Ativo = true;
                     HelpUpdate.Add(Titulo);
                 }
 
-                foreach(var PedidoVendaItem in item.PedidoVendaItem)
+
+
+                foreach (var PedidoVendaItem in item.PedidoVendaItem)
                 {
-                    foreach(var ConferenciaItem in PedidoVendaItem.PedidoVendaItemConferenciaItem)
+
+
+                    if (PedidoVendaItem.PedidoVendaItemConferenciaItem.Count == 0)
                     {
 
-                        var EstoqueMovimentoItemEntrada = ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada;
+                        var QueryMovimentoItem = new HelpQuery<EstoqueMovimentoItem>();
+
+                        QueryMovimentoItem.AddInclude("EstoqueMovimentoItemEntrada");
+
+                        QueryMovimentoItem.AddWhere("ProdutoID == @0", PedidoVendaItem.ProdutoID);
+
+                        var EstoqueMovimentoItem = await QueryMovimentoItem.ToList();
+
+                        for(var i = 1; i <= PedidoVendaItem.Quantidade; i++)
+                        {
+
+                            var Entradas = EstoqueMovimentoItem.Where(c => c?.EstoqueMovimentoItemEntrada?.Saldo > 0).Select(c => c?.EstoqueMovimentoItemEntrada);
+
+                            foreach (var Entrada in Entradas)
+                            {
+
+                                var ConferenciaItem = PedidoVendaItem.PedidoVendaItemConferenciaItem.FirstOrDefault(c => c.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntradaID == Entrada.EstoqueMovimentoItemEntradaID);
+
+                                if (ConferenciaItem == null)
+                                {
+                                    PedidoVendaItem.PedidoVendaItemConferenciaItem.Add(new PedidoVendaItemConferenciaItem()
+                                    {
+                                        ConferenciaItem = new ConferenciaItem()
+                                        {
+
+                                            Quantidade = 1,
+
+                                            EstoqueMovimentoItem = new EstoqueMovimentoItem()
+                                            {
+                                                EstoqueMovimentoItemEntrada = Entrada,
+                                            }
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.Quantidade++;
+                                }
+
+                                if (Entrada.Saldo <= 0)
+                                {
+                                    throw new Exception(PedidoVendaItem.Produto.Descricao + " não possui estoque suficiente!");
+                                }
+
+                                Entrada.Saldo--;
+
+                            }
+                            
+                        }
+
+                    }
+
+                    foreach (var ConferenciaItem in PedidoVendaItem.PedidoVendaItemConferenciaItem)
+                    {
+
+                        var HelpQuery = new HelpQuery<EstoqueMovimentoItemEntrada>();
+
+                        HelpQuery.AddWhere("EstoqueMovimentoItemEntradaID == @0", ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada.EstoqueMovimentoItemEntradaID);
+
+                        var EstoqueMovimentoItemEntrada = await HelpQuery.FirstOrDefault(); //ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada;
+
+                        await App.JSRuntime.InvokeVoidAsync("console.log", EstoqueMovimentoItemEntrada);
 
                         var NotaFiscamItem = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.FirstOrDefault(c => c.NotaFiscalItem.NotaFiscalItemID == null);
 
                         var EstoqueMovimentoItem = new EstoqueMovimentoItem()
                         {
-                            EstoqueMovimento = new EstoqueMovimento()
-                            {
-                                EstoqueMovimentoTipoID = EstoqueMovimentoTipo.Saida,
-                                Data = DateTime.Now,
-                                UsuarioID = HelpParametros.Parametros.UsuarioLogado.FuncionarioID,
-                            },
-
                             ProdutoID = PedidoVendaItem.ProdutoID,
-                            Quantidade = NotaFiscamItem.NotaFiscalItem.qCom,
-                            NotaFiscalItemID = NotaFiscamItem.NotaFiscalItemID,
-
+                            Quantidade = ConferenciaItem.ConferenciaItem.Quantidade,
+                            NotaFiscalItem = NotaFiscamItem.NotaFiscalItem,
+                            EstoqueMovimentoItemSaida = new EstoqueMovimentoItemSaida()
+                            {
+                                EstoqueMovimentoItemEntradaID = EstoqueMovimentoItemEntrada.EstoqueMovimentoItemEntradaID,
+                            }
                         };
 
-                        var EstoqueMovimentoItemSaida = new EstoqueMovimentoItemSaida()
+                        EstoqueMovimento.EstoqueMovimentoItem.Add(EstoqueMovimentoItem);
+
+                        EstoqueMovimentoItemEntrada.Saldo -= ConferenciaItem.ConferenciaItem.Quantidade;
+
+                        if (EstoqueMovimentoItemEntrada.Saldo < 0)
                         {
-                            EstoqueMovimentoItem = EstoqueMovimentoItem,
-                        };
 
-                        EstoqueMovimentoItemEntrada.EstoqueMovimentoItemSaida.Add(EstoqueMovimentoItemSaida);
+                            if (ViewPedidoVendaAndamento != null)
+                            {
+                                await ViewPedidoVendaAndamento?.EditItemViewLayout?.ViewModal?.Hide();
+                            }
+                            
+                            throw new Exception(PedidoVendaItem.Produto.Descricao + " não possui estoque suficiente!");
 
-                        EstoqueMovimentoItemEntrada.Saldo -= EstoqueMovimentoItemSaida.EstoqueMovimentoItem.Quantidade;
+                        }
 
                         HelpUpdate.Add(EstoqueMovimentoItemEntrada);
 
                     }
+
                 }
 
 
@@ -245,14 +342,14 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 item.Vendedor = null;
                 item.Transportadora = null;
 
-                if (item.Finalizado == null)
-                {
-                    item.Finalizado = DateTime.Now;
-                }
+                //if (item.Finalizado == null)
+                //{
+                //    item.Finalizado = DateTime.Now;
+                //}
 
                 if (item.PedidoVendaItem.Sum(c => c.PedidoVendaItemNotaFiscalItem.Sum(c => c.NotaFiscalItem.qCom ?? 0)) == item.PedidoVendaItem.Sum(c => c.Quantidade))
                 {
-                    item.Faturamento = DateTime.Now;
+                    item.Faturado = DateTime.Now;
                 }
 
                 item.PedidoVendaItem = null;
@@ -260,12 +357,27 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
             }
 
+            HelpUpdate.Add(EstoqueMovimento);
             HelpUpdate.AddRange(ListPedidoVenda);
-
+           
 
             await HelpUpdate.SaveChanges();
 
-            await EditItemViewLayout.ViewModal.Hide();
+            if (EditItemViewLayout != null)
+            {
+                await EditItemViewLayout?.ViewModal?.Hide();
+            }
+            
+            if (ViewPedidoVendaAndamento != null)
+            {
+                await ViewPedidoVendaAndamento?.EditItemViewLayout?.ViewModal?.Hide();
+            }
+            
+
+        }
+
+        protected async Task ViewPedidoVendaAndamento_Finally()
+        {
 
             await ListView.ListViewBtnPesquisa.BtnPesquisar_Click();
 

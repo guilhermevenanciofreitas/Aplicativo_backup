@@ -36,6 +36,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
         public DropDownList DplOrigem { get; set; }
         public ViewPesquisa<NCM> ViewPesquisaNCM { get; set; }
         public ViewPesquisa<CEST> ViewPesquisaCEST { get; set; }
+        public ViewPesquisa<Tributacao> ViewPesquisaTributacao { get; set; }
 
         public ViewProdutoFornecedor ViewProdutoFornecedor { get; set; }
         #endregion
@@ -49,7 +50,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             DplOrigem.Add("1", "1 - Estrangeira (Importação direta)");
             DplOrigem.Add("2", "2 - Estrangeira (Adquirida no mercado interno)");
 
-            DplUnidadeMedida.LoadDropDownList("UnidadeMedidaID", "Descricao", new DropDownListItem(null, "[Selecione]"), HelpParametros.Parametros.UnidadeMedida);
+            DplUnidadeMedida.LoadDropDownList("UnidadeMedidaID", "Unidade", new DropDownListItem(null, "[Selecione]"), HelpParametros.Parametros.UnidadeMedida.Where(c => c.Ativo == true).ToList());
 
         }
 
@@ -66,9 +67,12 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             Query.AddInclude("NCM");
             Query.AddInclude("CEST");
+            Query.AddInclude("Tributacao");
 
             Query.AddInclude("ProdutoFornecedor");
             Query.AddInclude("ProdutoFornecedor.Fornecedor");
+            Query.AddInclude("ProdutoFornecedor.UnidadeMedida");
+
             Query.AddWhere("ProdutoID == @0", ((Produto)args).ProdutoID);
 
             ViewModel = await Query.FirstOrDefault();
@@ -90,6 +94,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ViewPesquisaCEST.Value = ViewModel.Codigo_CEST;
             ViewPesquisaCEST.Text = ViewModel.CEST?.Descricao;
 
+            ViewPesquisaTributacao.Value = ViewModel.TributacaoID.ToStringOrNull();
+            ViewPesquisaTributacao.Text = ViewModel.Tributacao?.Descricao.ToStringOrNull();
+
             //Fornecedores
             ViewProdutoFornecedor.ListView.Items = ViewModel.ProdutoFornecedor.ToList();
 
@@ -103,6 +110,10 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             ProdutoID = null;
 
             EditItemViewLayout.LimparCampos(this);
+
+            ViewPesquisaNCM.Clear();
+            ViewPesquisaCEST.Clear();
+            ViewPesquisaTributacao.Clear();
 
             ViewProdutoFornecedor.ListView.Items = new List<ProdutoFornecedor>();
 
@@ -130,8 +141,15 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
 
             //Tributação
             ViewModel.Origem = DplOrigem.SelectedValue.ToIntOrNull();
+
             ViewModel.Codigo_NCM = ViewPesquisaNCM.Value;
+            ViewModel.NCM = null;
+
             ViewModel.Codigo_CEST = ViewPesquisaCEST.Value;
+            ViewModel.CEST = null;
+
+            ViewModel.TributacaoID = ViewPesquisaTributacao.Value.ToIntOrNull();
+            ViewModel.Tributacao = null;
 
 
             //Fornecedores
@@ -140,6 +158,7 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             foreach(var item in ViewModel.ProdutoFornecedor)
             {
                 item.Fornecedor = null;
+                item.UnidadeMedida = null;
             }
 
             var HelpUpdate = new HelpUpdate();
@@ -149,10 +168,6 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
             var Changes = await HelpUpdate.SaveChanges();
 
             ViewModel = HelpUpdate.Bind<Produto>(Changes[0]);
-
-            //var Query = new HelpQuery<Produto>();
-
-            //ViewModel = await Query.Update(ViewModel);
 
             await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
 
@@ -191,7 +206,11 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
                 item.Ativo = false;
             }
 
-            //await Query.Update(ViewModel, false);
+            var HelpUpdate = new HelpUpdate();
+
+            HelpUpdate.AddRange(ViewModel);
+
+            await HelpUpdate.SaveChanges();
 
         }
 

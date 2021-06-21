@@ -14,6 +14,8 @@ namespace Aplicativo.View.Layout.Component.ListView
 
         [Parameter] public RenderFragment ViewPages { get; set; }
 
+        [Parameter] public bool CardActionsVisible { get; set; } = true;
+
         [Parameter] public RenderFragment BtnNovo { get; set; }
         [Parameter] public RenderFragment BtnOneSelected { get; set; }
         [Parameter] public RenderFragment BtnOneMoreSelected { get; set; }

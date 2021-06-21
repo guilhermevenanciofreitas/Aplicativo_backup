@@ -1,0 +1,99 @@
+﻿@inherits ViewTributacaoPage
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Tributação" OnLoad="Page_Load" Width="660px">
+    
+    <BtnLimpar>
+        <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
+    </BtnLimpar>
+
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+    </BtnSalvar>
+
+    <BtnExcluir>
+        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+    </BtnExcluir>
+
+    <View>
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                        <TextBox @ref="TxtCodigo" _Label="Código" _ReadOnly="true" />
+                    </div>
+                    <div class="col-md-10 col-sm-12">
+                        <TextBox @ref="TxtDescricao" _Label="Descrição" />
+                    </div>
+                </div>
+
+                <br />
+                <br />
+
+                <TabSet @ref="TabCST" Changed="StateHasChanged">
+                    <TabPage Id="ICMS" Title="ICMS">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <ViewPesquisa @ref="ViewPesquisaICMS" Tipo="CST_ICMS" _Label="CST ICMS" _Title="Procurar CST ICMS" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <ViewPesquisa @ref="ViewPesquisaCSOSN" Tipo="CSOSN_ICMS" _Label="CSOSN ICMS" _Title="Procurar CSOSN ICMS" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <NumericBox @ref="TxtAliq_ICMS" _Label="Aliq. (%)" />
+                            </div>
+                        </div>
+                    </TabPage>
+                    <TabPage Id="IPI" Title="IPI">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <ViewPesquisa @ref="ViewPesquisaIPI" Tipo="CST_IPI" _Label="CST IPI" _Title="Procurar CST IPI" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <NumericBox @ref="TxtAliq_IPI" _Label="Aliq. (%)" />
+                            </div>
+                        </div>
+                    </TabPage>
+                    <TabPage Id="PIS" Title="PIS">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <ViewPesquisa @ref="ViewPesquisaPIS" Tipo="CST_PISCOFINS" _Label="CST PIS" _Title="Procurar CST PIS" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <NumericBox @ref="TxtAliq_PIS" _Label="Aliq. (%)" />
+                            </div>
+                        </div>
+                    </TabPage>
+                    <TabPage Id="COFINS" Title="COFINS">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <ViewPesquisa @ref="ViewPesquisaCOFINS" Tipo="CST_PISCOFINS" _Label="CST COFINS" _Title="Procurar CST COFINS" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-12">
+                                <NumericBox @ref="TxtAliq_COFINS" _Label="Aliq. (%)" />
+                            </div>
+                        </div>
+                    </TabPage>
+                </TabSet>
+
+            </TabPage>
+            <TabPage Id="Operacoes" Title="Operações">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <ViewTributacaoOperacao @ref="ViewTributacaoOperacao" />
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

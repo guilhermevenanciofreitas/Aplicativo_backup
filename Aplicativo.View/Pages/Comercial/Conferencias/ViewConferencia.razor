@@ -1,0 +1,76 @@
+﻿@inherits ViewConferenciaPage
+
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Conferência" OnLoad="Page_Load" Width="1200px">
+    
+    <BtnLimpar>
+        <ViewPageBtnLimpar Visible="BtnLimpar" OnClick="BtnLimpar_Click" />
+    </BtnLimpar>
+
+    <BtnSalvar>
+        <ViewPageBtnSalvar ListItemViewLayout="ListView" Text="Finalizar" OnClick="BtnFinalizar_Click" />
+    </BtnSalvar>
+
+    <View>
+
+        <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamento" ListView="ListView" OnConfirm="ViewPedidoVendaAndamento_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
+
+        <TabSet @ref="TabSet" Changed="StateHasChanged">
+            <TabPage Id="Principal" Title="Principal">
+                <div class="row">
+                    <div class="col-md-2 col-sm-6">
+                        <NumericBox @ref="TxtQuantidade" _Label="Quantidade" _Digits="3" />
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <TextBox @ref="TxtCodigoBarras" _Label="Cód. barras" />
+                    </div>
+                    <div class="col-md-1 col-sm-6">
+                        <button @onclick="BtnAdicionar_Click">Adicionar</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <SfGrid @ref="GridViewPedidoVendaItem" DataSource="ListPedidoVendaItem" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
+                            <GridFilterSettings Type="FilterType.Excel" />
+                            <GridPageSettings PageSize="30"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Width="70" Field="ProdutoID" HeaderText="Código" />
+                                <GridColumn Width="210" Field="Produto.Descricao" HeaderText="Descrição" />
+                                <GridColumn Width="85" Field="Quantidade" HeaderText="Quantidade" />
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <SfGrid @ref="GridViewConferenciaItem" DataSource="ListConferenciaItem" AllowReordering="true" AllowResizing="true" AllowFiltering="true" AllowSorting="true" RowHeight="30" onselectstart='return false'>
+                            <GridFilterSettings Type="FilterType.Excel" />
+                            <GridPageSettings PageSize="30"></GridPageSettings>
+                            <GridColumns>
+                                <GridColumn Width="70" Field="ProdutoID" HeaderText="Código" />
+                                <GridColumn Width="210" Field="Produto.Descricao" HeaderText="Descrição" />
+                                <GridColumn Width="85" Field="Quantidade" HeaderText="Quantidade" />
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Andamento" Title="Andamento">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <SfGrid @ref="GridViewAndamento" DataSource="ListAndamento" TValue="PedidoVendaAndamento" AllowReordering="true" AllowResizing="true" AllowSorting="true" RowHeight="30" Height="100%" Width="auto" onselectstart='return false'>
+                                    <GridPageSettings PageSize="30" />
+                                    <GridColumns>
+                                        <GridColumn Field="Data" HeaderText="Data" Width="120" />
+                                        <GridColumn Field="PedidoVendaStatus.Descricao" HeaderText="Status" Width="200" />
+                                        <GridColumn Field="Observacao" HeaderText="Observação" Width="450" />
+                                    </GridColumns>
+                                </SfGrid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </TabPage>
+        </TabSet>
+    </View>
+
+</EditItemViewLayout>

@@ -1,13 +1,13 @@
-﻿@attribute [Page("Fiscal/NotasFiscais")]
+﻿@attribute [Page("Fiscal/Tributacoes")]
 @attribute [LoginRequired(true)]
 
 @inherits IndexPage;
 
 <ComponentLayout OnLoad="Page_Load">
-    <ListItemViewLayout @ref="ListView" Type="NotaFiscal" Title="Notas fiscais">
+    <ListItemViewLayout @ref="ListView" Type="Tributacao" Title="Tributações">
 
         <ViewPages>
-            <ViewNotaFiscal @ref="View" ListView="ListView" />
+            <ViewTributacao @ref="View" ListView="ListView" />
         </ViewPages>
 
         <BtnNovo>
@@ -29,15 +29,15 @@
         </BtnExcluir>
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscal" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="Tributacao" OnItemView="BtnItemView_Click" AllowGrouping="false" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
-                        var item = (NotaFiscal)context;
+                        var item = (Tributacao)context;
 
-                        <ListItemText Primary="@item.CEP">
+                        <ListItemText Primary="@item.TributacaoID.ToString()">
                             <SecondaryContent>
                                 <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                    @item.CEP
+                                    @item.TributacaoID
                                 </Typography>
                                 — I'll be in your neighborhood
                             </SecondaryContent>
@@ -45,13 +45,13 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="nNF" HeaderText="Número" Width="90" />
-                    <GridColumn Field="serie" HeaderText="Série" Width="70" />
-                    <GridColumn Field="dhEmi" HeaderText="Emissão" Width="90" Format="dd/MM/yyyy" />
-                    <GridColumn Field="xNome" HeaderText="Emitente" Width="230" />
-                    <GridColumn Field="dest_xNome" HeaderText="Destinatário" Width="230" />
-                    <GridColumn Field="IE" HeaderText="Status" Width="160" />
-                    <GridColumn Field="vNF" HeaderText="Valor" Width="110" Format="C2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="TributacaoID" HeaderText="Código" Width="100" />
+                    <GridColumn Field="Descricao" HeaderText="Descrição" Width="210" />
+                    <GridColumn Field="ICMS" HeaderText="ICMS" Width="280" />
+                    @*<GridColumn Field="CSOSN" HeaderText="CSOSN" Width="100" />*@
+                    <GridColumn Field="IPI" HeaderText="IPI" Width="220" />
+                    <GridColumn Field="PIS" HeaderText="PIS" Width="220" />
+                    <GridColumn Field="COFINS" HeaderText="COFINS" Width="220" />
                 </Columns>
             </ListViewGridView>
         </GridView>

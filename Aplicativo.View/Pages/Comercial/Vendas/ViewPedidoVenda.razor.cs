@@ -2,10 +2,12 @@
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout.Component.ListView;
 using Aplicativo.View.Layout.Component.ViewPage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +24,16 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
+
+        public ViewPedidoVendaAndamento ViewPedidoVendaAndamento { get; set; }
+
         public TabSet TabSet { get; set; }
 
         public TextBox TxtCodigo { get; set; }
         public ViewPesquisa<Pessoa> ViewPesquisaCliente { get; set; }
         public TextBox TxtCNPJ { get; set; }
         public TextBox TxtTelefone { get; set; }
+        public DropDownList DplStatus { get; set; }
 
         public ViewPesquisa<Pessoa> ViewPesquisaVendedor { get; set; }
         public DatePicker DtpData { get; set; }
@@ -38,10 +44,15 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         public ViewPedidoVendaItem ViewPedidoVendaItem { get; set; }
         public ViewPedidoVendaPagamento ViewPedidoVendaPagamento { get; set; }
 
+
+        public SfGrid<PedidoVendaAndamento> GridViewAndamento { get; set; }
+        public List<PedidoVendaAndamento> ListAndamento { get; set; } = new List<PedidoVendaAndamento>();
+
         #endregion
 
-        protected async Task Page_Load(object args)
+        private void InitializeComponents()
         {
+
 
             ViewPesquisaCliente.Where.Clear();
             ViewPesquisaVendedor.Where.Clear();
@@ -58,6 +69,24 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             ViewPesquisaTransportadora.AddWhere("IsTransportadora == @0", true);
             ViewPesquisaTransportadora.AddWhere("Ativo == @0", true);
 
+            DplStatus.LoadDropDownList("PedidoVendaStatusID", "Descricao", new DropDownListItem(null, "[Selecione]"), 
+                HelpParametros.Parametros.PedidoVendaStatus.Where(c => 
+                    (c.IsFinalizado ?? false) == false && 
+                    (c.IsSeparado ?? false) == false && 
+                    (c.IsConferido ?? false) == false && 
+                    (c.IsFaturado ?? false) == false &&
+                    (c.IsEntregue ?? false) == false
+                ).ToList()
+            );
+
+
+        }
+
+        protected async Task Page_Load(object args)
+        {
+
+            InitializeComponents();
+
             await BtnLimpar_Click();
 
             if (args == null) return;
@@ -69,6 +98,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             Query.AddInclude("Cliente.PessoaContato");
             Query.AddInclude("Cliente.PessoaContato.Contato");
             Query.AddInclude("PedidoVendaItem");
+            Query.AddInclude("PedidoVendaItem.Operacao");
             Query.AddInclude("PedidoVendaItem.Produto");
             Query.AddInclude("PedidoVendaPagamento");
             Query.AddInclude("PedidoVendaPagamento.Titulo");
@@ -77,6 +107,10 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.CentroCusto");
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.ContaBancaria");
             Query.AddInclude("PedidoVendaPagamento.Titulo.TituloDetalhe.FormaPagamento");
+
+            Query.AddInclude("PedidoVendaAndamento");
+            Query.AddInclude("PedidoVendaAndamento.PedidoVendaStatus");
+
             Query.AddInclude("Transportadora");
             Query.AddWhere("PedidoVendaID == @0", ((PedidoVenda)args).PedidoVendaID);
             
@@ -89,6 +123,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             ViewPesquisaCliente.Text = ViewModel.Cliente?.NomeFantasia.ToStringOrNull();
             TxtCNPJ.Text = ViewModel.Cliente?.CNPJ_Formatado.ToStringOrNull();
             TxtTelefone.Text = ViewModel.Cliente?.PessoaContato?.FirstOrDefault()?.Contato?.Telefone;
+            DplStatus.SelectedValue = ViewModel.PedidoVendaStatusID.ToStringOrNull();
 
             ViewPesquisaVendedor.Value = ViewModel.VendedorID.ToStringOrNull();
             ViewPesquisaVendedor.Text = ViewModel.Vendedor?.NomeFantasia.ToStringOrNull();
@@ -105,6 +140,11 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             {
                 ViewPedidoVendaPagamento.ListView.Items = ViewModel.PedidoVendaPagamento?.FirstOrDefault()?.Titulo?.TituloDetalhe?.ToList();
             }
+
+
+            ListAndamento.Clear();
+            ListAndamento.AddRange(ViewModel.PedidoVendaAndamento.ToList());
+            GridViewAndamento.Refresh();
 
             ViewPedidoVendaItem_Save();
 
@@ -137,6 +177,11 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             ViewPedidoVendaPagamento.vTotal_Pagamento = 0;
             ViewPedidoVendaPagamento.ListView.Items = new List<TituloDetalhe>();
 
+            ViewModel.PedidoVendaPagamento.Clear();
+
+            ListAndamento.Clear();
+            GridViewAndamento.Refresh();
+
             ViewPedidoVendaItem_Save();
 
             ViewPedidoVendaItem.CalcularTotais();
@@ -150,11 +195,43 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         protected async Task BtnSalvar_Click()
         {
 
-            //if (string.IsNullOrEmpty(TxtLogin.Text))
-            //{
-            //    await TabSet.Active("Principal");
-            //    throw new EmptyException("Informe o login!", TxtLogin.Element);
-            //}
+            await Validar();
+
+            await Salvar();
+
+            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
+
+            if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
+            {
+                EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
+                await Page_Load(ViewModel);
+            }
+            else
+            {
+                await EditItemViewLayout.ViewModal.Hide();
+            }
+
+        }
+
+        private async Task Validar()
+        {
+
+            if (ViewPesquisaCliente.Value.ToIntOrNull() == null)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("Informe o cliente!", ViewPesquisaCliente.Element);
+            }
+
+            if (DplStatus.SelectedValue == null)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("Informe o status!", DplStatus.Element);
+            }
+
+        }
+
+        private async Task Salvar()
+        {
 
             ViewModel.PedidoVendaID = TxtCodigo.Text.ToIntOrNull();
 
@@ -167,21 +244,36 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
             ViewModel.Data = DtpData.Value;
             ViewModel.Expedicao = DtpExpedicao.Value;
 
+            ViewModel.PedidoVendaStatusID = DplStatus.SelectedValue.ToIntOrNull();
+
             ViewModel.TransportadoraID = ViewPesquisaTransportadora.Value.ToIntOrNull();
             ViewModel.Transportadora = null;
 
             ViewModel.PedidoVendaItem = ViewPedidoVendaItem.ListView.Items.ToList();
 
-            foreach(var item in ViewModel.PedidoVendaItem)
+            foreach (var item in ViewModel.PedidoVendaItem)
             {
+                item.Operacao = null;
                 item.Produto = null;
             }
-            
+
 
             var Query = new HelpQuery<PedidoVenda>();
 
+            ViewModel.PedidoVendaAndamento.Clear();
 
-            if (ViewModel.PedidoVendaID == null || ViewModel.PedidoVendaPagamento.Count == 0 || ViewModel.PedidoVendaPagamento != null)
+            if (ViewModel.PedidoVendaID == null)
+            {
+                ViewModel.PedidoVendaAndamento.Add(new PedidoVendaAndamento()
+                {
+                    UsuarioID = HelpParametros.Parametros.UsuarioLogado.UsuarioID,
+                    Data = DateTime.Now,
+                    PedidoVendaStatusID = DplStatus.SelectedValue.ToIntOrNull(),
+                    Observacao = "Criado",
+                });
+            }
+
+            if (ViewModel.PedidoVendaPagamento.Count == 0)
             {
                 ViewModel.PedidoVendaPagamento = new List<PedidoVendaPagamento>();
                 ViewModel.PedidoVendaPagamento.Add(new PedidoVendaPagamento() { Titulo = new Titulo() { DataLancamento = DateTime.Now, TituloDetalhe = ViewPedidoVendaPagamento.ListView.Items.ToList() } });
@@ -191,7 +283,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
                 ViewModel.PedidoVendaPagamento.FirstOrDefault().Titulo.TituloDetalhe = ViewPedidoVendaPagamento.ListView.Items.ToList();
             }
 
-            foreach(var item in ViewModel.PedidoVendaPagamento)
+            foreach (var item in ViewModel.PedidoVendaPagamento)
             {
 
                 item.Titulo.Ativo = false;
@@ -213,41 +305,61 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             var Changes = await HelpUpdate.SaveChanges();
 
+
             ViewModel = HelpUpdate.Bind<PedidoVenda>(Changes[0]);
-
-            await App.JSRuntime.InvokeVoidAsync("alert", "Salvo com sucesso!!");
-
-            if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
-            {
-                EditItemViewLayout.ItemViewMode = ItemViewMode.Edit;
-                await Page_Load(ViewModel);
-            }
-            else
-            {
-                await EditItemViewLayout.ViewModal.Hide();
-            }
 
         }
 
-        public async Task Finalizar(List<int> args)
+        protected async Task BtnFinalizar_Click()
+        {
+            try
+            {
+
+                await Validar();
+
+                if (DplStatus.SelectedValue == null)
+                {
+                    await TabSet.Active("Principal");
+                    throw new EmptyException("Informe o status!", DplStatus.Element);
+                }
+
+                await Salvar();
+
+                await Page_Load(ViewModel);
+
+                await ListView.ListViewBtnPesquisa.BtnPesquisar_Click();
+
+                ViewPedidoVendaAndamento.IsFinalizado = true;
+                ViewPedidoVendaAndamento.PedidoVendaID = new List<int?>() { TxtCodigo.Text.ToIntOrNull() };
+
+                await ViewPedidoVendaAndamento.EditItemViewLayout.Show(null);
+
+
+            }
+            catch (EmptyException)
+            {
+
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(new Error(ex));
+            }
+        }
+
+        protected async Task ViewPedidoVendaAndamento_Confirm()
         {
 
-            var Query = new HelpQuery<PedidoVenda>();
+            await App.JSRuntime.InvokeVoidAsync("alert", "Finalizado com sucesso!!");
 
-            Query.AddWhere("PedidoVendaID IN (" + string.Join(",", args.ToArray()) + ")");
+            await ViewPedidoVendaAndamento.EditItemViewLayout.ViewModal.Hide();
+            await EditItemViewLayout.ViewModal.Hide();
 
-            var ViewModel = await Query.ToList();
+        }
 
-            foreach (var item in ViewModel)
-            {
-                item.Finalizado = DateTime.Now;
-            }
+        protected async Task ViewPedidoVendaAndamento_Finally()
+        {
 
-            var HelpUpdate = new HelpUpdate();
-
-            HelpUpdate.AddRange(ViewModel);
-
-            await HelpUpdate.SaveChanges();
+            await ListView.ListViewBtnPesquisa.BtnPesquisar_Click();
 
         }
 

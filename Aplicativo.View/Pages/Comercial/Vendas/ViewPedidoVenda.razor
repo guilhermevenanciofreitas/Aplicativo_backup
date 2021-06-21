@@ -10,11 +10,18 @@
         <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
     </BtnSalvar>
 
+    <BtnCustom>
+        <ViewPageBtnCustom Text="Finalizar" OnClick="BtnFinalizar_Click" />
+    </BtnCustom>
+
     <BtnExcluir>
         <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
     </BtnExcluir>
 
     <View>
+
+        <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamento" ListView="ListView" OnConfirm="ViewPedidoVendaAndamento_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
+
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
                 <div class="row">
@@ -29,6 +36,9 @@
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <TextBox @ref="TxtTelefone" _Label="Telefone" _ReadOnly="true" _TabIndex="-1" />
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <DropDownList @ref="DplStatus" _Label="Status" />
                     </div>
                 </div>
 
@@ -62,6 +72,20 @@
                 <div class="row">
                     <div class="col-md-5 col-sm-12">
                         <ViewPesquisa @ref="ViewPesquisaTransportadora" Tipo="Pessoa" _Label="Transportadora" _Title="Procurar transportadora" />
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Andamento" Title="Andamento">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <SfGrid @ref="GridViewAndamento" DataSource="ListAndamento" TValue="PedidoVendaAndamento" AllowReordering="true" AllowResizing="true" AllowSorting="true" RowHeight="30" Height="100%" Width="auto" onselectstart='return false'>
+                            <GridPageSettings PageSize="30" />
+                            <GridColumns>
+                                <GridColumn Field="Data" HeaderText="Data" Width="100" />
+                                <GridColumn Field="PedidoVendaStatus.Descricao" HeaderText="Status" Width="200" />
+                                <GridColumn Field="Observacao" HeaderText="Observação" Width="450" />
+                            </GridColumns>
+                        </SfGrid>
                     </div>
                 </div>
             </TabPage>

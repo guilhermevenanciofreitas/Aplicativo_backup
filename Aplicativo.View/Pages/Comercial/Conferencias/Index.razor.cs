@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Comercial.Faturamento
+namespace Aplicativo.View.Pages.Comercial.Conferencias
 {
     public partial class IndexPage : ComponentBase
     {
 
         protected ListItemViewLayout<PedidoVenda> ListView { get; set; }
-        protected ViewFaturamento View { get; set; }
+        protected ViewConferencia View { get; set; }
 
         protected async Task Page_Load()
         {
@@ -29,8 +29,9 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
             Query.AddInclude("Cliente");
             Query.AddInclude("Vendedor");
 
-            Query.AddWhere("Conferido != null");
-            Query.AddWhere("Faturado == null");
+            Query.AddWhere("Finalizado != null");
+            Query.AddWhere("Separado != null");
+            Query.AddWhere("Conferido == null");
 
             ListView.Items = await Query.ToList();
             
@@ -39,15 +40,15 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
         protected async Task BtnItemView_Click(object args)
         {
 
-            var PedidoVenda = (PedidoVenda)args;
-
-            await View.EditItemViewLayout.Show(new List<int?> { PedidoVenda.PedidoVendaID });
+            await View.EditItemViewLayout.Show(args);
 
         }
 
-        protected async Task BtnFaturar_Click(object args)
+        protected async Task BtnConferir_Click(object args)
         {
-            await View.EditItemViewLayout.Show(((IEnumerable)args).Cast<PedidoVenda>().Select(c => c.PedidoVendaID).ToList());
+            
+            await View.EditItemViewLayout.Show(((IEnumerable)args).Cast<PedidoVenda>().FirstOrDefault());
+
         }
 
     }

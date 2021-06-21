@@ -5,6 +5,7 @@ using Aplicativo.View.Layout.Component.ListView;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
     {
 
         protected ListItemViewLayout<PedidoVenda> ListView { get; set; }
+
+        protected ViewPedidoVendaAndamento ViewPedidoVendaAndamento { get; set; }
         protected ViewPedidoVenda View { get; set; }
 
         protected async Task Page_Load()
@@ -26,6 +29,7 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
             var Query = new HelpQuery<PedidoVenda>();
 
+            Query.AddInclude("PedidoVendaStatus");
             Query.AddInclude("Cliente");
             Query.AddInclude("Vendedor");
 
@@ -43,12 +47,26 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
         protected async Task BtnFinalizar_Click(object args)
         {
 
-            var confirm = await App.JSRuntime.InvokeAsync<bool>("confirm", "Tem certeza que deseja finalizar ?");
+            ViewPedidoVendaAndamento.PedidoVendaID = ((IEnumerable)args).Cast<PedidoVenda>().Select(c => c.PedidoVendaID).ToList();
 
-            if (!confirm) return;
+            await ViewPedidoVendaAndamento.EditItemViewLayout.Show(null);
 
-            await View.Finalizar(((IEnumerable)args).Cast<PedidoVenda>().Select(c => (int)c.PedidoVendaID).ToList());
+        }
+
+        protected async Task ViewPedidoVendaAndamento_Confirm()
+        {
+
+            await ViewPedidoVendaAndamento.EditItemViewLayout.ViewModal.Hide();
+
             await BtnPesquisar_Click();
+
+        }
+
+        protected async Task ViewPedidoVendaAndamento_Finally()
+        {
+
+            await ListView.ListViewBtnPesquisa.BtnPesquisar_Click();
+
         }
 
         protected async Task BtnExcluir_Click(object args)

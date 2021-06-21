@@ -40,6 +40,31 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
         public ViewPesquisa<NCM> ViewPesquisaNCM { get; set; }
         public ViewPesquisa<CEST> ViewPesquisaCEST { get; set; }
 
+
+        public NumericBox TxtBaseCalculo { get; set; }
+
+        public ViewPesquisa<CST_ICMS> ViewPesquisaCST_ICMS { get; set; }
+        public ViewPesquisa<CSOSN_ICMS> ViewPesquisaCSOSN_ICMS { get; set; }
+        public NumericBox TxtICMSBaseCalculo { get; set; }
+        public NumericBox TxtAliqICMS { get; set; }
+        public NumericBox TxtValorICMS { get; set; }
+
+        public ViewPesquisa<CST_IPI> ViewPesquisaCST_IPI { get; set; }
+        public NumericBox TxtIPIBaseCalculo { get; set; }
+        public NumericBox TxtAliqIPI { get; set; }
+        public NumericBox TxtValorIPI { get; set; }
+
+        public ViewPesquisa<CST_PISCOFINS> ViewPesquisaCST_PIS { get; set; }
+        public NumericBox TxtPISBaseCalculo { get; set; }
+        public NumericBox TxtAliqPIS { get; set; }
+        public NumericBox TxtValorPIS { get; set; }
+
+        public ViewPesquisa<CST_PISCOFINS> ViewPesquisaCST_COFINS { get; set; }
+        public NumericBox TxtCOFINSBaseCalculo { get; set; }
+        public NumericBox TxtAliqCOFINS { get; set; }
+        public NumericBox TxtValorCOFINS { get; set; }
+
+
         #endregion
 
         #region ListView
@@ -62,6 +87,12 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             ViewPesquisaCFOP.Clear();
             ViewPesquisaNCM.Clear();
             ViewPesquisaCEST.Clear();
+
+            ViewPesquisaCST_ICMS.Clear();
+            ViewPesquisaCSOSN_ICMS.Clear();
+            ViewPesquisaCST_IPI.Clear();
+            ViewPesquisaCST_PIS.Clear();
+            ViewPesquisaCST_COFINS.Clear();
 
 
             await TabPrincipal.Active("Item");
@@ -99,6 +130,38 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             ViewPesquisaCEST.Text = ViewModel.CEST?.Descricao;
 
 
+            TxtBaseCalculo.Value = ViewModel.vBC ?? 0;
+
+            ViewPesquisaCST_ICMS.Value = ViewModel.Codigo_CST;
+            ViewPesquisaCST_ICMS.Text = ViewModel.CST_ICMS?.Descricao;
+
+            ViewPesquisaCSOSN_ICMS.Value = ViewModel.Codigo_CSOSN;
+            ViewPesquisaCSOSN_ICMS.Text = ViewModel.CSOSN_ICMS?.Descricao;
+
+            TxtAliqICMS.Value = ViewModel.pICMS ?? 0;
+            TxtValorICMS.Value = ViewModel.vICMS ?? 0;
+
+            ViewPesquisaCST_IPI.Value = ViewModel.Codigo_IPI;
+            ViewPesquisaCST_IPI.Text = ViewModel.CST_IPI?.Descricao;
+            TxtAliqIPI.Value = ViewModel.pIPI ?? 0;
+            TxtValorIPI.Value = ViewModel.vIPI ?? 0;
+
+            ViewPesquisaCST_PIS.Value = ViewModel.Codigo_PIS;
+            ViewPesquisaCST_PIS.Text = ViewModel.CST_PIS?.Descricao;
+            TxtAliqPIS.Value = ViewModel.pPIS ?? 0;
+            TxtValorPIS.Value = ViewModel.vPIS ?? 0;
+
+            ViewPesquisaCST_COFINS.Value = ViewModel.Codigo_COFINS;
+            ViewPesquisaCST_COFINS.Text = ViewModel.CST_COFINS?.Descricao;
+            TxtAliqCOFINS.Value = ViewModel.pCOFINS ?? 0;
+            TxtValorCOFINS.Value = ViewModel.vCOFINS ?? 0;
+
+            TxtICMSBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtIPIBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtPISBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtCOFINSBaseCalculo.Value = TxtCOFINSBaseCalculo.Value;
+
+
         }
 
         protected async Task ViewPageBtnSalvar_Click()
@@ -112,6 +175,9 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             ViewModel.cProd = TxtCodigo.Text.ToStringOrNull();
             ViewModel.xProd = TxtDescricao.Text.ToStringOrNull();
 
+            ViewModel.qCom = TxtQuantidade.Value;
+            ViewModel.vUnCom = TxtPreco.Value;
+
             ViewModel.Codigo_CFOP = ViewPesquisaCFOP.Value;
             ViewModel.CFOP = new CFOP() { Descricao = ViewPesquisaCFOP.Text };
 
@@ -120,6 +186,34 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             ViewModel.Codigo_CEST = ViewPesquisaCEST.Value;
             ViewModel.CEST = new CEST() { Descricao = ViewPesquisaCEST.Text };
+
+
+            ViewModel.vBC = TxtBaseCalculo.Value;
+
+            ViewModel.Codigo_CST = ViewPesquisaCST_ICMS.Value;
+            ViewModel.CST_ICMS = new CST_ICMS() { Descricao = ViewPesquisaCST_ICMS.Text };
+
+            ViewModel.Codigo_CSOSN = ViewPesquisaCSOSN_ICMS.Value;
+            ViewModel.CSOSN_ICMS = new CSOSN_ICMS() { Descricao = ViewPesquisaCSOSN_ICMS.Text };
+
+            ViewModel.pICMS = TxtAliqICMS.Value;
+            ViewModel.vICMS = TxtValorICMS.Value;
+
+
+            ViewModel.Codigo_IPI = ViewPesquisaCST_IPI.Value;
+            ViewModel.CST_IPI = new CST_IPI() { Descricao = ViewPesquisaCST_IPI.Text };
+            ViewModel.pIPI = TxtAliqIPI.Value;
+            ViewModel.vIPI = TxtValorIPI.Value;
+
+            ViewModel.Codigo_PIS = ViewPesquisaCST_PIS.Value;
+            ViewModel.CST_PIS = new CST_PISCOFINS() { Descricao = ViewPesquisaCST_PIS.Text };
+            ViewModel.pPIS = TxtAliqPIS.Value;
+            ViewModel.vPIS = TxtValorPIS.Value;
+
+            ViewModel.Codigo_COFINS = ViewPesquisaCST_COFINS.Value;
+            ViewModel.CST_COFINS = new CST_PISCOFINS() { Descricao = ViewPesquisaCST_COFINS.Text };
+            ViewModel.pCOFINS = TxtAliqCOFINS.Value;
+            ViewModel.vCOFINS = TxtValorCOFINS.Value;
 
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
@@ -153,6 +247,38 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             {
                 ListView.Items.Remove(item);
             }
+        }
+
+        protected void TxtBaseCalculo_KeyUp()
+        {
+
+            TxtICMSBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtIPIBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtPISBaseCalculo.Value = TxtBaseCalculo.Value;
+            TxtCOFINSBaseCalculo.Value = TxtBaseCalculo.Value;
+
+            TxtAliqICMS_KeyUp();
+            TxtAliqIPI_KeyUp();
+            TxtAliqPIS_KeyUp();
+            TxtAliqCOFINS_KeyUp();
+
+        }
+
+        protected void TxtAliqICMS_KeyUp()
+        {
+            TxtValorICMS.Value = TxtBaseCalculo.Value * (TxtAliqICMS.Value / 100);
+        }
+        protected void TxtAliqIPI_KeyUp()
+        {
+            TxtValorIPI.Value = TxtBaseCalculo.Value * (TxtAliqIPI.Value / 100);
+        }
+        protected void TxtAliqPIS_KeyUp()
+        {
+            TxtValorPIS.Value = TxtBaseCalculo.Value * (TxtAliqPIS.Value / 100);
+        }
+        protected void TxtAliqCOFINS_KeyUp()
+        {
+            TxtValorCOFINS.Value = TxtBaseCalculo.Value * (TxtAliqCOFINS.Value / 100);
         }
 
         #endregion

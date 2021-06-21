@@ -28,6 +28,7 @@ namespace Aplicativo.View.Layout.Component.ViewPage
 
         [Parameter] public RenderFragment BtnLimpar { get; set; }
         [Parameter] public RenderFragment BtnSalvar { get; set; }
+        [Parameter] public RenderFragment BtnCustom { get; set; }
         [Parameter] public RenderFragment BtnExcluir { get; set; }
 
         [Parameter] public EventCallback OnLoad { get; set; }

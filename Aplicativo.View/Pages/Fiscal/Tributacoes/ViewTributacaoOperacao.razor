@@ -1,0 +1,77 @@
+﻿@inherits ViewTributacaoOperacaoPage
+
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListView" Type="TributacaoOperacao">
+
+        <BtnNovo>
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
+        </BtnExcluir>
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Operação" Width="620px" Top="100px">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
+                </BtnExcluir>
+
+                <View>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <ViewPesquisa @ref="ViewPesquisaOperacao" Tipo="Operacao" _Label="Operação" _Title="Procurar operação" />
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <b>CFOP</b>
+
+                    <TabSet @ref="TabCFOP" Changed="StateHasChanged">
+                        <TabPage Id="Estadual" Title="Estadual">
+                            <ViewPesquisa @ref="ViewPesquisaCFOP_Estadual" Tipo="CFOP" _Label="CFOP" _Title="Procurar CFOP" Width_Codigo="90px" _Mask="9.999" />
+                        </TabPage>
+                        <TabPage Id="Interestadual" Title="Interestadual">
+                            <ViewPesquisa @ref="ViewPesquisaCFOP_Interestadual" Tipo="CFOP" _Label="CFOP" _Title="Procurar CFOP" Width_Codigo="90px" _Mask="9.999" />
+                        </TabPage>
+                        <TabPage Id="Exterior" Title="Exterior">
+                            <ViewPesquisa @ref="ViewPesquisaCFOP_Exterior" Tipo="CFOP" _Label="CFOP" _Title="Procurar CFOP" Width_Codigo="90px" _Mask="9.999" />
+                        </TabPage>
+                    </TabSet>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
+
+        <GridView>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="TributacaoOperacao" Height="400px" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (TributacaoOperacao)context;
+
+                        <ListItemText Primary="@item.TributacaoID.ToString()">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.TributacaoID
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="Operacao.Descricao" HeaderText="Operação" Width="300" />
+                    @*<GridColumn Field="Codigo_CFOP_Estadual" HeaderText="CFOP Est." Width="50" />
+                    <GridColumn Field="Codigo_CFOP_Interestadual" HeaderText="CFOP Int." Width="50" />
+                    <GridColumn Field="Codigo_CFOP_Exterior" HeaderText="CFOP Ext." Width="50" />*@
+                </Columns>
+            </ListViewGridView>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

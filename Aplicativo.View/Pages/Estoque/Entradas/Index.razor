@@ -1,13 +1,13 @@
-﻿@attribute [Page("Fiscal/NotasFiscais")]
+﻿@attribute [Page("Estoque/Entradas")]
 @attribute [LoginRequired(true)]
 
 @inherits IndexPage;
 
 <ComponentLayout OnLoad="Page_Load">
-    <ListItemViewLayout @ref="ListView" Type="NotaFiscal" Title="Notas fiscais">
+    <ListItemViewLayout @ref="ListView" Type="EstoqueMovimento" Title="Entrada">
 
         <ViewPages>
-            <ViewNotaFiscal @ref="View" ListView="ListView" />
+            <ViewEntrada @ref="View" ListView="ListView" />
         </ViewPages>
 
         <BtnNovo>
@@ -24,20 +24,20 @@
             <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
         </BtnPesquisa>
 
-        <BtnExcluir>
+        @*<BtnExcluir>
             <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
-        </BtnExcluir>
+        </BtnExcluir>*@
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscal" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="EstoqueMovimento" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
-                        var item = (NotaFiscal)context;
+                        var item = (EstoqueMovimento)context;
 
-                        <ListItemText Primary="@item.CEP">
+                        <ListItemText Primary="@item.Observacao">
                             <SecondaryContent>
                                 <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
-                                    @item.CEP
+                                    @item.Observacao
                                 </Typography>
                                 — I'll be in your neighborhood
                             </SecondaryContent>
@@ -45,13 +45,8 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="nNF" HeaderText="Número" Width="90" />
-                    <GridColumn Field="serie" HeaderText="Série" Width="70" />
-                    <GridColumn Field="dhEmi" HeaderText="Emissão" Width="90" Format="dd/MM/yyyy" />
-                    <GridColumn Field="xNome" HeaderText="Emitente" Width="230" />
-                    <GridColumn Field="dest_xNome" HeaderText="Destinatário" Width="230" />
-                    <GridColumn Field="IE" HeaderText="Status" Width="160" />
-                    <GridColumn Field="vNF" HeaderText="Valor" Width="110" Format="C2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="Estoque.Descricao" HeaderText="Estoque" Width="200" />
+                    <GridColumn Field="Data" HeaderText="Data" Width="100" Format="dd/MM/yyyy" />
                 </Columns>
             </ListViewGridView>
         </GridView>

@@ -1,0 +1,67 @@
+﻿@inherits ViewEntradaItemPage
+
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListView" Type="EstoqueMovimentoItem" CardActionsVisible="false">
+
+        @*<BtnNovo>
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>*@
+
+        @*<BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
+        </BtnExcluir>*@
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Vincular Item" Width="580px" Top="100px">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
+                </BtnSalvar>
+
+                @*<BtnExcluir>
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
+                </BtnExcluir>*@
+
+                <View>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <ViewPesquisa @ref="ViewPesquisaProduto" Tipo="Produto" _Label="Produto" _Title="Procurar produto" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <TextBox @ref="TxtItemNF" _Label="Item NF" _ReadOnly="true" />
+                        </div>
+                    </div>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
+
+        <GridView>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="EstoqueMovimentoItem" CheckBoxVisible="false" ShowRegistroSelecionados="false" Height="400px" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (EstoqueMovimentoItem)context;
+
+                        <ListItemText Primary="@item.EstoqueMovimentoID.ToString()">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.EstoqueMovimentoID
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="ProdutoVinculado" HeaderText="Produto" Width="360" />
+                    <GridColumn Field="ItemNF" HeaderText="Item NF" Width="360" />
+                    <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="140" Format="N3" TextAlign="TextAlign.Right" />
+                    @*<GridColumn Field="Porta" HeaderText="Porta" Width="100"></GridColumn>
+        <GridColumn Field="Email" HeaderText="Email" Width="380"></GridColumn>
+        <GridColumn Field="Ssl_Habilitado" HeaderText="Ssl" Width="80"></GridColumn>*@
+                </Columns>
+            </ListViewGridView>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

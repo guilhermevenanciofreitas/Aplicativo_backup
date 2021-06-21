@@ -159,6 +159,81 @@ namespace Aplicativo.View.Controls
                     ViewPesquisaModal.Refresh();
                     ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
                     break;
+
+                case "CSOSN_ICMS":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "CST_ICMS":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "CST_IPI":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "CST_PISCOFINS":
+                    PrimaryKey = "Codigo";
+                    ViewPesquisaModal.Columns.Add(new Column("Codigo", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "Tributacao":
+                    PrimaryKey = "TributacaoID";
+                    ViewPesquisaModal.Columns.Add(new Column("TributacaoID", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "Operacao":
+                    PrimaryKey = "OperacaoID";
+                    ViewPesquisaModal.Columns.Add(new Column("OperacaoID", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
+                case "NotaFiscal":
+                    PrimaryKey = "NotaFiscalID";
+                    ViewPesquisaModal.Columns.Add(new Column("NotaFiscalID", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("nNF", "Número", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("serie", "Série", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("CNPJCPF", "CNPJ/CPF", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("xFant", "Emitente", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "nNF";
+                    break;
+
+                case "Estoque":
+                    PrimaryKey = "EstoqueID";
+                    ViewPesquisaModal.Columns.Add(new Column("EstoqueID", "Código", typeof(string)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Take = 500;
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
             }
 
         }
@@ -390,6 +465,167 @@ namespace Aplicativo.View.Controls
                         await OnChange.InvokeAsync(CEST);
 
                         break;
+
+                    case "CSOSN_ICMS":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CSOSN_ICMS = await Query.FirstOrDefault();
+
+                        if (CSOSN_ICMS == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CSOSN_ICMS as CSOSN_ICMS).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CSOSN_ICMS as CSOSN_ICMS).Descricao;
+
+                        await OnChange.InvokeAsync(CSOSN_ICMS);
+
+                        break;
+
+                    case "CST_ICMS":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CST_ICMS = await Query.FirstOrDefault();
+
+                        if (CST_ICMS == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CST_ICMS as CST_ICMS).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CST_ICMS as CST_ICMS).Descricao;
+
+                        await OnChange.InvokeAsync(CST_ICMS);
+
+                        break;
+
+                    case "CST_IPI":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CST_IPI = await Query.FirstOrDefault();
+
+                        if (CST_IPI == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CST_IPI as CST_IPI).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CST_IPI as CST_IPI).Descricao;
+
+                        await OnChange.InvokeAsync(CST_IPI);
+
+                        break;
+
+                    case "CST_PISCOFINS":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var CST_PISCOFINS = await Query.FirstOrDefault();
+
+                        if (CST_PISCOFINS == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (CST_PISCOFINS as CST_PISCOFINS).Codigo.ToStringOrNull();
+                        TxtDescricao.Text = (CST_PISCOFINS as CST_PISCOFINS).Descricao;
+
+                        await OnChange.InvokeAsync(CST_PISCOFINS);
+
+                        break;
+
+                    case "Tributacao":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var Tributacao = await Query.FirstOrDefault();
+
+                        if (Tributacao == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (Tributacao as Tributacao).TributacaoID.ToStringOrNull();
+                        TxtDescricao.Text = (Tributacao as Tributacao).Descricao;
+
+                        await OnChange.InvokeAsync(Tributacao);
+
+                        break;
+
+                    case "Operacao":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var Operacao = await Query.FirstOrDefault();
+
+                        if (Operacao == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (Operacao as Operacao).OperacaoID.ToStringOrNull();
+                        TxtDescricao.Text = (Operacao as Operacao).Descricao;
+
+                        await OnChange.InvokeAsync(Operacao);
+
+                        break;
+
+                    case "NotaFiscal":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var NotaFiscal = await Query.FirstOrDefault();
+
+                        if (NotaFiscal == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (NotaFiscal as NotaFiscal).NotaFiscalID.ToStringOrNull();
+                        TxtDescricao.Text = (NotaFiscal as NotaFiscal).nNF.ToStringOrNull();
+
+                        await OnChange.InvokeAsync(NotaFiscal);
+
+                        break;
+
+                    case "Estoque":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToStringOrNull());
+
+                        var Estoque = await Query.FirstOrDefault();
+
+                        if (Estoque == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (Estoque as Estoque).EstoqueID.ToStringOrNull();
+                        TxtDescricao.Text = (Estoque as Estoque).Descricao.ToStringOrNull();
+
+                        await OnChange.InvokeAsync(Estoque);
+
+                        break;
+
                 }
 
             }

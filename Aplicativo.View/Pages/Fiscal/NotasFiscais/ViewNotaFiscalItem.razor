@@ -12,7 +12,7 @@
         </BtnExcluir>
 
         <ViewPages>
-            <EditItemViewLayout @ref="EditItemViewLayout" Title="Item" Width="650px" Top="100px">
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Item" Width="700px" Top="100px">
 
                 <BtnSalvar>
                     <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
@@ -55,87 +55,96 @@
                             <br />
 
                             <TabSet @ref="TabImpostos" Changed="StateHasChanged">
-                                <TabPage Id="ICMS" Title="ICMS">
+                                <TabPage Id="BaseCalculo" Title="Base de calculo">
                                     <div class="row">
-                                        <div class="col-md-9 col-sm-12">
-                                            <ViewPesquisa Tipo="CFOP" _Label="CST ICMS" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Base de calculo" />
-                                        </div>
-                                        <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Aliq. ICMS (%)" />
-                                        </div>
-                                        <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Valor ICMS (R$)" />
+                                        <div class="col-md-3 col-sm-6">
+                                            <NumericBox @ref="TxtBaseCalculo" _Label="Base de calculo" OnKeyUp="TxtBaseCalculo_KeyUp" />
                                         </div>
                                     </div>
                                 </TabPage>
-                                <TabPage Id="ICMSST" Title="ICMS ST">
-
+                                <TabPage Id="ICMS" Title="ICMS">
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa @ref="ViewPesquisaCST_ICMS" Tipo="CST_ICMS" _Label="CST ICMS" _Title="Procurar CST ICMS" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-9 col-sm-12">
+                                            <ViewPesquisa @ref="ViewPesquisaCSOSN_ICMS" Tipo="CSOSN_ICMS" _Label="CSOSN ICMS" _Title="Procurar CSOSN ICMS" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox @ref="TxtICMSBaseCalculo" _Label="Base de calculo" _ReadOnly="true" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox @ref="TxtAliqICMS" _Label="Aliq. ICMS (%)" OnKeyUp="TxtAliqICMS_KeyUp" />
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <NumericBox @ref="TxtValorICMS" _Label="Valor ICMS (R$)" />
+                                        </div>
+                                    </div>
                                 </TabPage>
                                 <TabPage Id="IPI" Title="IPI">
                                     <div class="row">
                                         <div class="col-md-9 col-sm-12">
-                                            <ViewPesquisa Tipo="CFOP" _Label="CST IPI" />
+                                            <ViewPesquisa @ref="ViewPesquisaCST_IPI" Tipo="CST_IPI" _Label="CST IPI" _Title="Procurar CST IPI" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Base de calculo" />
+                                            <NumericBox @ref="TxtIPIBaseCalculo" _Label="Base de calculo" _ReadOnly="true" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Aliq. IPI (%)" />
+                                            <NumericBox @ref="TxtAliqIPI" _Label="Aliq. IPI (%)" OnKeyUp="TxtAliqIPI_KeyUp" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Valor IPI (R$)" />
+                                            <NumericBox @ref="TxtValorIPI" _Label="Valor IPI (R$)" />
                                         </div>
                                     </div>
                                 </TabPage>
                                 <TabPage Id="PIS" Title="PIS">
                                     <div class="row">
                                         <div class="col-md-9 col-sm-12">
-                                            <ViewPesquisa Tipo="CFOP" _Label="CST PIS" />
+                                            <ViewPesquisa @ref="ViewPesquisaCST_PIS" Tipo="CST_PISCOFINS" _Label="CST PIS" _Title="Procurar CST PIS" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Base de calculo" />
+                                            <NumericBox @ref="TxtPISBaseCalculo" _Label="Base de calculo" _ReadOnly="true" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Aliq. PIS (%)" />
+                                            <NumericBox @ref="TxtAliqPIS" _Label="Aliq. PIS (%)" OnKeyUp="TxtAliqPIS_KeyUp" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Valor PIS (R$)" />
+                                            <NumericBox @ref="TxtValorPIS" _Label="Valor PIS (R$)" />
                                         </div>
                                     </div>
                                 </TabPage>
                                 <TabPage Id="COFINS" Title="COFINS">
                                     <div class="row">
                                         <div class="col-md-9 col-sm-12">
-                                            <ViewPesquisa Tipo="CFOP" _Label="CST COFINS" />
+                                            <ViewPesquisa @ref="ViewPesquisaCST_COFINS" Tipo="CST_PISCOFINS" _Label="CST COFINS" _Title="Procurar CST COFINS" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Base de calculo" />
+                                            <NumericBox @ref="TxtCOFINSBaseCalculo" _Label="Base de calculo" _ReadOnly="true" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Aliq. COFINS (%)" />
+                                            <NumericBox @ref="TxtAliqCOFINS" _Label="Aliq. COFINS (%)" OnKeyUp="TxtAliqCOFINS_KeyUp" />
                                         </div>
                                         <div class="col-md-3 col-sm-12">
-                                            <NumericBox _Label="Valor COFINS (R$)" />
+                                            <NumericBox @ref="TxtValorCOFINS" _Label="Valor COFINS (R$)" />
                                         </div>
                                     </div>
                                 </TabPage>
-                                <TabPage Id="ISSQN" Title="ISSQN">
+                                @*<TabPage Id="ISSQN" Title="ISSQN">
 
                                 </TabPage>
                                 <TabPage Id="II" Title="II">
 
-                                </TabPage>
+                                </TabPage>*@
                             </TabSet>
 
                         </TabPage>
@@ -167,7 +176,7 @@
         </ViewPages>
 
         <GridView>
-            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscalItem" Height="350px" CheckBoxWidth="45" OnItemView="ViewLayout_ItemView" ShowRegistroSelecionados="false" AllowPaging="false" OnDataChange="StateHasChanged">
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="NotaFiscalItem" Height="350px" CheckBoxWidth="45" OnItemView="ViewLayout_ItemView" ShowRegistroSelecionados="false" AllowPaging="false" AllowGrouping="false" OnDataChange="StateHasChanged">
                 <ItemView>
                     @{
                         var item = (NotaFiscalItem)context;
@@ -183,14 +192,15 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="cProd" HeaderText="Código" Width="85" />
+                    <GridColumn Field="cProd" HeaderText="Código" Width="75" />
                     <GridColumn Field="xProd" HeaderText="Descrição" Width="200" />
-                    @*<GridColumn Field="Produto.Descricao" HeaderText="Descrição" Width="300" />
-        <GridColumn Field="Quantidade" HeaderText="Quantidade" Width="105" Format="N3" TextAlign="TextAlign.Right" />
-        <GridColumn Field="vPreco" HeaderText="Preço" Width="90" Format="C2" TextAlign="TextAlign.Right" />
-        <GridColumn Field="pDesconto" HeaderText="Desc. (%)" Width="100" Format="N2" TextAlign="TextAlign.Right" />
-        <GridColumn Field="DescontoTotal" HeaderText="Desc. total" Width="100" Format="C2" TextAlign="TextAlign.Right" />
-        <GridColumn Field="vTotal" HeaderText="Total" Width="100" Format="C2" TextAlign="TextAlign.Right" />*@
+                    <GridColumn Field="Codigo_NCM" HeaderText="NCM" Width="75" />
+                    <GridColumn Field="Codigo_CFOP" HeaderText="CFOP" Width="70" />
+                    <GridColumn Field="qCom" HeaderText="Qtd." Width="70" Format="N3" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="vUnCom" HeaderText="Valor un." Width="80" Format="N2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="vProd" HeaderText="Valor total" Width="90" Format="N2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="vICMS" HeaderText="ICMS" Width="65" Format="N2" TextAlign="TextAlign.Right" />
+                    <GridColumn Field="vIPI" HeaderText="IPI" Width="65" Format="N2" TextAlign="TextAlign.Right" />
                 </Columns>
             </ListViewGridView>
 

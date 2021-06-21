@@ -7,6 +7,7 @@
     <ListItemViewLayout @ref="ListView" Type="PedidoVenda" Title="Vendas">
 
         <ViewPages>
+            <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamento" OnConfirm="ViewPedidoVendaAndamento_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
             <ViewPedidoVenda @ref="View" ListView="ListView" />
         </ViewPages>
 
@@ -51,6 +52,7 @@
                 <Columns>
                     <GridColumn Field="PedidoVendaID" HeaderText="Número" Width="80" />
                     <GridColumn Field="Data" HeaderText="Data" Width="80" Format="dd/MM/yyyy" />
+                    <GridColumn Field="PedidoVendaStatus.Descricao" HeaderText="Status" Width="120" />
                     <GridColumn Field="Cliente.NomeFantasia" HeaderText="Cliente" Width="300" />
                     <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Vendedor" Width="300" />
                 </Columns>

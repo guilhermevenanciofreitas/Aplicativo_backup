@@ -31,13 +31,13 @@
 
                 <div class="row">
                     <div class="col-md-5 col-sm-5">
-                        <TextBox _Label="Chave de acesso" _Mask="9999 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999" />
+                        <TextBox @ref="TxtChaveAcesso" _Label="Chave de acesso" _Mask="9999 9999 9999 9999 9999 9999 9999 9999 9999 9999 9999" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <DropDownList _Label="Modelo" />
+                        <DropDownList @ref="DplModelo" _Label="Modelo" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <TextBox _Label="Natureza de operação" />
+                        <TextBox @ref="TxtNaturezaOperacao" _Label="Natureza de operação" />
                     </div>
                 </div>
 
@@ -71,43 +71,43 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <NumericBox _Label="Base calculo ICMS" />
+                        <NumericBox @ref="TxtBaseCalculoICMS" _Label="Base calculo ICMS" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor ICMS" />
+                        <NumericBox @ref="TxtValorICMS" _Label="Valor ICMS" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Base calculo ICMS Subst." />
+                        <NumericBox @ref="TxtBaseCalculoICMSST" _Label="Base calculo ICMS Subst." />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor ICMS Subst." />
+                        <NumericBox @ref="TxtValorICMSST" _Label="Valor ICMS Subst." />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor aprox. tributos" />
+                        <NumericBox @ref="TxtAproxTributos" _Label="Valor aprox. tributos" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Total dos produtos" />
+                        <NumericBox @ref="TxtTotalProdutos" _Label="Total dos produtos" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor Frete" />
+                        <NumericBox @ref="TxtValorFrete" _Label="Valor Frete" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor Seguro" />
+                        <NumericBox @ref="TxtValorSeguro" _Label="Valor Seguro" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Desconto" />
+                        <NumericBox @ref="TxtDesconto" _Label="Desconto" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Outras desp. acess." />
+                        <NumericBox @ref="TxtOutrasDespAcess" _Label="Outras desp. acess." />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Valor do IPI" />
+                        <NumericBox @ref="TxtValorIPI" _Label="Valor do IPI" />
                     </div>
                     <div class="col-md-2">
-                        <NumericBox _Label="Total da nota" />
+                        <NumericBox @ref="TxtTotalNota" _Label="Total da nota" />
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@
 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        <TextArea _Label="Informações complementares" _Rows="4" />
+                        <TextArea @ref="TxtInformacoesComplementares" _Label="Informações complementares" _Rows="4" />
                     </div>
                 </div>
 
@@ -130,10 +130,10 @@
 
                 <div class="row">
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="CPF/CNPJ" />
+                        <TextBox @ref="Emit_TxtCNPJ" _Label="CPF/CNPJ" />
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <TextBox _Label="Razão social" />
+                        <TextBox @ref="Emit_TxtRazaoSocial" _Label="Razão social" />
                     </div>
                     <div class="col-md-2 col-sm-2">
                         <TextBox _Label="Inscrição estadual" />
@@ -189,10 +189,10 @@
 
                 <div class="row">
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="CPF/CNPJ" />
+                        <TextBox @ref="Dest_TxtCNPJ" _Label="CPF/CNPJ" />
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <TextBox _Label="Razão social" />
+                        <TextBox @ref="Dest_TxtRazaoSocial" _Label="Razão social" />
                     </div>
                     <div class="col-md-2 col-sm-2">
                         <TextBox _Label="Inscrição estadual" />
@@ -302,6 +302,20 @@
                 </div>
             </TabPage>
             <TabPage Id="Cobranca" Title="Cobrança">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Eventos" Title="Eventos">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+
+                    </div>
+                </div>
+            </TabPage>
+            <TabPage Id="Anexos" Title="Anexos">
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
 

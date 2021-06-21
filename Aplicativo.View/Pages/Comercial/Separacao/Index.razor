@@ -1,0 +1,117 @@
+﻿@attribute [Page("Comercial/Separacao")]
+@attribute [LoginRequired(true)]
+
+@inherits IndexPage;
+
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListViewPendente" Type="PedidoVenda" Title="Separação">
+
+        <ViewPages>
+            
+            <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamentoPendente" ListView="ListViewPendente" OnConfirm="ViewPedidoVendaAndamentoPendente_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
+            <Aplicativo.View.Pages.Comercial.Vendas.ViewPedidoVendaAndamento @ref="ViewPedidoVendaAndamentoEmSeparacao" ListView="ListViewPendente" OnConfirm="ViewPedidoVendaAndamentoEmSeparacao_Confirm" OnFinally="ViewPedidoVendaAndamento_Finally" />
+
+        </ViewPages>
+
+        <BtnOneSelected>
+            <ListViewBtnCustom ListItemViewLayout="ListViewPendente" Text="Separar" OnClick="BtnSeparar_Click" />
+        </BtnOneSelected>
+
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListViewPendente.ViewFiltro">
+                <ViewFiltro @ref="ListViewPendente.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListViewPendente.ListViewBtnPesquisa" ViewFiltro="ListViewPendente.ViewFiltro" OnClick="BtnPesquisar_Click" />
+        </BtnPesquisa>
+
+        @*<BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+        </BtnExcluir>*@
+
+        <GridView>
+
+            <TabSet>
+
+                <TabPage Id="Pendente" Title="Pendente">
+                    <ListViewGridView @ref="ListViewPendente.ListViewGridView" Type="PedidoVenda" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                        <ItemView>
+                            @{
+                                var item = (PedidoVenda)context;
+
+                                <ListItemText Primary="@item.PedidoVendaID.ToString()">
+                                    <SecondaryContent>
+                                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                            @item.PedidoVendaID
+                                        </Typography>
+                                        — I'll be in your neighborhood
+                                    </SecondaryContent>
+                                </ListItemText>
+                            }
+                        </ItemView>
+                        <Columns>
+                            <GridColumn Field="PedidoVendaID" HeaderText="Número" Width="80" />
+                            <GridColumn Field="Data" HeaderText="Data" Width="80" Format="dd/MM/yyyy" />
+                            <GridColumn Field="Cliente.NomeFantasia" HeaderText="Cliente" Width="300" />
+                            <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Vendedor" Width="300" />
+                        </Columns>
+                    </ListViewGridView>
+                </TabPage>
+
+                <TabPage Id="EmSeparacao" Title="Em separação">
+                    <ListViewGridView @ref="GridViewEmSeparacao" Type="PedidoVenda" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                        <ItemView>
+                            @{
+                                var item = (PedidoVenda)context;
+
+                                <ListItemText Primary="@item.PedidoVendaID.ToString()">
+                                    <SecondaryContent>
+                                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                            @item.PedidoVendaID
+                                        </Typography>
+                                        — I'll be in your neighborhood
+                                    </SecondaryContent>
+                                </ListItemText>
+                            }
+                        </ItemView>
+                        <Columns>
+                            <GridColumn Field="PedidoVendaID" HeaderText="Número" Width="80" />
+                            <GridColumn Field="Data" HeaderText="Data" Width="80" Format="dd/MM/yyyy" />
+                            <GridColumn Field="Cliente.NomeFantasia" HeaderText="Cliente" Width="300" />
+                            <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Vendedor" Width="300" />
+                        </Columns>
+                    </ListViewGridView>
+                </TabPage>
+
+                <TabPage Id="Separado" Title="Separado">
+                    <ListViewGridView @ref="GridViewSeparado" Type="PedidoVenda" OnDataChange="StateHasChanged">
+                        <ItemView>
+                            @{
+                                var item = (PedidoVenda)context;
+
+                                <ListItemText Primary="@item.PedidoVendaID.ToString()">
+                                    <SecondaryContent>
+                                        <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                            @item.PedidoVendaID
+                                        </Typography>
+                                        — I'll be in your neighborhood
+                                    </SecondaryContent>
+                                </ListItemText>
+                            }
+                        </ItemView>
+                        <Columns>
+                            <GridColumn Field="PedidoVendaID" HeaderText="Número" Width="80" />
+                            <GridColumn Field="Data" HeaderText="Data" Width="80" Format="dd/MM/yyyy" />
+                            <GridColumn Field="Cliente.NomeFantasia" HeaderText="Cliente" Width="300" />
+                            <GridColumn Field="Vendedor.NomeFantasia" HeaderText="Vendedor" Width="300" />
+                        </Columns>
+                    </ListViewGridView>
+                </TabPage>
+
+            </TabSet>
+            
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>
