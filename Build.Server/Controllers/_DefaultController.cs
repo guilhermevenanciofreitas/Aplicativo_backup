@@ -54,32 +54,28 @@ namespace Sistema.Server.Controllers
 
                 var Database = Request.GetParameter("Database");
 
-                var Table = Request.GetParameter("Table").ToString();
-
                 var db = new Context(Database);
 
-                var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Table).ClrType;
+                var List = new List<Update>();
 
-                var RemoveIncludes = Request.GetParameter("RemoveIncludes").ToBoolean();
-
-                var List = new List<object>();
-
-                foreach(var Item in JsonConvert.DeserializeObject<List<object>>(Request.GetParameter(Table)))
+                foreach(var Item in JsonConvert.DeserializeObject<List<Update>>(Request.GetParameter("Update")))
                 {
 
-                    var Obj = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Item), Type);
+                    var Type = db.Model.FindEntityType("Aplicativo.Utils.Models." + Item.Table).ClrType;
 
-                    //SetNull(Obj);
+                    var Object = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(Item.Object), Type);
 
-                    List.Add(Obj);
+                    Item.Object = Object;
+
+                    List.Add(Item);
 
                 }
 
-                Update(db, List, RemoveIncludes);
+                Update(db, List);
 
                 db.SaveChanges();
 
-                Response.Data = List;
+                Response.Data = List.Select(c => c.Object).ToList();
 
                 return Response;
 

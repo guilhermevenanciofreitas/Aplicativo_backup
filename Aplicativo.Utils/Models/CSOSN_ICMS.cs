@@ -8,14 +8,15 @@ namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
-    [Table("CFOP")]
-    public partial class CFOP : _Extends
+    [Table("CSOSN_ICMS")]
+    public partial class CSOSN_ICMS : _Extends
     {
 
         [Key]
-        [StringLength(5)]
+        [StringLength(3)]
         public string Codigo { get; set; }
 
+        [StringLength(200)]
         public string Descricao { get; set; }
 
     }

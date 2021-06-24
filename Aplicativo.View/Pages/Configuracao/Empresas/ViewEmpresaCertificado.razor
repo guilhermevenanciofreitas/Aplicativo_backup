@@ -1,0 +1,97 @@
+﻿@inherits ViewEmpresaCertificadoPage
+
+<ComponentLayout>
+    <ListItemViewLayout @ref="ListView" Type="EmpresaCertificado">
+
+        <BtnNovo>
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" Text="Adicionar" OnClick="ViewLayout_ItemView" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="ListViewBtnExcluir_Click" />
+        </BtnExcluir>
+
+        <ViewPages>
+            <EditItemViewLayout @ref="EditItemViewLayout" Title="Certificado" Width="650px" Top="100px">
+
+                <BtnSalvar>
+                    <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="ViewPageBtnSalvar_Click" />
+                </BtnSalvar>
+
+                <BtnExcluir>
+                    <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="ViewPageBtnExcluir_Click" />
+                </BtnExcluir>
+
+                <View>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <Options @ref="OptTipo" _Name="Tipo" OnChange="StateHasChanged">
+                                <Option Label="Certificado A1" Value="1" />
+                                <Option Label="Certificado A3" Value="2" />
+                            </Options>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-10 col-sm-10">
+                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" />
+                        </div>
+                        <div class="col-md-2 col-sm-12">
+                            <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None" />
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-10 col-sm-12">
+                            <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true" />
+                        </div>
+                    </div>
+                </View>
+            </EditItemViewLayout>
+        </ViewPages>
+
+        <GridView>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="EmpresaCertificado" Height="400px" OnItemView="ViewLayout_ItemView" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (EmpresaCertificado)context;
+
+                        @*<ListItemText Primary="@item.Email">
+                            <SecondaryContent>
+                                <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                    @item.Email
+                                </Typography>
+                                — I'll be in your neighborhood
+                            </SecondaryContent>
+                        </ListItemText>*@
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="CertificadoID" HeaderText="Código" Width="200" />
+                </Columns>
+            </ListViewGridView>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

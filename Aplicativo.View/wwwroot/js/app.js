@@ -31,6 +31,16 @@ window.Modal = {
     },
 };
 
+window.Document =
+{
+    GetElementById: function (id) {
+        return document.getElementById(id).value;
+    },
+    SetValueElementById: function (id, value) {
+        document.getElementById(id).value = value;
+    },
+};
+
 window.ElementReference = {
     SetValue: function (element, value) {
         element.value = value;

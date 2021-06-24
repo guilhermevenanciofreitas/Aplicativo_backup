@@ -13,6 +13,7 @@ namespace Aplicativo.Utils.Models
         {
             PedidoVendaItem = new HashSet<PedidoVendaItem>();
             PedidoVendaPagamento = new HashSet<PedidoVendaPagamento>();
+            PedidoVendaAndamento = new HashSet<PedidoVendaAndamento>();
         }
 
         [Key]
@@ -29,15 +30,24 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("Vendedor")]
         public int? VendedorID { get; set; }
 
+        [ForeignKey("PedidoVendaStatus")]
+        public int? PedidoVendaStatusID { get; set; }
+
         public DateTime? Data { get; set; }
+
+        public DateTime? Expedicao { get; set; }
+
+
 
         public DateTime? Finalizado { get; set; }
 
-        public DateTime? Faturamento { get; set; }
+        public DateTime? EmSeparacao { get; set; }
 
-        public DateTime? Conferencia { get; set; }
+        public DateTime? Separado { get; set; }
 
-        public DateTime? Expedicao { get; set; }
+        public DateTime? Conferido { get; set; }
+
+        public DateTime? Faturado { get; set; }
 
         public DateTime? Entregue { get; set; }
 
@@ -47,15 +57,21 @@ namespace Aplicativo.Utils.Models
         [StringLength(500)]
         public string Observacao { get; set; }
 
-        public virtual Pessoa Vendedor { get; set; }
+
 
         public virtual Pessoa Cliente { get; set; }
+
+        public virtual Pessoa Vendedor { get; set; }
+
+        public virtual PedidoVendaStatus PedidoVendaStatus { get; set; }
 
         public virtual Pessoa Transportadora { get; set; }
 
         public ICollection<PedidoVendaItem> PedidoVendaItem { get; set; }
 
         public ICollection<PedidoVendaPagamento> PedidoVendaPagamento { get; set; }
+
+        public ICollection<PedidoVendaAndamento> PedidoVendaAndamento { get; set; }
 
     }
 }

@@ -14,7 +14,7 @@ namespace Aplicativo.Utils.Models
 
         public EstoqueMovimentoItem()
         {
-            HistoricoSaida = new HashSet<EstoqueMovimentoItemSaida>();
+
         }
 
         [Key]
@@ -33,8 +33,6 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("NotaFiscalItem")]
         public int? NotaFiscalItemID { get; set; }
 
-        public int? CFOPID { get; set; }
-
         public decimal? Quantidade { get; set; }
 
         [NotMapped]
@@ -46,6 +44,11 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("EstoqueMovimentoItemSaida")]
         public int? EstoqueMovimentoItemSaidaID { get; set; }
 
+        [NotMapped]
+        public string ProdutoVinculado => ProdutoID + " - " + Produto?.Descricao;
+
+        [NotMapped]
+        public string ItemNF => NotaFiscalItem?.cProd + " - " + NotaFiscalItem?.xProd;
 
         public virtual EstoqueMovimento EstoqueMovimento { get; set; }
 
@@ -58,8 +61,6 @@ namespace Aplicativo.Utils.Models
         public virtual EstoqueMovimentoItemEntrada EstoqueMovimentoItemEntrada { get; set; }
 
         public virtual EstoqueMovimentoItemSaida EstoqueMovimentoItemSaida { get; set; }
-
-        public virtual ICollection<EstoqueMovimentoItemSaida> HistoricoSaida { get; set; }
 
     }
 }

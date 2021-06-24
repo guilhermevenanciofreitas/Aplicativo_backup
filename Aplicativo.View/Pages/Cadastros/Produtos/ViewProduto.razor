@@ -27,11 +27,58 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="form-inline">
+                            <CheckBox @ref="ChkCombinacao" _Label="Combinações" Changed="StateHasChanged" />
+                            <CheckBox @ref="ChkComposicao" _Label="Composição" Changed="StateHasChanged" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
                         <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida" />
                     </div>
                 </div>
             </TabPage>
+            <TabPage Id="Aplicacoes" Title="Aplicações">
+
+            </TabPage>
+
+            <TabPage Id="Estoque" Title="Estoque">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <SfGrid @ref="GridViewEstoque" DataSource="ListEstoque" TValue="RelBasica" AllowReordering="true" AllowResizing="true" AllowSorting="true" RowHeight="30" Height="100%" Width="auto" onselectstart='return false'>
+                            <GridPageSettings PageSize="30" />
+                            <GridColumns>
+                                <GridColumn Field="Descricao01" HeaderText="Descrição" Width="730" />
+                                <GridColumn Field="Valor01" HeaderText="Saldo" Width="100" Format="N3" />
+                            </GridColumns>
+                        </SfGrid>
+                    </div>
+                </div>
+            </TabPage>
+
+            <div style="display: @(ChkCombinacao?.Checked ?? false ? "block" : "none")">
+                <TabPage Id="Atributos" Title="Atributos">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <ViewProdutoAtributo @ref="ViewProdutoAtributo" OnSave="ViewProdutoAtributo_Save" />
+                        </div>
+                    </div>
+                </TabPage>
+            </div>
+
+            <div style="display: @(ChkCombinacao?.Checked ?? false ? "block" : "none")">
+                <TabPage Id="Combinacoes" Title="Combinações">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <ViewProdutoCombinacao @ref="ViewProdutoCombinacao" />
+                        </div>
+                    </div>
+                </TabPage>
+            </div>
+
             <TabPage Id="Tributacao" Title="Tributação">
                 <div class="row">
                     <div class="col-md-5 col-sm-12">

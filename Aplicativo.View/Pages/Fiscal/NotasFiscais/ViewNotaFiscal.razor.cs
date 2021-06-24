@@ -15,6 +15,8 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
     public partial class ViewNotaFiscalPage : ComponentBase
     {
 
+        public int? NotaFiscalID { get; set; }
+
         public NotaFiscal ViewModel = new NotaFiscal();
 
         [Parameter] public ListItemViewLayout<NotaFiscal> ListView { get; set; }
@@ -118,6 +120,7 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
 
             #region Principal
+            NotaFiscalID = ViewModel.NotaFiscalID;
             TxtChaveAcesso.Text = ViewModel.chNFe.StringFormat("#### #### #### #### #### #### #### #### #### #### ####");
             DplModelo.SelectedValue = ViewModel.mod.ToStringOrNull();
             TxtNaturezaOperacao.Text = ViewModel.natOp.ToStringOrNull();
@@ -167,6 +170,8 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             EditItemViewLayout.LimparCampos(this);
 
+            NotaFiscalID = null;
+
             DplTipo.SelectedValue = "0";
             DplFinalidade.SelectedValue = "1";
 
@@ -195,6 +200,7 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
 
             #region Principal
+            ViewModel.NotaFiscalID = NotaFiscalID;
             ViewModel.chNFe = TxtChaveAcesso.Text?.Replace(" ", "");
             ViewModel.mod = DplModelo.SelectedValue.ToStringOrNull();
             ViewModel.natOp = TxtNaturezaOperacao.Text.ToStringOrNull();
@@ -280,15 +286,15 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
         public async Task Excluir(List<int> args)
         {
 
-            var Query = new HelpQuery<Usuario>();
+            var Query = new HelpQuery<NotaFiscal>();
 
-            Query.AddWhere("UsuarioID IN (" + string.Join(",", args.ToArray()) + ")");
+            Query.AddWhere("NotaFiscalID IN (" + string.Join(",", args.ToArray()) + ")");
 
             var ViewModel = await Query.ToList();
 
             foreach (var item in ViewModel)
             {
-                item.Ativo = false;
+                //item.Ativo = false;
             }
 
             //await Query.Update(ViewModel, false);

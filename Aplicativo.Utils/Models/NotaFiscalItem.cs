@@ -39,31 +39,47 @@ namespace Aplicativo.Utils.Models
         [StringLength(130)]
         public string xProd { get; set; }
 
-        [StringLength(8)]
-        public string Codigo_NCM { get; set; }
-
-        [StringLength(7)]
-        public string Codigo_CEST { get; set; }
 
         [ForeignKey("CFOP")]
         [StringLength(5)]
         public string Codigo_CFOP { get; set; }
+
+        [ForeignKey("NCM")]
+        [StringLength(10)]
+        public string Codigo_NCM { get; set; }
+
+        [ForeignKey("CEST")]
+        [StringLength(9)]
+        public string Codigo_CEST { get; set; }
+
 
 
         //Tributação
 
         public int? orig { get; set; }
 
+        [ForeignKey("CST_ICMS")]
+        [StringLength(2)]
         public string Codigo_CST { get; set; }
 
+        [ForeignKey("CSOSN_ICMS")]
+        [StringLength(3)]
         public string Codigo_CSOSN { get; set; }
 
 
+        [ForeignKey("CST_IPI")]
+        [StringLength(2)]
+        public string Codigo_IPI { get; set; }
 
-        public string IPI_CST { get; set; }
-        public string PIS_CST { get; set; }
-        public string COFINS_CST { get; set; }
+        [ForeignKey("CST_PIS")]
+        [StringLength(2)]
+        public string Codigo_PIS { get; set; }
 
+        [ForeignKey("CST_COFINS")]
+        [StringLength(2)]
+        public string Codigo_COFINS { get; set; }
+
+        public decimal? vBC { get; set; }
 
         public decimal? pICMS { get; set; }
         public decimal? pIPI { get; set; }
@@ -83,6 +99,8 @@ namespace Aplicativo.Utils.Models
 
         public decimal? vUnCom { get; set; }
 
+        public decimal? vTotTrib { get; set; }
+
         public decimal? vDesc { get; set; }
 
         public decimal? vProd { get; set; }
@@ -91,6 +109,20 @@ namespace Aplicativo.Utils.Models
 
 
         public virtual CFOP CFOP { get; set; }
+
+        public virtual NCM NCM { get; set; }
+
+        public virtual CEST CEST { get; set; }
+
+        public virtual CST_ICMS CST_ICMS { get; set; }
+
+        public virtual CSOSN_ICMS CSOSN_ICMS { get; set; }
+
+        public virtual CST_IPI CST_IPI { get; set; }
+
+        public virtual CST_PISCOFINS CST_PIS { get; set; }
+
+        public virtual CST_PISCOFINS CST_COFINS { get; set; }
 
         public virtual ICollection<PedidoVendaItemNotaFiscalItem> PedidoVendaItemNotaFiscalItem { get; set; }
 

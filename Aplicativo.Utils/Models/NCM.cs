@@ -8,14 +8,15 @@ namespace Aplicativo.Utils.Models
 {
 
     [Serializable()]
-    [Table("CFOP")]
-    public partial class CFOP : _Extends
+    [Table("NCM")]
+    public partial class NCM : _Extends
     {
 
         [Key]
-        [StringLength(5)]
+        [StringLength(10)]
         public string Codigo { get; set; }
 
+        [StringLength(800)]
         public string Descricao { get; set; }
 
     }

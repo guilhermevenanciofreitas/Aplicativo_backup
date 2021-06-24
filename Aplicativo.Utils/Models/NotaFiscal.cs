@@ -40,7 +40,8 @@ namespace Aplicativo.Utils.Models
 
         public int? serie { get; set; }
 
-        [StringLength(8)]
+        [ForeignKey("NotaFiscalModelo")]
+        [StringLength(3)]
         public string mod { get; set; } = "55";
 
         public byte? indPres { get; set; }
@@ -227,6 +228,8 @@ namespace Aplicativo.Utils.Models
 
         public decimal? vOutro { get; set; } = 0;
 
+        public decimal? vTotTrib { get; set; } = 0;
+
         public decimal? vNF { get; set; } = 0;
 
         public int? modFrete { get; set; } = 9;
@@ -289,11 +292,13 @@ namespace Aplicativo.Utils.Models
 
         //public virtual NotaFiscalEvento EventoCancelamento { get; set; }
 
+        public virtual NotaFiscalModelo NotaFiscalModelo { get; set; }
+
         public virtual Arquivo XmlArquivo { get; set; }
 
         public virtual ICollection<NotaFiscalItem> NotaFiscalItem { get; set; }
 
-        public virtual ICollection<OrdemCargaNotaFiscal> OrdemCargaNotaFiscal { get; set; }
+        //public virtual ICollection<OrdemCargaNotaFiscal> OrdemCargaNotaFiscal { get; set; }
 
     }
 }

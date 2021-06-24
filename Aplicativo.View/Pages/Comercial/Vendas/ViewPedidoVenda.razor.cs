@@ -228,6 +228,20 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
                 throw new EmptyException("Informe o status!", DplStatus.Element);
             }
 
+            if (ViewPesquisaVendedor.Value.ToIntOrNull() == null)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("Informe o vendedor!", DplStatus.Element);
+            }
+
+            if (ViewPedidoVendaItem.ListView.Items.Count == 0)
+            {
+                await TabSet.Active("Principal");
+                throw new EmptyException("Nenhum item informado para venda!");
+            }
+
+
+
         }
 
         private async Task Salvar()

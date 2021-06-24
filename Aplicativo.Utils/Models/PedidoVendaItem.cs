@@ -11,6 +11,7 @@ namespace Aplicativo.Utils.Models
 
         public PedidoVendaItem()
         {
+            PedidoVendaItemConferenciaItem = new HashSet<PedidoVendaItemConferenciaItem>();
             PedidoVendaItemNotaFiscalItem = new HashSet<PedidoVendaItemNotaFiscalItem>();
         }
 
@@ -20,6 +21,9 @@ namespace Aplicativo.Utils.Models
 
         [ForeignKey("PedidoVenda")]
         public int? PedidoVendaID { get; set; }
+
+        [ForeignKey("Operacao")]
+        public int? OperacaoID { get; set; }
 
         [ForeignKey("Produto")]
         public int? ProdutoID { get; set; }
@@ -38,7 +42,11 @@ namespace Aplicativo.Utils.Models
 
         public virtual PedidoVenda PedidoVenda { get; set; }
 
+        public virtual Operacao Operacao { get; set; }
+
         public virtual Produto Produto { get; set; }
+
+        public virtual ICollection<PedidoVendaItemConferenciaItem> PedidoVendaItemConferenciaItem { get; set; }
 
         public virtual ICollection<PedidoVendaItemNotaFiscalItem> PedidoVendaItemNotaFiscalItem { get; set; }
 

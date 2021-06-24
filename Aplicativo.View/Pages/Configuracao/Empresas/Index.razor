@@ -1,0 +1,55 @@
+﻿@attribute [Page("Configuracao/Empresas")]
+@attribute [LoginRequired(true)]
+
+@inherits IndexPage
+
+<ComponentLayout OnLoad="Page_Load">
+    <ListItemViewLayout @ref="ListView" Type="Empresa" Title="Empresas">
+
+        <ViewPages>
+            <ViewEmpresa @ref="View" ListView="ListView" />
+        </ViewPages>
+
+        <BtnFiltro>
+            <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
+                <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
+            </ListViewBtnFiltro>
+        </BtnFiltro>
+
+        <BtnPesquisa>
+            <ListViewBtnPesquisa @ref="ListView.ListViewBtnPesquisa" ViewFiltro="ListView.ViewFiltro" OnClick="BtnPesquisar_Click" />
+        </BtnPesquisa>
+
+        <BtnNovo>
+            <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
+        </BtnNovo>
+
+        <BtnExcluir>
+            <ListViewBtnExcluir @ref="ListView.ListViewBtnExcluir" ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+        </BtnExcluir>
+
+        <GridView>
+            <ListViewGridView @ref="ListView.ListViewGridView" Type="Empresa" OnItemView="BtnItemView_Click" OnDataChange="StateHasChanged">
+                <ItemView>
+                    @{
+                        var item = (Empresa)context;
+
+                        @*<ListItemText Primary="@item.NomeFantasia">
+                                <SecondaryContent>
+                                    <Typography Component="span" Variant="@TypographyVariant.Body2" Color="@Color.TextPrimary" Style="display: inline;">
+                                        @item.NomeFantasia
+                                    </Typography>
+                                    — I'll be in your neighborhood
+                                </SecondaryContent>
+                            </ListItemText>*@
+                    }
+                </ItemView>
+                <Columns>
+                    <GridColumn Field="CNPJ_Formatado" HeaderText="CPF/CNPJ" Width="110" />
+                    <GridColumn Field="NomeFantasia" HeaderText="Nome fantasia" Width="200" />
+                    <GridColumn Field="RazaoSocial" HeaderText="Razão social" Width="300" />
+                </Columns>
+            </ListViewGridView>
+        </GridView>
+    </ListItemViewLayout>
+</ComponentLayout>

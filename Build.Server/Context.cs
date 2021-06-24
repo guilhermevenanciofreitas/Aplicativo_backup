@@ -33,7 +33,13 @@ namespace Aplicativo.Server
 
         public DbSet<CentroCusto> CentroCusto { get; set; }
 
+        public DbSet<CEST> CEST { get; set; }
+
         public DbSet<CFOP> CFOP { get; set; }
+
+        public DbSet<Conferencia> Conferencia { get; set; }
+
+        public DbSet<ConferenciaItem> ConferenciaItem { get; set; }
 
         //public DbSet<Chamado> Chamado { get; set; }
 
@@ -58,6 +64,14 @@ namespace Aplicativo.Server
         public DbSet<Contato> Contato { get; set; }
 
         public DbSet<ContatoTipo> ContatoTipo { get; set; }
+
+        public DbSet<CSOSN_ICMS> CSOSN_ICMS { get; set; }
+
+        public DbSet<CST_ICMS> CST_ICMS { get; set; }
+
+        public DbSet<CST_IPI> CST_IPI { get; set; }
+
+        public DbSet<CST_PISCOFINS> CST_PISCOFINS { get; set; }
 
         //public DbSet<Cotacao> Cotacao { get; set; }
 
@@ -101,9 +115,15 @@ namespace Aplicativo.Server
 
         public DbSet<Municipio> Municipio { get; set; }
 
+        public DbSet<NCM> NCM { get; set; }
+
         public DbSet<NotaFiscal> NotaFiscal { get; set; }
 
         public DbSet<NotaFiscalItem> NotaFiscalItem { get; set; }
+
+        public DbSet<NotaFiscalModelo> NotaFiscalModelo { get; set; }
+
+        public DbSet<Operacao> Operacao { get; set; }
 
         //public DbSet<Ocorrencia> Ocorrencia { get; set; }
 
@@ -121,9 +141,19 @@ namespace Aplicativo.Server
 
         public DbSet<PedidoVenda> PedidoVenda { get; set; }
 
+        public DbSet<PedidoVendaAndamento> PedidoVendaAndamento { get; set; }
+
+        public DbSet<PedidoVendaAndamentoWorkflow> PedidoVendaAndamentoWorkflow { get; set; }
+
         public DbSet<PedidoVendaItem> PedidoVendaItem { get; set; }
 
+        public DbSet<PedidoVendaItemConferenciaItem> PedidoVendaItemConferenciaItem { get; set; }
+
+        public DbSet<PedidoVendaItemNotaFiscalItem> PedidoVendaItemNotaFiscalItem { get; set; }
+
         public DbSet<PedidoVendaPagamento> PedidoVendaPagamento { get; set; }
+
+        public DbSet<PedidoVendaStatus> PedidoVendaStatus { get; set; }
 
         public DbSet<Pessoa> Pessoa { get; set; }
 
@@ -211,6 +241,18 @@ namespace Aplicativo.Server
                 .HasOne(x => x.Vendedor)
                 .WithMany(e => e.Clientes)
                 .HasForeignKey(x => x.VendedorID);
+
+
+
+            modelBuilder.Entity<PedidoVendaAndamentoWorkflow>()
+                .HasOne(x => x.PedidoVendaStatus)
+                .WithMany(e => e.PedidoVendaAndamentoWorkflow)
+                .HasForeignKey(x => x.PedidoVendaStatusID);
+
+            modelBuilder.Entity<PedidoVendaAndamentoWorkflow>()
+                .HasOne(x => x.PedidoVendaStatusPara)
+                .WithMany(e => e.PedidoVendaAndamentoWorkflowPara)
+                .HasForeignKey(x => x.PedidoVendaStatusParaID);
 
 
 

@@ -38,11 +38,13 @@ namespace Aplicativo.Utils.Models
 
         public int? Origem { get; set; }
 
-        [StringLength(8)]
-        public string NCM { get; set; }
+        [ForeignKey("NCM")]
+        [StringLength(10)]
+        public string Codigo_NCM { get; set; }
 
-        [StringLength(7)]
-        public string CEST { get; set; }
+        [ForeignKey("CEST")]
+        [StringLength(9)]
+        public string Codigo_CEST { get; set; }
 
         [StringLength(30)]
         public string EAN { get; set; }
@@ -60,6 +62,10 @@ namespace Aplicativo.Utils.Models
 
 
         public virtual UnidadeMedida UnidadeMedida { get; set; }
+
+        public virtual NCM NCM { get; set; }
+
+        public virtual CEST CEST { get; set; }
 
         public virtual ICollection<EstoqueMovimentoItem> EstoqueMovimentoItem { get; set; }
 

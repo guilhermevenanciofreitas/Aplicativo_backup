@@ -21,15 +21,28 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("Operacao")]
         public int? OperacaoID { get; set; }
 
-        [ForeignKey("CFOP")]
-        public int? CFOPID { get; set; }
+        [ForeignKey("CFOP_Estadual")]
+        [StringLength(5)]
+        public string Codigo_CFOP_Estadual { get; set; }
+
+        [ForeignKey("CFOP_Interestadual")]
+        [StringLength(5)]
+        public string Codigo_CFOP_Interestadual { get; set; }
+
+        [ForeignKey("CFOP_Exterior")]
+        [StringLength(5)]
+        public string Codigo_CFOP_Exterior { get; set; }
 
 
         public virtual Tributacao Tributacao { get; set; }
 
         public virtual Operacao Operacao { get; set; }
 
-        public virtual CFOP CFOP { get; set; }
+        public virtual CFOP CFOP_Estadual { get; set; }
+
+        public virtual CFOP CFOP_Interestadual { get; set; }
+
+        public virtual CFOP CFOP_Exterior { get; set; }
 
     }
 }

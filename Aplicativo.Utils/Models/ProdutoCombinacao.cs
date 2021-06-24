@@ -22,8 +22,8 @@ namespace Aplicativo.Utils.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? ProdutoCombinacaoID { get; set; }
 
-        [NotMapped]
-        public int NumItem { get; set; }
+        //[NotMapped]
+        //public int NumItem { get; set; }
 
         [ForeignKey("Produto")]
         public int ProdutoID { get; set; }

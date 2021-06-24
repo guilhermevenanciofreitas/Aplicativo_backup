@@ -107,11 +107,16 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
 
             var ProdutoFornecedor = await QueryProdutoFornecedor.ToList();
 
+
+
             var HelpQuery = new HelpQuery<NotaFiscal>();
 
             HelpQuery.AddInclude("NotaFiscalItem");
+            HelpQuery.AddWhere("NotaFiscalID == @0", NotaFiscal.NotaFiscalID);
 
             var Item = await HelpQuery.FirstOrDefault();
+
+
 
             var EstoqueMovimentoItem = new List<EstoqueMovimentoItem>();
 
@@ -120,14 +125,22 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
 
                 var ProdFornecedor = ProdutoFornecedor.FirstOrDefault(c => c.CodigoFornecedor == item.cProd);
 
-                EstoqueMovimentoItem.Add(new EstoqueMovimentoItem()
+                var MovimentoItem = new EstoqueMovimentoItem()
                 {
                     NotaFiscalItemID = item.NotaFiscalItemID,
                     NotaFiscalItem = item,
-                    ProdutoID = ProdFornecedor?.ProdutoID,
-                    Produto = ProdFornecedor?.Produto,
                     Quantidade = item.qCom,
-                });
+                };
+
+                if (ProdFornecedor?.Produto?.Combinacao ?? false == false)
+                {
+                    MovimentoItem.ProdutoID = ProdFornecedor?.ProdutoID;
+                    MovimentoItem.Produto = ProdFornecedor?.Produto;
+                }
+
+                EstoqueMovimentoItem.Add(MovimentoItem);
+
+
 
             }
 

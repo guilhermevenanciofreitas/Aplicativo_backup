@@ -94,6 +94,14 @@ namespace Aplicativo.View.Controls
                     ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
                     break;
 
+                case "Atributo":
+                    PrimaryKey = "AtributoID";
+                    ViewPesquisaModal.Columns.Add(new Column("AtributoID", "Código", typeof(int)));
+                    ViewPesquisaModal.Columns.Add(new Column("Descricao", "Descrição", typeof(string)));
+                    ViewPesquisaModal.Refresh();
+                    ViewPesquisaModal.DplCampo.SelectedValue = "Descricao";
+                    break;
+
                 case "ContaBancaria":
                     PrimaryKey = "ContaBancariaID";
                     ViewPesquisaModal.Columns.Add(new Column("ContaBancariaID", "Código", typeof(int)));
@@ -303,6 +311,26 @@ namespace Aplicativo.View.Controls
                         TxtDescricao.Text = (Produto as Produto).Descricao;
 
                         await OnChange.InvokeAsync(Produto);
+
+                        break;
+
+                    case "Atributo":
+
+                        Query.AddWhere(PrimaryKey + " == @0", TxtCodigo.Text.ToIntOrNull());
+
+                        var Atributo = await Query.FirstOrDefault();
+
+                        if (Atributo == null)
+                        {
+                            await App.JSRuntime.InvokeVoidAsync("alert", "Não encontrado!");
+                            Clear();
+                            return;
+                        }
+
+                        TxtCodigo.Text = (Atributo as Atributo).AtributoID.ToStringOrNull();
+                        TxtDescricao.Text = (Atributo as Atributo).Descricao;
+
+                        await OnChange.InvokeAsync(Atributo);
 
                         break;
 

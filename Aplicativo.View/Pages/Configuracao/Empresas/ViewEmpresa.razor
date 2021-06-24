@@ -1,6 +1,6 @@
-﻿@inherits ViewPessoaPage
+﻿@inherits ViewEmpresaPage
 
-<EditItemViewLayout @ref="EditItemViewLayout" Title="@Title" OnLoad="Page_Load" Width="1250px">
+<EditItemViewLayout @ref="EditItemViewLayout" Title="Empresa" OnLoad="Page_Load" Width="1250px">
     
     <BtnLimpar>
         <ViewPageBtnLimpar OnClick="BtnLimpar_Click" />
@@ -36,16 +36,16 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="form-inline">
-                            <CheckBox @ref="ChkCliente" _Label="Cliente" Changed="StateHasChanged" />
-                            <CheckBox @ref="ChkFornecedor" _Label="Fornecedor" />
-                            <CheckBox @ref="ChkTransportadora" _Label="Transportadora" />
-                            <CheckBox @ref="ChkFuncionario" _Label="Funcionário" />
-                        </div>
+                @*<div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-inline">
+                        <CheckBox @ref="ChkCliente" _Label="Cliente" Changed="StateHasChanged" />
+                        <CheckBox @ref="ChkFornecedor" _Label="Fornecedor" />
+                        <CheckBox @ref="ChkTransportadora" _Label="Transportadora" />
+                        <CheckBox @ref="ChkFuncionario" _Label="Funcionário" />
                     </div>
                 </div>
+            </div>*@
 
                 <br />
 
@@ -65,29 +65,26 @@
                 </div>
 
             </TabPage>
-            <div style="display: @((ChkCliente?.Checked ?? false) ? "block" : "none")">
-                <TabPage Id="Vendedor" Title="Vendedor">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <ViewPessoaVendedor @ref="ViewPessoaVendedor" />
-                        </div>
-                    </div>
-                </TabPage>
-            </div>
-            <TabPage Id="Endereco" Title="Endereço">
+
+            <TabPage Id="Certificados" Title="Certificados">
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
-                        <ViewPessoaEndereco @ref="ViewPessoaEndereco" />
+                        <ViewEmpresaCertificado @ref="ViewEmpresaCertificado" />
                     </div>
                 </div>
             </TabPage>
-            <TabPage Id="Contato" Title="Contato">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <ViewPessoaContato @ref="ViewPessoaContato" />
-                    </div>
-                </div>
+
+            @*<div style="display: @((ChkCliente?.Checked ?? false) ? "block" : "none")">
+            <TabPage Id="Vendedor" Title="Vendedor">
+                <ViewPessoaVendedor @ref="ViewPessoaVendedor" />
             </TabPage>
+        </div>*@
+            @*<TabPage Id="Endereco" Title="Endereço">
+            <ViewPessoaEndereco @ref="ViewPessoaEndereco" />
+        </TabPage>*@
+            @*<TabPage Id="Contato" Title="Contato">
+            <ViewPessoaContato @ref="ViewPessoaContato" />
+        </TabPage>*@
         </TabSet>
     </View>
 </EditItemViewLayout>

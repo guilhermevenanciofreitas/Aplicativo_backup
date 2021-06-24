@@ -62,27 +62,27 @@ namespace Build.Server.Controllers
 
         //}
 
-        protected void Update(Context db, List<object> List, bool RemoveIncludes = false)
+        protected void Update(Context db, List<Update> List)
         {
 
             foreach (var item in List)
             {
 
-                var PrimaryKey = db.Model.FindEntityType(item.GetType()).FindPrimaryKey().Properties.First().Name;
+                var PrimaryKey = db.Model.FindEntityType(item.Object.GetType()).FindPrimaryKey().Properties.First().Name;
 
-                if (item.GetType().GetProperty(PrimaryKey).GetValue(item) == null)
+                if (item.Object.GetType().GetProperty(PrimaryKey).GetValue(item.Object) == null)
                 {
-                    db.Add(item);
+                    db.Add(item.Object);
                 }
                 else
                 {
 
-                    if (RemoveIncludes)
-                    {
-                        RemoveInclude(db, item);
-                    }
+                    //if (item.RemoveIncludes)
+                    //{
+                        RemoveInclude(db, item.Object);
+                    //}
                     
-                    db.Update(item);
+                    db.Update(item.Object);
 
                 }
             }
@@ -97,7 +97,10 @@ namespace Build.Server.Controllers
 
             foreach (var Collection in Collections)
             {
-                Remove<int?>(db, Item, Collection.PropertyType.GetGenericArguments().Single(), Collection.Name);
+                if (Item != null)
+                {
+                    Remove<int?>(db, Item, Collection.PropertyType.GetGenericArguments().Single(), Collection.Name);
+                }
             }
 
         }
@@ -109,12 +112,19 @@ namespace Build.Server.Controllers
 
             var PrimaryKey = db.Model.FindEntityType(Type).FindPrimaryKey().Properties.First().Name;
 
-            var List = ((IEnumerable)Item.GetType().GetProperty(Name).GetValue(Item)).Cast<object>().ToList().Select(c => c.GetType().GetProperty(PrimaryKey).GetValue(c));
+            var Obj = ((IEnumerable)Item.GetType().GetProperty(Name).GetValue(Item));
 
-            if (List != null)
+            if (Obj != null)
             {
-                var Remove = AsQueryable(db, Type.Name).Where(TablePrimaryKey + " == @0 && !@1.Contains(" + PrimaryKey + ")", Item.GetType().GetProperty(TablePrimaryKey).GetValue(Item), ((IEnumerable)List).Cast<TypePrimaryKey>().ToList());
-                db.RemoveRange(Remove);
+
+                var List = Obj.Cast<object>().ToList().Select(c => c.GetType().GetProperty(PrimaryKey).GetValue(c));
+
+                if (List != null)
+                {
+                    var Remove = AsQueryable(db, Type.Name).Where(TablePrimaryKey + " == @0 && !@1.Contains(" + PrimaryKey + ")", Item.GetType().GetProperty(TablePrimaryKey).GetValue(Item), ((IEnumerable)List).Cast<TypePrimaryKey>().ToList());
+                    db.RemoveRange(Remove);
+                }
+
             }
 
         }

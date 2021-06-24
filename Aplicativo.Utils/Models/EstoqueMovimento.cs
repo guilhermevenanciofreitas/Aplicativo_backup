@@ -39,19 +39,19 @@ namespace Aplicativo.Utils.Models
 
         public EstoqueMovimentoOrigem? EstoqueOrigemID { get; set; }
 
-        public EstoqueMovimentoTipo? EstoqueTipoID { get; set; }
+        public EstoqueMovimentoTipo? EstoqueMovimentoTipoID { get; set; }
 
         public DateTime? Data { get; set; }
 
-        [ForeignKey("Usuario")]
-        public int? UsuarioID { get; set; }
+        [ForeignKey("Funcionario")]
+        public int? FuncionarioID { get; set; }
 
         [StringLength(300)]
         public string Observacao { get; set; }
 
         public virtual Estoque Estoque { get; set; }
 
-        public virtual Usuario Usuario { get; set; }
+        public virtual Pessoa Funcionario { get; set; }
 
         public virtual ICollection<EstoqueMovimentoItem> EstoqueMovimentoItem { get; set; }
 

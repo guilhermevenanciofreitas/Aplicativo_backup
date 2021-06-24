@@ -195,6 +195,11 @@ namespace Aplicativo.Utils.Helpers
         public static string StringFormat(this string valor, string mascara)
         {
 
+            if (string.IsNullOrEmpty(valor))
+            {
+                return null;
+            }
+
             string novoValor = string.Empty;
 
             int posicao = 0;

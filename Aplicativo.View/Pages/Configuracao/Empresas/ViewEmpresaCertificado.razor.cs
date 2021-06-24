@@ -15,31 +15,33 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Aplicativo.View.Pages.Estoque.Entradas
+namespace Aplicativo.View.Pages.Configuracao.Empresas
 {
-    public class ViewEntradaItemPage : ComponentBase
+    public class ViewEmpresaCertificadoPage : ComponentBase
     {
 
-        public EstoqueMovimentoItem ViewModel { get; set; } = new EstoqueMovimentoItem();
+        public EmpresaCertificado ViewModel { get; set; } = new EmpresaCertificado();
 
-        public ListItemViewLayout<EstoqueMovimentoItem> ListView { get; set; }
+        public ListItemViewLayout<EmpresaCertificado> ListView { get; set; }
         public EditItemViewLayout EditItemViewLayout { get; set; }
 
         #region Elements
-        public ViewPesquisa<Produto> ViewPesquisaProduto { get; set; }
 
-        public int? ProdutoComposicaoID { get; set; }
+        public Options OptTipo { get; set; }
 
-        public TextBox TxtItemNF { get; set; }
+
+        public TextBox TxtSmtp { get; set; }
+        public TextBox TxtPorta { get; set; }
+        public TextBox TxtEmail { get; set; }
+        public TextBox TxtSenha { get; set; }
+        public TextBox TxtConfirmarSenha { get; set; }
+
+        public CheckBox ChkSSL { get; set; }
         #endregion
 
         #region ListView
         protected async Task ViewLayout_ItemView(object args)
         {
-
-            ViewPesquisaProduto.Where.Clear();
-            ViewPesquisaProduto.AddWhere("Ativo == @0", true);
-
             await ViewLayout_Carregar(args);
         }
         #endregion
@@ -48,15 +50,13 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
         protected void BtnLimpar_Click()
         {
 
-            ViewModel = new EstoqueMovimentoItem();
+            ViewModel = new EmpresaCertificado();
 
             EditItemViewLayout.LimparCampos(this);
 
-            ProdutoComposicaoID = null;
+            ChkSSL.Checked = true;
 
-            ViewPesquisaProduto.Clear();
-
-            ViewPesquisaProduto.Focus();
+            TxtSmtp.Focus();
 
         }
 
@@ -69,12 +69,8 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
 
             if (args == null) return;
 
-            ViewModel = (EstoqueMovimentoItem)args;
+            ViewModel = (EmpresaCertificado)args;
 
-            ViewPesquisaProduto.Value = ViewModel.ProdutoID.ToStringOrNull();
-            ViewPesquisaProduto.Text = ViewModel.Produto?.Descricao.ToStringOrNull();
-
-            TxtItemNF.Text = ViewModel.NotaFiscalItem.cProd + " - " + ViewModel.NotaFiscalItem.xProd;
             //TxtSmtp.Text = ViewModel.Smtp.ToStringOrNull();
             //TxtPorta.Text = ViewModel.Porta.ToStringOrNull();
             //TxtEmail.Text = ViewModel.Email.ToStringOrNull();
@@ -108,9 +104,6 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
             //ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
             //ViewModel.Ssl = ChkSSL.Checked;
 
-            ViewModel.ProdutoID = ViewPesquisaProduto.Value.ToIntOrNull();
-            ViewModel.Produto = new Produto() { Descricao = ViewPesquisaProduto.Text };
-
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
                 ListView.Items.Add(ViewModel);
@@ -120,35 +113,49 @@ namespace Aplicativo.View.Pages.Estoque.Entradas
 
         }
 
-        protected void ViewPesquisaProduto_Change(object args)
+        protected async Task ViewPageBtnExcluir_Click()
         {
 
-            App.JSRuntime.InvokeVoidAsync("console.log", args);
+            Excluir(new List<EmpresaCertificado>() { ViewModel });
+
+            await EditItemViewLayout.ViewModal.Hide();
 
         }
 
-        //protected async Task ViewPageBtnExcluir_Click()
+        protected void ListViewBtnExcluir_Click(object args)
+        {
+
+            Excluir(((IEnumerable)args).Cast<EmpresaCertificado>().ToList());
+
+        }
+
+        public void Excluir(List<EmpresaCertificado> args)
+        {
+            foreach (var item in args)
+            {
+                ListView.Items.Remove(item);
+            }
+        }
+
+        //protected void LoadFiles(InputFileChangeEventArgs e)
         //{
+        //    isLoading = true;
+        //    loadedFiles.Clear();
 
-        //    Excluir(new List<EstoqueMovimentoItem>() { ViewModel });
-
-        //    await EditItemViewLayout.ViewModal.Hide();
-
-        //}
-
-        //protected void ListViewBtnExcluir_Click(object args)
-        //{
-
-        //    Excluir(((IEnumerable)args).Cast<EstoqueMovimentoItem>().ToList());
-
-        //}
-
-        //public void Excluir(List<EstoqueMovimentoItem> args)
-        //{
-        //    foreach (var item in args)
+        //    foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
         //    {
-        //        ListView.Items.Remove(item);
+        //        try
+        //        {
+        //            loadedFiles.Add(file);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logger.LogError("File: {Filename} Error: {Error}",
+        //                file.Name, ex.Message);
+        //        }
         //    }
+
+        //    isLoading = false;
         //}
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aplicativo.Utils.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,10 +21,13 @@ namespace Aplicativo.Utils.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? EmpresaID { get; set; }
 
-        public int? TipoPessoaID { get; set; } = 1;
+        public TipoPessoa? TipoPessoaID { get; set; }
 
         [StringLength(14, ErrorMessage = "CPF/CNPJ - tamanho máximo 14 caracteres")]
         public string CNPJ { get; set; }
+
+        [NotMapped]
+        public string CNPJ_Formatado => TipoPessoaID == TipoPessoa.Fisica ? CNPJ?.StringFormat("###.###.###-##") : CNPJ?.StringFormat("##.###.###/####-##");
 
         [StringLength(15)]
         public string IE { get; set; }
