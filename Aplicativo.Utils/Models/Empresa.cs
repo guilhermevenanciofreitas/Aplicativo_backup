@@ -15,6 +15,7 @@ namespace Aplicativo.Utils.Models
         public Empresa()
         {
             EmpresaEndereco = new HashSet<EmpresaEndereco>();
+            EmpresaCertificado = new HashSet<EmpresaCertificado>();
         }
 
         [Key]
@@ -52,6 +53,8 @@ namespace Aplicativo.Utils.Models
 
 
         public virtual ICollection<EmpresaEndereco> EmpresaEndereco { get; set; }
+
+        public virtual ICollection<EmpresaCertificado> EmpresaCertificado { get; set; }
 
     }
 }

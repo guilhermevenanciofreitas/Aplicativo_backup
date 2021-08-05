@@ -51,6 +51,9 @@ window.ElementReference = {
     Focus: function (element) {
         element.focus();
     },
+    Click: function (element) {
+        element.click();
+    },
     SetSelectionRange: function (element, start, end) {
         element.setSelectionRange(start, end);
     },

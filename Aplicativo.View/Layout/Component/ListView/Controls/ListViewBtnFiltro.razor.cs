@@ -1,6 +1,8 @@
 ﻿using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 
@@ -20,7 +22,11 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
         {
             try
             {
-                ViewFiltro.ViewModal.Show();
+                await ViewFiltro.ViewModal.Show();
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

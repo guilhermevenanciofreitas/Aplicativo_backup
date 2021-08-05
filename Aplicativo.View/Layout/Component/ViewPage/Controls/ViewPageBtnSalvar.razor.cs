@@ -2,6 +2,7 @@
 using Aplicativo.View.Helpers.Exceptions;
 using Aplicativo.View.Layout.Component.ListView;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Syncfusion.Blazor.Notifications;
 using System;
 using System.Threading.Tasks;
@@ -38,6 +39,10 @@ namespace Aplicativo.View.Layout.Component.ViewPage.Controls
                     ListItemViewLayout.ListViewGridView.GridView.Refresh();
                 }
 
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (EmptyException)
             {

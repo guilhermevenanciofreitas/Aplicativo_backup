@@ -1,5 +1,6 @@
 ﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Syncfusion.Blazor.Grids;
@@ -148,6 +149,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
                 await OnItemView.InvokeAsync(ItemView.RowData);
 
             }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
+            }
             catch (Exception ex)
             {
                 await HelpErro.Show(new Error(ex));
@@ -166,6 +171,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
                 await OnDataChange.InvokeAsync(null);
                 //ListItemView = ListItemView;
             }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
+            }
             catch (Exception ex)
             {
                 await HelpErro.Show(new Error(ex));
@@ -182,6 +191,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
                 }
                 await OnDataChange.InvokeAsync(null);
                 //ListItemView = ListItemView;
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

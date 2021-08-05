@@ -83,6 +83,18 @@
 
                                 <div class="row" style="margin-bottom: 10px">
                                     <div class="col-md-4">
+                                        <label class="control-label" style="margin-top: 10px">Taxa</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <NumericBox @ref="TxtPercTaxa" _Prefix="% " _Digits="3" OnKeyUp="TxtPercTaxa_KeyUp" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <NumericBox @ref="TxtValorTaxa" _Prefix="R$ " OnKeyUp="TxtValorTaxa_KeyUp" />
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin-bottom: 10px">
+                                    <div class="col-md-4">
                                         <label class="control-label" style="margin-top: 10px"><font color="red">Juros (ao dia)</font></label>
                                     </div>
                                     <div class="col-md-4">

@@ -1,4 +1,5 @@
 ﻿using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -52,6 +53,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
 
                 //await ShowToast("Informação:", List.Count() + " registro(s) excluído(s) com sucesso!", "e-toast-success", "e-success toast-icons");
 
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

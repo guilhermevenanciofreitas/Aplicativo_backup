@@ -7,21 +7,70 @@
     </BtnLimpar>
 
     <BtnSalvar>
-        <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+        @if (@ViewModel.nProt == null)
+        {
+            <ViewPageBtnSalvar ListItemViewLayout="ListView" OnClick="BtnSalvar_Click" />
+        }
     </BtnSalvar>
 
     <BtnExcluir>
-        <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+        @if (@ViewModel.nProt == null)
+        {
+            <ViewPageBtnExcluir ListItemViewLayout="ListView" OnClick="BtnExcluir_Click" />
+        }
+        else
+        {
+            <ViewPageBtnCustom Text="Cancelar" />
+        }
     </BtnExcluir>
+
+    <BtnEnd>
+        <DropDownList @ref="DplStatus" />
+    </BtnEnd>
 
     <View>
         <TabSet @ref="TabSet" Changed="StateHasChanged">
             <TabPage Id="Principal" Title="Principal">
 
                 <br />
-                <div class="alert alert-success" role="alert">
-                    Válido para o SPED Fiscal
+
+                @if (ViewModel.cStat == 100)
+                {
+                    <div class="alert alert-success">
+                        @if (ViewModel.xMotivo == null)
+                        {
+                            <span>Autorizado o uso da NF-e</span>
+                        }
+                        else
+                        {
+                            @(ViewModel.xMotivo + " (Protocolo: " + ViewModel.nProt + ")")
+                        }
+                    </div>
+                }
+
+                @if (ViewModel.cStat != 100 && ViewModel.xMotivo != null)
+                {
+                    <div class="alert alert-danger">
+                        <b>Código:</b> @ViewModel.cStat
+                        <br />
+                        <b>Motivo:</b> @ViewModel.xMotivo
+                    </div>
+                }
+
+                <FileDialog @ref="FileDialog" />
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="BtnArquivo_Click">Selecionar arquivo</button>
+                            <TextBox @ref="TxtArquivo" _CharacterCasing="CharacterCasing.None" _ReadOnly="true" />
+                        </div>
+                    </div>
                 </div>
+
+                <!--<div class="alert alert-success" role="alert">
+                    Válido para o SPED Fiscal
+                </div>-->
 
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
@@ -59,6 +108,21 @@
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <DateTimePicker @ref="DtpEntradaSaida" _Label="Data Entrada/Saída" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <DropDownList @ref="DplAmbiente" _Label="Ambiente" />
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <DropDownList @ref="DplTipoEmissao" _Label="Tipo emissão" />
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <DropDownList @ref="DplIndicadorPresenca" _Label="Ind. presença" />
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <DropDownList @ref="DplCRT" _Label="CRT" />
                     </div>
                 </div>
 
@@ -136,10 +200,10 @@
                         <TextBox @ref="Emit_TxtRazaoSocial" _Label="Razão social" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Inscrição estadual" />
+                        <TextBox @ref="Emit_TxtInscricaoEstadual" _Label="Inscrição estadual" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Telefone" />
+                        <TextBox @ref="Emit_TxtTelefone" _Label="Telefone" />
                     </div>
                 </div>
 
@@ -153,28 +217,28 @@
 
                 <div class="row">
                     <div class="col-md-2 col-sm-2">
-                        <TextBoxCEP _Label="CEP" />
+                        <TextBoxCEP @ref="Emit_TxtCEP" _Label="CEP" OnSuccess="Emit_TxtCEP_Success" OnError="Emit_TxtCEP_Error" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <TextBox _Label="Logradouro" />
+                        <TextBox @ref="Emit_TxtLogradouro" _Label="Logradouro" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Número" />
+                        <TextBox @ref="Emit_TxtNumero" _Label="Número" />
                     </div>
                     <div class="col-sm-3 col-sm-3">
-                        <TextBox _Label="Complemento" />
+                        <TextBox @ref="Emit_TxtComplemento" _Label="Complemento" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 col-sm-6">
-                        <TextBox _Label="Bairro" />
+                        <TextBox @ref="Emit_TxtBairro" _Label="Bairro" />
                     </div>
                     <div class="col-md-1 col-sm-1">
                         <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" OnChange="Emit_ViewPesquisaMunicipio_Change" />
                     </div>
                 </div>
 
@@ -195,10 +259,7 @@
                         <TextBox @ref="Dest_TxtRazaoSocial" _Label="Razão social" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Inscrição estadual" />
-                    </div>
-                    <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Telefone" />
+                        <TextBox @ref="Dest_TxtInscricaoEstadual" _Label="Inscrição estadual" />
                     </div>
                 </div>
 
@@ -212,28 +273,28 @@
 
                 <div class="row">
                     <div class="col-md-2 col-sm-2">
-                        <TextBoxCEP _Label="CEP" />
+                        <TextBoxCEP @ref="Dest_TxtCEP" _Label="CEP" OnSuccess="Dest_TxtCEP_Success" OnError="Dest_TxtCEP_Error" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <TextBox _Label="Logradouro" />
+                        <TextBox @ref="Dest_TxtLogradouro" _Label="Logradouro" />
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <TextBox _Label="Número" />
+                        <TextBox @ref="Dest_TxtNumero" _Label="Número" />
                     </div>
                     <div class="col-sm-3 col-sm-3">
-                        <TextBox _Label="Complemento" />
+                        <TextBox @ref="Dest_TxtComplemento" _Label="Complemento" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 col-sm-6">
-                        <TextBox _Label="Bairro" />
+                        <TextBox @ref="Dest_TxtBairro" _Label="Bairro" />
                     </div>
                     <div class="col-md-1 col-sm-1">
-                        <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
+                        <DropDownList @ref="Dest_TxtUF" _Label="UF" OnChange="Dest_TxtUF_Change" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                        <ViewPesquisa @ref="Dest_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" OnChange="Dest_ViewPesquisaMunicipio_Change" />
                     </div>
                 </div>
 
@@ -268,7 +329,7 @@
 
                 <div class="row">
                     <div class="col-md-2 col-sm-2">
-                        <TextBoxCEP _Label="CEP" />
+                        <TextBoxCEP _Label="CEP" OnSuccess="Transp_TxtCEP_Success" OnError="Transp_TxtCEP_Error" />
                     </div>
                     <div class="col-md-5 col-sm-5">
                         <TextBox _Label="Logradouro" />
@@ -286,10 +347,10 @@
                         <TextBox _Label="Bairro" />
                     </div>
                     <div class="col-md-1 col-sm-1">
-                        <DropDownList @ref="Emit_TxtUF" _Label="UF" OnChange="Emit_TxtUF_Change" />
+                        <DropDownList @ref="Transp_TxtUF" _Label="UF" OnChange="Transp_TxtUF_Change" />
                     </div>
                     <div class="col-md-5 col-sm-5">
-                        <ViewPesquisa @ref="Emit_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
+                        <ViewPesquisa @ref="Transp_ViewPesquisaMunicipio" Tipo="Municipio" _Label="Munícipio" _Title="Procurar munícipio" />
                     </div>
                 </div>
 

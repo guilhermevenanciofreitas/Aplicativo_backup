@@ -35,7 +35,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
         public NumericBox TxtDesconto { get; set; }
         public NumericBox TxtTotal { get; set; }
 
+        public DropDownList DplUnidadeMedida { get; set; }
+        public TextBox TxtEAN { get; set; }
 
+        public DropDownList DplOrigem { get; set; }
         public ViewPesquisa<CFOP> ViewPesquisaCFOP { get; set; }
         public ViewPesquisa<NCM> ViewPesquisaNCM { get; set; }
         public ViewPesquisa<CEST> ViewPesquisaCEST { get; set; }
@@ -68,9 +71,29 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
         #endregion
 
         #region ListView
+        private void InitializeComponents()
+        {
+
+        }
+
+        protected void Page_Load(object args)
+        {
+            InitializeComponents();
+        }
+
         protected async Task ViewLayout_ItemView(object args)
         {
+
+            DplUnidadeMedida.LoadDropDownList("UnidadeMedidaID", "Unidade", new DropDownListItem(null, "[Selecione]"), HelpParametros.Parametros.UnidadeMedida.Where(c => c.Ativo == true).ToList());
+
+            DplOrigem.Items.Clear();
+            DplOrigem.Add(null, "[Selecione]");
+            DplOrigem.Add("0", "0 - Nacional");
+            DplOrigem.Add("1", "1 - Estrangeira (Importação direta)");
+            DplOrigem.Add("2", "2 - Estrangeira (Adquirida no mercado interno)");
+
             await ViewLayout_Carregar(args);
+
         }
         #endregion
 
@@ -84,6 +107,7 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             EditItemViewLayout.LimparCampos(this);
 
+            DplOrigem.SelectedValue = "0";
             ViewPesquisaCFOP.Clear();
             ViewPesquisaNCM.Clear();
             ViewPesquisaCEST.Clear();
@@ -119,7 +143,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             TxtDesconto.Value = ViewModel.vDesc ?? 0;
             TxtTotal.Value = ViewModel.vProd ?? 0;
 
+            DplUnidadeMedida.SelectedValue = HelpParametros.Parametros.UnidadeMedida.FirstOrDefault(c => c.Unidade == ViewModel.uCom)?.UnidadeMedidaID.ToStringOrNull();
+            TxtEAN.Text = ViewModel.cEAN.ToStringOrNull();
 
+            DplOrigem.SelectedValue = ViewModel.orig.ToStringOrNull();
             ViewPesquisaCFOP.Value = ViewModel.Codigo_CFOP;
             ViewPesquisaCFOP.Text = ViewModel.CFOP?.Descricao;
 
@@ -177,6 +204,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
 
             ViewModel.qCom = TxtQuantidade.Value;
             ViewModel.vUnCom = TxtPreco.Value;
+            ViewModel.uCom = DplUnidadeMedida.SelectedText.ToStringOrNull();
+            ViewModel.cEAN = TxtEAN.Text.ToStringOrNull();
+
+            ViewModel.orig = DplOrigem.SelectedValue.ToIntOrNull();
 
             ViewModel.Codigo_CFOP = ViewPesquisaCFOP.Value;
             ViewModel.CFOP = new CFOP() { Descricao = ViewPesquisaCFOP.Text };
@@ -187,8 +218,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             ViewModel.Codigo_CEST = ViewPesquisaCEST.Value;
             ViewModel.CEST = new CEST() { Descricao = ViewPesquisaCEST.Text };
 
+            ViewModel.vProd = TxtTotal.Value;
 
             ViewModel.vBC = TxtBaseCalculo.Value;
+            
 
             ViewModel.Codigo_CST = ViewPesquisaCST_ICMS.Value;
             ViewModel.CST_ICMS = new CST_ICMS() { Descricao = ViewPesquisaCST_ICMS.Text };
@@ -247,6 +280,26 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             {
                 ListView.Items.Remove(item);
             }
+        }
+
+        protected void TxtQuantidade_KeyUp()
+        {
+            CalcularTotal();
+        }
+
+        protected void TxtPreco_KeyUp()
+        {
+            CalcularTotal();
+        }
+
+        protected void TxtDesconto_KeyUp()
+        {
+            CalcularTotal();
+        }
+
+        private void CalcularTotal()
+        {
+            TxtTotal.Value = (TxtPreco.Value - TxtDesconto.Value) * TxtQuantidade.Value;
         }
 
         protected void TxtBaseCalculo_KeyUp()

@@ -31,6 +31,8 @@ namespace Aplicativo.View.Layout.Component.ViewPage
         [Parameter] public RenderFragment BtnCustom { get; set; }
         [Parameter] public RenderFragment BtnExcluir { get; set; }
 
+        [Parameter] public RenderFragment BtnEnd { get; set; }
+
         [Parameter] public EventCallback OnLoad { get; set; }
 
         public ViewModal ViewModal { get; set; }

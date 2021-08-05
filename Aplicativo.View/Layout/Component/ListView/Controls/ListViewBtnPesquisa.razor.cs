@@ -1,7 +1,9 @@
 ﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,6 +39,10 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
 
                 await OnClick.InvokeAsync(null);
 
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

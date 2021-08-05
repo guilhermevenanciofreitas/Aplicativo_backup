@@ -35,6 +35,7 @@ namespace Aplicativo.View.Controls
                 Open = true;
                 await App.JSRuntime.InvokeVoidAsync("Modal.Show", DivModal);
                 await OnLoad.InvokeAsync(null);
+                StateHasChanged();
             }
             catch (Exception ex)
             {

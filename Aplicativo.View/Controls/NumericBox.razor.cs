@@ -80,7 +80,18 @@ namespace Aplicativo.View.Controls
             }
         }
 
-
+        public int Digits
+        {
+            get
+            {
+                return _Digits;
+            }
+            set
+            {
+                _Digits = value;
+                App.JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
+            }
+        }
 
         public string PlaceHolder
         {
@@ -118,9 +129,8 @@ namespace Aplicativo.View.Controls
 
                     Value = _Value;
                     PlaceHolder = _PlaceHolder;
-
-                    await App.JSRuntime.InvokeVoidAsync("ElementReference.MaskNumber", Element, _Prefix, _Digits);
-
+                    Digits = _Digits;
+                    
                 }
                 catch (Exception ex)
                 {

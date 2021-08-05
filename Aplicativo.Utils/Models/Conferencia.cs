@@ -25,7 +25,7 @@ namespace Aplicativo.Utils.Models
 
         public virtual Pessoa Funcionario { get; set; }
 
-        public ICollection<ConferenciaItem> ConferenciaItem { get; set; }
+        public virtual ICollection<ConferenciaItem> ConferenciaItem { get; set; }
 
     }
 }

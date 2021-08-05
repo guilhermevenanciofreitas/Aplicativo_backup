@@ -1,5 +1,4 @@
-﻿using Aplicativo.Server;
-using Aplicativo.Utils;
+﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Microsoft.AspNetCore.Mvc;

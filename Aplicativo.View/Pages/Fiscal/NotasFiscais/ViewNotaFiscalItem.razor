@@ -1,6 +1,6 @@
 ﻿@inherits ViewNotaFiscalItemPage
 
-<ComponentLayout>
+<ComponentLayout OnLoad="Page_Load">
     <ListItemViewLayout @ref="ListView" Type="NotaFiscalItem">
 
         <BtnNovo>
@@ -38,16 +38,25 @@
 
                             <div class="row">
                                 <div class="col-md-3 col-sm-12">
-                                    <NumericBox @ref="TxtQuantidade" _Label="Quantidade" _Digits="3" />
+                                    <NumericBox @ref="TxtQuantidade" _Label="Quantidade" _Digits="3" OnKeyUp="TxtQuantidade_KeyUp" />
                                 </div>
                                 <div class="col-md-3 col-sm-12">
-                                    <NumericBox @ref="TxtPreco" _Label="Preço un. (R$)" />
+                                    <NumericBox @ref="TxtPreco" _Label="Preço un. (R$)" OnKeyUp="TxtPreco_KeyUp" />
                                 </div>
                                 <div class="col-md-3 col-sm-12">
-                                    <NumericBox @ref="TxtDesconto" _Label="Desc.  un. (R$)" />
+                                    <NumericBox @ref="TxtDesconto" _Label="Desc.  un. (R$)" OnKeyUp="TxtDesconto_KeyUp" />
                                 </div>
                                 <div class="col-md-3 col-sm-12">
                                     <NumericBox @ref="TxtTotal" _Label="Total" _ReadOnly="true" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3 col-sm-12">
+                                    <DropDownList @ref="DplUnidadeMedida" _Label="Unidade medida" />
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <TextBox @ref="TxtEAN" _Label="GTIN/EAN" />
                                 </div>
                             </div>
 
@@ -149,6 +158,12 @@
 
                         </TabPage>
                         <TabPage Id="Impostos" Title="Inf. impostos">
+
+                            <div class="row">
+                                <div class="col-md-5 col-sm-12">
+                                    <DropDownList @ref="DplOrigem" _Label="Origem" />
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">

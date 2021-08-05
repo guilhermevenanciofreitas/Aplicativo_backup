@@ -148,9 +148,9 @@ namespace Aplicativo.View.Pages.Cadastros.Produtos
                 {
                     ListEstoque.Add(new RelBasica()
                     {
-                        Inteiro01 = item.EstoqueMovimento.EstoqueID,
-                        Descricao01 = item.EstoqueMovimento.Estoque.Descricao,
-                        Valor01 = item.EstoqueMovimentoItemEntrada.Saldo,
+                        Inteiro01 = item.EstoqueMovimento?.EstoqueID,
+                        Descricao01 = item.EstoqueMovimento?.Estoque?.Descricao,
+                        Valor01 = item.EstoqueMovimentoItemEntrada?.Saldo ?? 0,
                     });
                 }
                 else

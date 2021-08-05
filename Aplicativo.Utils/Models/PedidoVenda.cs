@@ -67,11 +67,11 @@ namespace Aplicativo.Utils.Models
 
         public virtual Pessoa Transportadora { get; set; }
 
-        public ICollection<PedidoVendaItem> PedidoVendaItem { get; set; }
+        public virtual ICollection<PedidoVendaItem> PedidoVendaItem { get; set; }
 
-        public ICollection<PedidoVendaPagamento> PedidoVendaPagamento { get; set; }
+        public virtual ICollection<PedidoVendaPagamento> PedidoVendaPagamento { get; set; }
 
-        public ICollection<PedidoVendaAndamento> PedidoVendaAndamento { get; set; }
+        public virtual ICollection<PedidoVendaAndamento> PedidoVendaAndamento { get; set; }
 
     }
 }

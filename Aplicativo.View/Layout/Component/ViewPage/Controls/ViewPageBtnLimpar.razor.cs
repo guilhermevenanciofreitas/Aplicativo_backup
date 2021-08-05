@@ -1,5 +1,7 @@
 ﻿using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +24,13 @@ namespace Aplicativo.View.Layout.Component.ViewPage.Controls
         {
             try
             {
+
                 await OnClick.InvokeAsync(null);
+
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

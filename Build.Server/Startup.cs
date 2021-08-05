@@ -1,3 +1,8 @@
+using Aplicativo.Utils;
+using ExpressionPowerTools.Core.Dependencies;
+using ExpressionPowerTools.Core.Extensions;
+using ExpressionPowerTools.Core.Signatures;
+using ExpressionPowerTools.Serialization.EFCore.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +25,11 @@ namespace Sistema.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            );
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
+            services.AddDbContext<Context>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +55,7 @@ namespace Sistema.Server
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapPowerToolsEFCore<Context>();
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");

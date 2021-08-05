@@ -28,46 +28,63 @@
                         <div class="col-md-12 col-sm-12">
                             <Options @ref="OptTipo" _Name="Tipo" OnChange="StateHasChanged">
                                 <Option Label="Certificado A1" Value="1" />
-                                <Option Label="Certificado A3" Value="2" />
+                                <!--<Option Label="Certificado A3" Value="2" />-->
                             </Options>
                         </div>
                     </div>
 
+                    <br />
+
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
+
+                            <FileDialog @ref="FileDialog" />
+
+                            <ViewModal @ref="ViewModalCertificado" Overlay="true" Title="Senha" Width="300px" Top="150px">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <TextBox @ref="TxtPassword" _Label="Senha" _CharacterCasing="CharacterCasing.None" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <Button Variant="@ButtonVariant.Contained" OnClick="BtnConfirmar_Click" Style=@("color: #fff; background-color: #5cb85c; width: 160px")>
+                                            <StartIcon>
+                                                <CheckIcon />
+                                            </StartIcon>
+                                            <ChildContent>
+                                                Confirmar
+                                            </ChildContent>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </ViewModal>
+
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" @onclick="OpenFileDialog">Selecionar arquivo</button>
+                                <TextBox @ref="TxtCertificado" _CharacterCasing="CharacterCasing.None" _ReadOnly="true" />
+                            </div>
+
                             
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-10 col-sm-10">
-                            <TextBox @ref="TxtSmtp" _Label="Smtp" _CharacterCasing="CharacterCasing.LowerCase" />
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <TextBox @ref="TxtPorta" _Label="Porta" _CharacterCasing="CharacterCasing.LowerCase" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <TextBox @ref="TxtEmail" _Label="Email" _CharacterCasing="CharacterCasing.LowerCase" />
+                            <TextBox @ref="TxtNome" _Label="Nome" _ReadOnly="true" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 col-sm-12">
+                            <TextBox @ref="TxtSerial" _Label="Serial" _ReadOnly="true" />
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <TextBox @ref="TxtExpira" _Label="Expira" _ReadOnly="true" />
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtSenha" _Type="@TextBoxType.Password" _Label="Senha" _CharacterCasing="CharacterCasing.None" />
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <TextBox @ref="TxtConfirmarSenha" _Type="@TextBoxType.Password" _Label="Confirmar Senha" _CharacterCasing="CharacterCasing.None" />
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-10 col-sm-12">
-                            <CheckBox @ref="ChkSSL" _Label="Habilitar SSL" _Checked="true" />
-                        </div>
-                    </div>
                 </View>
             </EditItemViewLayout>
         </ViewPages>
@@ -89,7 +106,9 @@
                     }
                 </ItemView>
                 <Columns>
-                    <GridColumn Field="CertificadoID" HeaderText="Código" Width="200" />
+                    <GridColumn Field="Certificado.Serial" HeaderText="Serial" Width="170" />
+                    <GridColumn Field="Certificado.Nome" HeaderText="Nome" Width="600" />
+                    <GridColumn Field="Certificado.Expira" HeaderText="Expira" Width="120" Format="dd/MM/yyyy" />
                 </Columns>
             </ListViewGridView>
         </GridView>

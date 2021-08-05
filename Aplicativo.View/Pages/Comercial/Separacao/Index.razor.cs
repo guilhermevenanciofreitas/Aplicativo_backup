@@ -104,6 +104,11 @@ namespace Aplicativo.View.Pages.Comercial.Separacao
 
             foreach(var item in PedidoVenda)
             {
+
+                item.PedidoVendaItem = null;
+                item.PedidoVendaPagamento = null;
+                item.PedidoVendaAndamento = null;
+
                 item.EmSeparacao = DateTime.Now;
                 HelpUpdate.Add(item);
             }

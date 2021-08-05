@@ -211,6 +211,12 @@ namespace Aplicativo.View.Pages.Comercial.Vendas
 
                 item.PedidoVendaStatusID = Andamento.PedidoVendaStatusID;
 
+
+                item.PedidoVendaItem = null;
+                item.PedidoVendaPagamento = null;
+                item.PedidoVendaAndamento = null;
+
+
                 HelpUpdate.Add(item);
                 HelpUpdate.Add(Andamento);
 

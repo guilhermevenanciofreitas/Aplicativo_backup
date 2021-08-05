@@ -54,6 +54,10 @@ namespace Aplicativo.Utils.Models
 
         public decimal? vDesconto { get; set; } = 0;
 
+        public decimal? pTaxa { get; set; } = 0;
+
+        public decimal? vTaxa { get; set; } = 0;
+
         public decimal? pJuros { get; set; } = 0;
 
         public decimal? vJuros { get; set; } = 0;

@@ -1,11 +1,24 @@
-﻿using Aplicativo.Utils.Helpers;
+﻿using Aplicativo.Utils;
+using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Helpers;
 using Aplicativo.View.Layout.Component.ListView;
+using ExpressionPowerTools.Core.Dependencies;
+using ExpressionPowerTools.Core.Extensions;
+using ExpressionPowerTools.Serialization;
+using ExpressionPowerTools.Serialization.Compression;
+using ExpressionPowerTools.Serialization.EFCore.Http.Extensions;
+using ExpressionPowerTools.Serialization.EFCore.Http.Queryable;
+using ExpressionPowerTools.Serialization.Signatures;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System;
 using System.Collections;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Aplicativo.View.Pages.Cadastros.Usuarios
 {
@@ -22,6 +35,13 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
 
         protected async Task BtnPesquisar_Click()
         {
+
+            //var query = DbClientContext<Context>.Query(c => c.Usuario);
+
+            //query = query.Where(c => c.UsuarioID == 32);
+
+            //var Usuarios = await query.ExecuteRemote().ToListAsync();
+
 
             var Query = new HelpQuery<Usuario>();
 
@@ -40,6 +60,7 @@ namespace Aplicativo.View.Pages.Cadastros.Usuarios
         {
             await View.Excluir(((IEnumerable)args).Cast<Usuario>().Select(c => (int)c.UsuarioID).ToList());
         }
+
 
     }
 }

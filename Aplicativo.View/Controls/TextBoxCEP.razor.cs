@@ -211,6 +211,10 @@ namespace Aplicativo.View.Controls
                 await OnSuccess.InvokeAsync(result);
 
             }
+            catch (EmptyException)
+            {
+
+            }
             catch (Exception ex)
             {
                 await HelpErro.Show(new Error(ex));

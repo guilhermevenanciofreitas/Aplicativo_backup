@@ -51,7 +51,7 @@ namespace Aplicativo.View.Helpers
                     return;
 
                 case StatusCode.Error:
-                    throw new Exception(Response.Data.ToString());
+                    throw new ErrorException(Response.Data.ToString());
 
                 case StatusCode.LoginRequired:
                     throw new LoginRequiredException();

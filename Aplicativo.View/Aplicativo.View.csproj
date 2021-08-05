@@ -19,7 +19,7 @@
     <PackageReference Include="BlazorPro.BlazorSize" Version="3.2.1" />
     <PackageReference Include="ChartJs.Blazor" Version="1.1.0" />
     <PackageReference Include="Microsoft.MobileBlazorBindings" Version="0.5.50-preview" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Skclusive.Markdown.Component" Version="5.2.0" />
     <PackageReference Include="Skclusive.Material.Alert" Version="5.2.0" />
     <PackageReference Include="Skclusive.Material.AppBar" Version="5.2.0" />
@@ -53,12 +53,16 @@
     <PackageReference Include="Skclusive.Material.Typography" Version="5.2.0" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="19.1.0.65" />
     <PackageReference Include="Syncfusion.Blazor.Notifications" Version="19.1.0.65" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.10" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="Tewr.Blazor.FileReader" Version="3.1.0.21158" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aplicativo.Utils\Aplicativo.Utils.csproj" />
+    <ProjectReference Include="..\ExpressionPowerTools\ExpressionPowerTools.Core\ExpressionPowerTools.Core.csproj" />
+    <ProjectReference Include="..\ExpressionPowerTools\ExpressionPowerTools.Serialization.EFCore.Http\ExpressionPowerTools.Serialization.EFCore.Http.csproj" />
+    <ProjectReference Include="..\ExpressionPowerTools\ExpressionPowerTools.Serialization\ExpressionPowerTools.Serialization.csproj" />
   </ItemGroup>
 
 </Project>

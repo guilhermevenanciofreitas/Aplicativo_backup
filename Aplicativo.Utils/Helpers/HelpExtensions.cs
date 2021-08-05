@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
 namespace Aplicativo.Utils.Helpers
 {
@@ -241,6 +243,29 @@ namespace Aplicativo.Utils.Helpers
                 return null;
         }
 
+        public static T GetCode<T>(string value)
+        {
+            foreach (object o in System.Enum.GetValues(typeof(T)))
+            {
+                T enumValue = (T)o;
+                if (GetXmlAttrNameFromEnumValue<T>(enumValue).Equals(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return (T)o;
+                }
+            }
+
+            throw new ArgumentException("No XmlEnumAttribute code exists for type " + typeof(T).ToString() + " corresponding to value of " + value);
+        }
+
+        public static string GetXmlAttrNameFromEnumValue<T>(T pEnumVal)
+        {
+            Type type = pEnumVal.GetType();
+            FieldInfo info = type.GetField(Enum.GetName(typeof(T), pEnumVal));
+            XmlEnumAttribute att = (XmlEnumAttribute)info.GetCustomAttributes(typeof(XmlEnumAttribute), false)[0];
+            //If there is an xmlattribute defined, return the name
+
+            return att.Name;
+        }
 
     }
 }

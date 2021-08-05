@@ -37,13 +37,9 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
         public DropDownList DplSexo { get; set; }
         public DatePicker DtpAbertura { get; set; }
 
+
+        public ViewEmpresaEndereco ViewEmpresaEndereco { get; set; }
         public ViewEmpresaCertificado ViewEmpresaCertificado { get; set; }
-
-        //public ViewPessoaVendedor ViewPessoaVendedor { get; set; }
-
-        //public ViewPessoaEndereco ViewPessoaEndereco { get; set; }
-
-        //public ViewPessoaContato ViewPessoaContato { get; set; }
 
         #endregion
 
@@ -75,11 +71,12 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
             //Query.AddInclude("Vendedores");
             //Query.AddInclude("Vendedores.Vendedor");
 
-            //Query.AddInclude("PessoaEndereco");
-            //Query.AddInclude("PessoaEndereco.Endereco");
+            Query.AddInclude("EmpresaEndereco");
+            Query.AddInclude("EmpresaEndereco.Endereco");
 
-            //Query.AddInclude("PessoaContato");
-            //Query.AddInclude("PessoaContato.Contato");
+            Query.AddInclude("EmpresaCertificado");
+            Query.AddInclude("EmpresaCertificado.Certificado");
+            Query.AddInclude("EmpresaCertificado.Certificado.Arquivo");
 
             Query.AddWhere("EmpresaID == @0", ((Empresa)args)?.EmpresaID);
             
@@ -89,7 +86,7 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
 
             TxtCodigo.Text = ViewModel.EmpresaID.ToStringOrNull();
             DplTipo.SelectedValue = ((int?)ViewModel.TipoPessoaID).ToStringOrNull();
-            //TxtCNPJ.Text = ViewModel.CNPJ_Formatado.ToStringOrNull();
+            TxtCNPJ.Text = ViewModel.CNPJ_Formatado.ToStringOrNull();
             TxtRazaoSocial.Text = ViewModel.RazaoSocial.ToStringOrNull();
             TxtNomeFantasia.Text = ViewModel.NomeFantasia.ToStringOrNull();
             //ChkCliente.Checked = ViewModel.IsCliente.ToBoolean();
@@ -104,9 +101,8 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
             //DtpAbertura.Value = ViewModel.Abertura;
 
 
-            //ViewPessoaVendedor.ListView.Items = ViewModel.Vendedores.ToList();
-            //ViewPessoaEndereco.ListView.Items = ViewModel.PessoaEndereco.ToList();
-            //ViewPessoaContato.ListView.Items = ViewModel.PessoaContato.ToList();
+            ViewEmpresaEndereco.ListView.Items = ViewModel.EmpresaEndereco.ToList();
+            ViewEmpresaCertificado.ListView.Items = ViewModel.EmpresaCertificado.ToList();
 
         }
 
@@ -119,9 +115,9 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
 
             DplTipo.SelectedValue = ((int)TipoPessoa.Juridica).ToString();
 
-            //ViewPessoaVendedor.ListView.Items = new List<PessoaVendedor>();
-            //ViewPessoaEndereco.ListView.Items = new List<PessoaEndereco>();
-            //ViewPessoaContato.ListView.Items = new List<PessoaContato>();
+
+            ViewEmpresaEndereco.ListView.Items = new List<EmpresaEndereco>();
+            ViewEmpresaCertificado.ListView.Items = new List<EmpresaCertificado>();
 
             await TabSet.Active("Principal");
 
@@ -181,24 +177,19 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
             //ViewModel.Sexo = (Sexo?)DplSexo.SelectedValue.ToIntOrNull();
             //ViewModel.Abertura = DtpAbertura.Value;
 
-            //ViewModel.Vendedores = ViewPessoaVendedor.ListView.Items.ToList();
-            //ViewModel.PessoaEndereco = ViewPessoaEndereco.ListView.Items.ToList();
-            //ViewModel.PessoaContato = ViewPessoaContato.ListView.Items.ToList();
+            ViewModel.EmpresaEndereco = ViewEmpresaEndereco.ListView.Items.ToList();
+            ViewModel.EmpresaCertificado = ViewEmpresaCertificado.ListView.Items.ToList();
 
-            //foreach(var item in ViewModel.Vendedores)
-            //{
-            //    item.Vendedor = null;
-            //}
 
-            //foreach(var item in ViewModel.PessoaEndereco)
-            //{
+            foreach (var item in ViewModel.EmpresaEndereco)
+            {
 
-            //}
+            }
 
-            //foreach(var item in ViewModel.PessoaContato)
-            //{
+            foreach (var item in ViewModel.EmpresaCertificado)
+            {
 
-            //}
+            }
 
             var HelpUpdate = new HelpUpdate();
 

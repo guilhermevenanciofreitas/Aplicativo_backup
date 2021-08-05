@@ -1,4 +1,5 @@
-﻿using Aplicativo.Utils.Helpers;
+﻿using Aplicativo.Utils;
+using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
@@ -37,6 +38,8 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
         public List<NotaFiscal> ListNotaFiscal { get; set; } = new List<NotaFiscal>();
 
         #endregion
+
+        public List<int> NFe_Numero { get; set; } = new List<int>();
 
         public async Task Page_Load(object args)
         {
@@ -127,12 +130,17 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 }
             }
 
-            CarregarNotasFiscais();
+            await CarregarNotasFiscais();
 
         }
 
-        private void CarregarNotasFiscais()
+        private async Task CarregarNotasFiscais()
         {
+
+            var Query = new HelpQuery<Empresa>();
+
+            var Empresa = await Query.FirstOrDefault();
+
 
             ListNotaFiscal.Clear();
 
@@ -154,15 +162,37 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
                         if (NotaFiscal == null)
                         {
+
+                            var Endereco = HelpParametros.Parametros.EmpresaLogada?.EmpresaEndereco?.FirstOrDefault()?.Endereco;
+
+                            if (Endereco == null)
+                            {
+                                throw new Exception("Informe o endereço do emitente!");
+                            }
+
+
+
                             ListNotaFiscal.Add(new NotaFiscal() { 
+
+                                nNF = Empresa.NFe_Numero ?? 1,
+                                serie = Empresa.NFe_Serie ?? 1,
 
                                 cNF = PedidoVenda.PedidoVendaID.ToStringOrNull(),
 
                                 tpNF = 1,
                                 
                                 CNPJCPF = HelpParametros.Parametros.EmpresaLogada.CNPJ,
+                                IE = HelpParametros.Parametros.EmpresaLogada.IE,
                                 xFant = HelpParametros.Parametros.EmpresaLogada.NomeFantasia,
                                 xNome = HelpParametros.Parametros.EmpresaLogada.RazaoSocial,
+
+                                CEP = Endereco.CEP,
+                                xLgr = Endereco.Logradouro,
+                                nro = Endereco.Numero,
+                                xCpl = Endereco.Complemento,
+                                xBairro = Endereco.Bairro,
+                                xMun = Endereco.Municipio?.Nome,
+                                cMun = Endereco.Municipio?.IBGE,
 
                                 dest_CNPJCPF = PedidoVenda.Cliente.CNPJ,
                                 dest_xNome = PedidoVenda.Cliente.NomeFantasia,
@@ -173,6 +203,11 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                                 NotaFiscalItem = new List<NotaFiscalItem>() { Item.NotaFiscalItem },
 
                             });
+
+                            NFe_Numero.Add(Empresa.NFe_Numero ?? 1);
+
+                            Empresa.NFe_Numero++;
+
                         }
                         else
                         {
@@ -229,8 +264,6 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                     Titulo.Ativo = true;
                     HelpUpdate.Add(Titulo);
                 }
-
-
 
                 foreach (var PedidoVendaItem in item.PedidoVendaItem)
                 {
@@ -298,9 +331,7 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
 
                         HelpQuery.AddWhere("EstoqueMovimentoItemEntradaID == @0", ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada.EstoqueMovimentoItemEntradaID);
 
-                        var EstoqueMovimentoItemEntrada = await HelpQuery.FirstOrDefault(); //ConferenciaItem.ConferenciaItem.EstoqueMovimentoItem.EstoqueMovimentoItemEntrada;
-
-                        await App.JSRuntime.InvokeVoidAsync("console.log", EstoqueMovimentoItemEntrada);
+                        var EstoqueMovimentoItemEntrada = await HelpQuery.FirstOrDefault();
 
                         var NotaFiscamItem = PedidoVendaItem.PedidoVendaItemNotaFiscalItem.FirstOrDefault(c => c.NotaFiscalItem.NotaFiscalItemID == null);
 
@@ -338,22 +369,19 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
                 }
 
 
-                item.Cliente = null;
-                item.Vendedor = null;
-                item.Transportadora = null;
-
-                //if (item.Finalizado == null)
-                //{
-                //    item.Finalizado = DateTime.Now;
-                //}
-
                 if (item.PedidoVendaItem.Sum(c => c.PedidoVendaItemNotaFiscalItem.Sum(c => c.NotaFiscalItem.qCom ?? 0)) == item.PedidoVendaItem.Sum(c => c.Quantidade))
                 {
                     item.Faturado = DateTime.Now;
                 }
 
+
+                item.Cliente = null;
+                item.Vendedor = null;
+                item.Transportadora = null;
+
                 item.PedidoVendaItem = null;
                 item.PedidoVendaPagamento = null;
+                item.PedidoVendaAndamento = null;
 
             }
 
@@ -362,6 +390,14 @@ namespace Aplicativo.View.Pages.Comercial.Faturamento
            
 
             await HelpUpdate.SaveChanges();
+
+
+            var Request = new Request();
+
+            Request.Parameters.Add(new Parameters("NotaFiscal", ListNotaFiscal));
+
+            var NotaFiscal = await HelpHttp.Send<List<NotaFiscal>>("api/NotaFiscal/Enviar", Request);
+
 
             if (EditItemViewLayout != null)
             {

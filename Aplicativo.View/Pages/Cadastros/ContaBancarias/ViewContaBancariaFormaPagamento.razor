@@ -28,6 +28,30 @@
                             <ViewPesquisa @ref="ViewPesquisaFormaPagamento" Tipo="FormaPagamento" _Label="Forma de pagamento" _Title="Procurar forma de pagamento" />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-7 col-sm-6">
+                            <DropDownList @ref="DplTipoTaxa" _Label="Tipo" OnChange="DplTipoTaxa_Change" />
+                        </div>
+                        <div class="col-md-5 col-sm-6">
+                            <NumericBox @ref="TxtTaxa" _Label="Taxa" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7 col-sm-6">
+                            <DropDownList @ref="DplTipoJuros" _Label="Tipo" OnChange="DplTipoJuros_Change" />
+                        </div>
+                        <div class="col-md-5 col-sm-6">
+                            <NumericBox @ref="TxtJuros" _Label="Juros (ao dia)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7 col-sm-6">
+                            <DropDownList @ref="DplTipoMulta" _Label="Tipo" OnChange="DplTipoMulta_Change" />
+                        </div>
+                        <div class="col-md-5 col-sm-6">
+                            <NumericBox @ref="TxtMulta" _Label="Multa" />
+                        </div>
+                    </div>
                 </View>
             </EditItemViewLayout>
         </ViewPages>

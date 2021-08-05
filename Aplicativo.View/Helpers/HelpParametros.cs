@@ -27,6 +27,9 @@ namespace Aplicativo.View.Helpers
             QueryUsuario.AddWhere("UsuarioID == @0", UsuarioID);
 
             var QueryEmpresa = new HelpQuery<Empresa>();
+            QueryEmpresa.AddInclude("EmpresaEndereco");
+            QueryEmpresa.AddInclude("EmpresaEndereco.Endereco");
+            QueryEmpresa.AddInclude("EmpresaEndereco.Endereco.Municipio");
             QueryEmpresa.AddWhere("EmpresaID == @0", EmpresaID);
 
             var QueryEstado = new HelpQuery<Estado>();

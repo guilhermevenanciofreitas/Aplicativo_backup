@@ -39,5 +39,10 @@ namespace Aplicativo.View.Pages.Fiscal.NotasFiscais
             await View.Excluir(((IEnumerable)args).Cast<NotaFiscal>().Select(c => (int)c.NotaFiscalID).ToList());
         }
 
+        protected async Task BtnEnviar_Click(object args)
+        {
+            await View.Enviar(((IEnumerable)args).Cast<NotaFiscal>().Select(c => (int)c.NotaFiscalID).ToList());
+        }
+
     }
 }

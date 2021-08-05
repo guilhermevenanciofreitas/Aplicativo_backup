@@ -20,10 +20,10 @@ namespace Aplicativo.Utils.Models
         [ForeignKey("ArquivoTipo")]
         public int? ArquivoTipoID { get; set; }
 
-        [StringLength(50)]
+        [StringLength(400)]
         public string Nome { get; set; }
 
-        [StringLength(100)]
+        [StringLength(800)]
         public string Observacao { get; set; }
 
         public byte[] Anexo { get; set; }

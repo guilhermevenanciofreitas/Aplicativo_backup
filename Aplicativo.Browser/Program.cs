@@ -12,6 +12,10 @@ using Aplicativo.View;
 using Aplicativo.View.Tasks;
 using Aplicativo.View.Routing;
 using BlazorPro.BlazorSize;
+using ExpressionPowerTools.Core.Dependencies;
+using ExpressionPowerTools.Serialization;
+using ExpressionPowerTools.Serialization.EFCore.Http.Extensions;
+using Tewr.Blazor.FileReader;
 
 namespace Aplicativo.Browser
 {
@@ -26,8 +30,13 @@ namespace Aplicativo.Browser
             
             builder.Services.AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            builder.Services.AddExpressionPowerToolsEFCore(new Uri(builder.HostEnvironment.BaseAddress));
+
             builder.Services.AddSingleton<IBarCodeScanner, BarCodeScanner>();
             builder.Services.AddSingleton<ICamera, Camera>();
+
+            builder.Services.AddFileReaderService(options => options.UseWasmSharedBuffer = true);
+
 
             builder.Services.AddSingleton<RouteManager>();
 

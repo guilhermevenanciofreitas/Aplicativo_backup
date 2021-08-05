@@ -16,8 +16,16 @@ namespace Aplicativo.Utils.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? CertificadoID { get; set; }
 
-        [StringLength(800)]
-        public string Descricao { get; set; }
+        [StringLength(600)]
+        public string Nome { get; set; }
+
+        [StringLength(100)]
+        public string Serial { get; set; }
+
+        public DateTime? Expira { get; set; }
+
+        [StringLength(50)]
+        public string Senha { get; set; }
 
         [ForeignKey("Arquivo")]
         public int? ArquivoID { get; set; }

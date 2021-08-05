@@ -33,7 +33,7 @@ namespace Aplicativo.Utils.Models
 
         public virtual Pessoa Funcionario { get; set; }
 
-        public ICollection<UsuarioEmail> UsuarioEmail { get; set; }
+        public virtual ICollection<UsuarioEmail> UsuarioEmail { get; set; }
 
     }
 }

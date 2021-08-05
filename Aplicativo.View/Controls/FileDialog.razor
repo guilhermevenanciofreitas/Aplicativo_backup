@@ -1,0 +1,7 @@
+﻿@inherits FileDialogControl
+
+<div style="display: none">
+    <input type="file" @ref="ElementReference" @onchange="FileChange" accept="@FilesAccepted" multiple="@Multiple" />
+</div>
+
+<!--<button @onclick=OpenFileDialog>Selecionar arquivo</button>-->

@@ -20,8 +20,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
         public TituloDetalhe ViewModel = new TituloDetalhe();
 
-        private decimal pJuros = 0;
-        private decimal pMulta = 0;
+        private TipoCobranca? TipoJuros { get; set; }
+        private decimal Juros { get; set; } = 0;
+
+        private TipoCobranca? TipoMulta { get; set; }
+        private decimal Multa { get; set; } = 0;
 
         [Parameter] public Tipo Tipo { get; set; }
         [Parameter] public ListItemViewLayout<TituloDetalhe> ListView { get; set; }
@@ -46,6 +49,8 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         public NumericBox TxtTotal { get; set; }
         public NumericBox TxtPercDesconto { get; set; }
         public NumericBox TxtValorDesconto { get; set; }
+        public NumericBox TxtPercTaxa { get; set; }
+        public NumericBox TxtValorTaxa { get; set; }
         public NumericBox TxtPercJuros { get; set; }
         public NumericBox TxtValorJuros { get; set; }
         public NumericBox TxtDiasAtrasados { get; set; }
@@ -95,8 +100,11 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             var ContaBancariaFormaPagamento = ViewModel.ContaBancaria.ContaBancariaFormaPagamento.FirstOrDefault(c => c.ContaBancariaID == ViewModel.ContaBancariaID && c.FormaPagamentoID == ViewModel.FormaPagamentoID);
 
-            pJuros = ContaBancariaFormaPagamento?.pJuros ?? 0;
-            pMulta = ContaBancariaFormaPagamento?.pMulta ?? 0;
+            TipoJuros = ContaBancariaFormaPagamento?.TipoJuros;
+            Juros = ContaBancariaFormaPagamento?.Juros ?? 0;
+
+            TipoMulta = ContaBancariaFormaPagamento?.TipoMulta;
+            Multa = ContaBancariaFormaPagamento?.Multa ?? 0;
 
             TxtCodigo.Text = ViewModel.TituloDetalheID.ToStringOrNull();
             TxtNumeroDocumento.Text = ViewModel.nDocumento.ToStringOrNull();
@@ -123,6 +131,9 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
 
             TxtPercDesconto.Value = ViewModel.pDesconto ?? 0;
             TxtValorDesconto.Value = ViewModel.vDesconto ?? 0;
+
+            TxtPercTaxa.Value = ViewModel.pTaxa ?? 0;
+            TxtValorTaxa.Value = ViewModel.vTaxa ?? 0;
 
             TxtPercJuros.Value = ViewModel.pJuros ?? 0;
             TxtValorJuros.Value = ViewModel.vJuros ?? 0;
@@ -224,6 +235,9 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             ViewModel.pDesconto = Math.Round(TxtPercDesconto.Value, 3);
             ViewModel.vDesconto = Math.Round(TxtValorDesconto.Value, 2);
 
+            ViewModel.pTaxa = Math.Round(TxtPercTaxa.Value, 3);
+            ViewModel.vTaxa = Math.Round(TxtValorTaxa.Value, 2);
+
             ViewModel.pJuros = Math.Round(TxtPercJuros.Value, 3);
             ViewModel.vJuros = Math.Round(TxtValorJuros.Value, 2);
 
@@ -301,7 +315,7 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         protected async Task DtpVencimento_Leave()
         {
 
-            if (pJuros == 0 && pMulta == 0)
+            if (Juros == 0 && Multa == 0)
             {
                 return;
             }
@@ -318,13 +332,35 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                     if (r)
                     {
 
-                        TxtPercJuros.Value = pJuros;
-                        TxtPercJuros_KeyUp();
+                        #region Juros
+                        if (TipoJuros == TipoCobranca.Percentual)
+                        {
+                            TxtPercJuros.Value = Juros;
+                            TxtPercJuros_KeyUp();
+                        }
+
+                        if (TipoJuros == TipoCobranca.ValorFixo)
+                        {
+                            TxtValorJuros.Value = Juros;
+                            TxtValorJuros_KeyUp();
+                        }
+                        #endregion
 
                         TxtDiasAtrasados.Value = (decimal)((DateTime.Today - DtpVencimento.Value)?.TotalDays);
 
-                        TxtPercMulta.Value = pMulta;
-                        TxtPercMulta_KeyUp();
+                        #region Multa
+                        if (TipoJuros == TipoCobranca.Percentual)
+                        {
+                            TxtPercMulta.Value = Multa;
+                            TxtPercMulta_KeyUp();
+                        }
+
+                        if (TipoJuros == TipoCobranca.ValorFixo)
+                        {
+                            TxtValorMulta.Value = Multa;
+                            TxtValorMulta_KeyUp();
+                        }
+                        #endregion
 
                     }
                 }
@@ -358,9 +394,9 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             ContaBancaria_Change(args, ViewPesquisaFormaPagamento, ViewPesquisaContaBancaria);
         }
 
-        protected void ViewPesquisaFormaPagamento_Change(object args)
+        protected async Task ViewPesquisaFormaPagamento_Change(object args)
         {
-            FormaPagamento_Change(args, ViewPesquisaContaBancaria, ViewPesquisaFormaPagamento);
+            await FormaPagamento_Change(args, ViewPesquisaContaBancaria, ViewPesquisaFormaPagamento);
         }
 
 
@@ -381,16 +417,69 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
             }
         }
 
-        private void FormaPagamento_Change(object args, ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria, ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento)
+        private async Task FormaPagamento_Change(object args, ViewPesquisa<ContaBancaria> ViewPesquisaContaBancaria, ViewPesquisa<FormaPagamento> ViewPesquisaFormaPagamento)
         {
             if (args != null)
             {
                 if (ViewPesquisaContaBancaria.Value.ToIntOrNull() == null)
                 {
-                    App.JSRuntime.InvokeVoidAsync("alert", "Informe a conta bancária!");
+                    await App.JSRuntime.InvokeVoidAsync("alert", "Informe a conta bancária!");
                     ViewPesquisaFormaPagamento.Clear();
                     ViewPesquisaContaBancaria.Focus();
+                    return;
                 }
+
+                var Query = new HelpQuery<ContaBancariaFormaPagamento>();
+
+                Query.AddWhere("ContaBancariaID == @0 && FormaPagamentoID == @1", ViewPesquisaContaBancaria.Value, ViewPesquisaFormaPagamento.Value);
+
+                var ContaBancariaFormaPagamento = await Query.FirstOrDefault();
+
+                #region Taxa
+                if (ContaBancariaFormaPagamento?.TipoTaxa == TipoCobranca.Percentual)
+                {
+                    TxtPercTaxa.Value = ContaBancariaFormaPagamento?.Taxa ?? 0;
+                    TxtPercTaxa_KeyUp();
+                }
+
+                if (ContaBancariaFormaPagamento?.TipoTaxa == TipoCobranca.ValorFixo)
+                {
+                    TxtValorTaxa.Value = ContaBancariaFormaPagamento?.Taxa ?? 0;
+                    TxtValorTaxa_KeyUp();
+                }
+                #endregion
+
+                #region Juros
+                if (ContaBancariaFormaPagamento?.TipoJuros == TipoCobranca.Percentual)
+                {
+                    TxtPercJuros.Value = ContaBancariaFormaPagamento?.Juros ?? 0;
+                    TxtPercJuros_KeyUp();
+                }
+
+                if (ContaBancariaFormaPagamento?.TipoJuros == TipoCobranca.ValorFixo)
+                {
+                    TxtValorJuros.Value = ContaBancariaFormaPagamento?.Juros ?? 0;
+                    TxtValorJuros_KeyUp();
+                }
+                #endregion
+
+                #region Multa
+                if (ContaBancariaFormaPagamento?.TipoMulta == TipoCobranca.Percentual)
+                {
+                    TxtPercMulta.Value = ContaBancariaFormaPagamento?.Multa ?? 0;
+                    TxtPercMulta_KeyUp();
+                }
+
+                if (ContaBancariaFormaPagamento?.TipoMulta == TipoCobranca.ValorFixo)
+                {
+                    TxtValorMulta.Value = ContaBancariaFormaPagamento?.Multa ?? 0;
+                    TxtValorMulta_KeyUp();
+                }
+                #endregion
+
+                CalcularValorLiquido();
+
+
             }
         }
 
@@ -418,6 +507,22 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
                 TxtPercDesconto.Value = (TxtValorDesconto.Value / TxtTotal.Value) * 100;
             else
                 TxtPercDesconto.Value = 0;
+
+            CalcularValorLiquido();
+        }
+
+        protected void TxtPercTaxa_KeyUp()
+        {
+            TxtValorTaxa.Value = (TxtTotal.Value / 100) * TxtPercTaxa.Value;
+            CalcularValorLiquido();
+        }
+
+        protected void TxtValorTaxa_KeyUp()
+        {
+            if (TxtTotal.Value != 0)
+                TxtPercTaxa.Value = (TxtValorTaxa.Value / TxtTotal.Value) * 100;
+            else
+                TxtPercTaxa.Value = 0;
 
             CalcularValorLiquido();
         }
@@ -464,12 +569,22 @@ namespace Aplicativo.View.Pages.Financeiro.TituloDetalhes
         {
 
             var vDesconto = Math.Round(TxtValorDesconto.Value, 2);
+            var vTaxa = Math.Round(TxtValorTaxa.Value, 2);
             var vJuros = Math.Round(TxtValorJuros.Value, 2);
             var vMulta = Math.Round(TxtValorMulta.Value, 2);
 
             var DiasAtrasados = TxtDiasAtrasados.Value;
 
-            vLiquido = Math.Round((TxtTotal.Value - vDesconto) + (vJuros * DiasAtrasados) + vMulta, 2);
+            if (Tipo == Tipo.Pagar)
+            {
+                vLiquido = Math.Round((TxtTotal.Value - vDesconto + vTaxa) + (vJuros * DiasAtrasados) + vMulta, 2);
+            }
+
+            if (Tipo == Tipo.Receber)
+            {
+                vLiquido = Math.Round((TxtTotal.Value - vDesconto - vTaxa) + (vJuros * DiasAtrasados) + vMulta, 2);
+            }
+
 
         }
 

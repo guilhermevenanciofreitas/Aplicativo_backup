@@ -1,7 +1,7 @@
-﻿using Aplicativo.Server;
-using Aplicativo.Utils;
+﻿using Aplicativo.Utils;
 using Aplicativo.Utils.Helpers;
 using Aplicativo.Utils.Models;
+using Aplicativo.View.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -133,13 +133,6 @@ namespace Build.Server.Controllers
         {
             var query = _context.GetType().GetProperty(type).GetValue(_context);
             return (IQueryable<object>)query.GetType().GetMethod("AsQueryable").Invoke(query, null);
-        }
-
-        protected Response Exception(Exception ex, Response Response)
-        {
-            Response.StatusCode = Aplicativo.Utils.StatusCode.Error;
-            Response.Data = ex.Message;
-            return Response;
         }
 
     }

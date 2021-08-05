@@ -4,16 +4,22 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Linq;
 
-namespace Aplicativo.Server
+namespace Aplicativo.Utils
 {
-    public class Context : DbContext
+    public class Context : DbContext, IDisposable
     {
 
-        private string ConnectionString { get; set; } = @"Server=localhost\AtlantaSistemas;Database=Dev;User Id=sa;Password=@Rped94ft";
+        //private string ConnectionString { get; set; } = @"Server=localhost\AtlantaSistemas;Database=Dev;User Id=sa;Password=@Rped94ft";
+
+        public Context()
+        {
+            //this.ConnectionString = ConnectionString;
+            //ChangeTracker.LazyLoadingEnabled = true;
+        }
 
         public Context(string ConnectionString)
         {
-            this.ConnectionString = ConnectionString;
+            //this.ConnectionString = ConnectionString;
             ChangeTracker.LazyLoadingEnabled = false;
         }
 
@@ -32,6 +38,8 @@ namespace Aplicativo.Server
         public DbSet<Atributo> Atributo { get; set; }
 
         public DbSet<CentroCusto> CentroCusto { get; set; }
+
+        public DbSet<Certificado> Certificado { get; set; }
 
         public DbSet<CEST> CEST { get; set; }
 
@@ -90,6 +98,8 @@ namespace Aplicativo.Server
         //public DbSet<DistribuicaoNFeNSU> DistribuicaoNFeNSU { get; set; }
 
         public DbSet<Empresa> Empresa { get; set; }
+
+        public DbSet<EmpresaCertificado> EmpresaCertificado { get; set; }
 
         public DbSet<EmpresaEndereco> EmpresaEndereco { get; set; }
 
@@ -232,6 +242,14 @@ namespace Aplicativo.Server
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+
+            modelBuilder.Entity<UsuarioEmail>()
+                .HasOne(x => x.Usuario)
+                .WithMany(e => e.UsuarioEmail)
+                .HasForeignKey(x => x.UsuarioID);
+
+
+
             modelBuilder.Entity<PessoaVendedor>()
                 .HasOne(x => x.Pessoa)
                 .WithMany(e => e.Vendedores)
@@ -271,15 +289,15 @@ namespace Aplicativo.Server
 
 
 
-            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.pJuros).HasPrecision(18, 3);
-            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.pMulta).HasPrecision(18, 3);
+            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.Juros).HasPrecision(18, 3);
+            modelBuilder.Entity<ContaBancariaFormaPagamento>().Property(c => c.Multa).HasPrecision(18, 3);
 
 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionString);
+            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer(@"Server=localhost\AtlantaSistemas;Database=Dev;User Id=sa;Password=@Rped94ft");
         }
     }
 

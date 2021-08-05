@@ -1,7 +1,9 @@
 ﻿using Aplicativo.Utils.Helpers;
 using Aplicativo.View.Controls;
 using Aplicativo.View.Helpers;
+using Aplicativo.View.Helpers.Exceptions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,10 +30,14 @@ namespace Aplicativo.View.Layout.Component.ListView.Controls
             try
             {
 
-                ViewModal.Hide();
+                await ViewModal.Hide();
 
                 await OnConfirmar.InvokeAsync(null);
 
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
             }
             catch (Exception ex)
             {

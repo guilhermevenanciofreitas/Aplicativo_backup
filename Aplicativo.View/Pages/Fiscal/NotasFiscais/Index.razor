@@ -14,6 +14,10 @@
             <ListViewBtnNovo @ref="ListView.ListViewBtnNovo" ListItemViewLayout="ListView" OnClick="BtnItemView_Click" />
         </BtnNovo>
 
+        <BtnOneMoreSelected>
+            <ListViewBtnCustom ListItemViewLayout="ListView" Text="Enviar" OnClick="BtnEnviar_Click" />
+        </BtnOneMoreSelected>
+
         <BtnFiltro>
             <ListViewBtnFiltro ViewFiltro="ListView.ViewFiltro">
                 <ViewFiltro @ref="ListView.ViewFiltro" OnConfirmar="BtnPesquisar_Click" />
@@ -50,7 +54,7 @@
                     <GridColumn Field="dhEmi" HeaderText="Emissão" Width="90" Format="dd/MM/yyyy" />
                     <GridColumn Field="xNome" HeaderText="Emitente" Width="230" />
                     <GridColumn Field="dest_xNome" HeaderText="Destinatário" Width="230" />
-                    <GridColumn Field="IE" HeaderText="Status" Width="160" />
+                    <GridColumn Field="xMotivo" HeaderText="Status" Width="160" />
                     <GridColumn Field="vNF" HeaderText="Valor" Width="110" Format="C2" TextAlign="TextAlign.Right" />
                 </Columns>
             </ListViewGridView>

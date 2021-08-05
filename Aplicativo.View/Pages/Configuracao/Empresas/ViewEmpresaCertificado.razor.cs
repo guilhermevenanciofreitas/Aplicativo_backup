@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Aplicativo.View.Pages.Configuracao.Empresas
@@ -28,15 +29,17 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
         #region Elements
 
         public Options OptTipo { get; set; }
+        public FileDialog FileDialog { get; set; }
+        public ViewModal ViewModalCertificado { get; set; }
+        public TextBox TxtPassword { get; set; }
+        public bool Confirmed { get; set; } = false;
 
+        public TextBox TxtCertificado { get; set; }
+        public TextBox TxtNome { get; set; }
+        public TextBox TxtSerial { get; set; }
+        public TextBox TxtExpira { get; set; }
+        
 
-        public TextBox TxtSmtp { get; set; }
-        public TextBox TxtPorta { get; set; }
-        public TextBox TxtEmail { get; set; }
-        public TextBox TxtSenha { get; set; }
-        public TextBox TxtConfirmarSenha { get; set; }
-
-        public CheckBox ChkSSL { get; set; }
         #endregion
 
         #region ListView
@@ -52,11 +55,15 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
 
             ViewModel = new EmpresaCertificado();
 
+            ViewModel.Certificado = new Certificado();
+            ViewModel.Certificado.Arquivo = new Arquivo();
+
+
             EditItemViewLayout.LimparCampos(this);
 
-            ChkSSL.Checked = true;
+            OptTipo.Value = "1";
 
-            TxtSmtp.Focus();
+            //TxtSmtp.Focus();
 
         }
 
@@ -71,38 +78,27 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
 
             ViewModel = (EmpresaCertificado)args;
 
-            //TxtSmtp.Text = ViewModel.Smtp.ToStringOrNull();
-            //TxtPorta.Text = ViewModel.Porta.ToStringOrNull();
-            //TxtEmail.Text = ViewModel.Email.ToStringOrNull();
-            //TxtSenha.Text = ViewModel.Senha.ToStringOrNull();
-            //TxtConfirmarSenha.Text = ViewModel.Senha.ToStringOrNull();
-            //ChkSSL.Checked = ViewModel.Ssl.ToBoolean();
+            TxtCertificado.Text = ViewModel.Certificado.Arquivo.Nome;
+            TxtNome.Text = ViewModel.Certificado.Nome.ToStringOrNull();
+            TxtSerial.Text = ViewModel.Certificado.Serial.ToStringOrNull();
+            TxtExpira.Text = ViewModel.Certificado.Expira?.ToString("dd/MM/yyyy");
 
         }
 
         protected async Task ViewPageBtnSalvar_Click()
         {
 
-            //if (string.IsNullOrEmpty(TxtSmtp.Text))
-            //    throw new EmptyException("Informe o SMTP!", TxtSmtp.Element);
+            if (ViewModel.Certificado.Arquivo.Anexo == null)
+                throw new EmptyException("Informe o certificado!");
 
-            //if (string.IsNullOrEmpty(TxtPorta.Text))
-            //    throw new EmptyException("Informe a porta!", TxtPorta.Element);
+            if (Convert.ToDateTime(TxtExpira.Text.ToStringOrNull()) < DateTime.Today)
+                throw new EmptyException("O certificado está expirado!");
 
-            //if (string.IsNullOrEmpty(TxtEmail.Text))
-            //    throw new EmptyException("Informe o email!", TxtEmail.Element);
 
-            //if (string.IsNullOrEmpty(TxtSenha.Text))
-            //    throw new EmptyException("Informe a senha!", TxtSenha.Element);
+            ViewModel.Certificado.Nome = TxtNome.Text.ToStringOrNull();
+            ViewModel.Certificado.Serial = TxtSerial.Text.ToStringOrNull();
+            ViewModel.Certificado.Expira = Convert.ToDateTime(TxtExpira.Text.ToStringOrNull());
 
-            //if (TxtSenha.Text != TxtConfirmarSenha.Text)
-            //    throw new EmptyException("A confirmação da senha está diferente da senha informada!", TxtConfirmarSenha.Element);
-
-            //ViewModel.Smtp = TxtSmtp.Text.ToStringOrNull();
-            //ViewModel.Porta = TxtPorta.Text.ToIntOrNull();
-            //ViewModel.Email = TxtEmail.Text.ToStringOrNull();
-            //ViewModel.Senha = TxtSenha.Text.ToStringOrNull();
-            //ViewModel.Ssl = ChkSSL.Checked;
 
             if (EditItemViewLayout.ItemViewMode == ItemViewMode.New)
             {
@@ -137,26 +133,76 @@ namespace Aplicativo.View.Pages.Configuracao.Empresas
             }
         }
 
-        //protected void LoadFiles(InputFileChangeEventArgs e)
-        //{
-        //    isLoading = true;
-        //    loadedFiles.Clear();
+        protected async Task OpenFileDialog()
+        {
+            try
+            {
 
-        //    foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
-        //    {
-        //        try
-        //        {
-        //            loadedFiles.Add(file);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logger.LogError("File: {Filename} Error: {Error}",
-        //                file.Name, ex.Message);
-        //        }
-        //    }
+                Confirmed = false;
 
-        //    isLoading = false;
-        //}
+                var Arquivo = (await FileDialog.OpenFileDialog(Multiple: false, Accept: new string[] { ".pfx" })).FirstOrDefault();
+
+                if (Arquivo != null)
+                {
+
+                    TxtPassword.Text = null;
+
+                    await ViewModalCertificado.ShowAsync();
+
+                    if (!Confirmed)
+                    {
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(TxtPassword.Text))
+                    {
+                        throw new EmptyException("Informe a senha!", TxtPassword.Element);
+                    }
+
+                    var Request = new Request();
+
+                    Request.Parameters.Add(new Parameters("Certificate", Arquivo.Anexo));
+                    Request.Parameters.Add(new Parameters("Password", TxtPassword.Text));
+
+                    var Certificado = await HelpHttp.Send<Certificado>("api/Certificate/InfoCertificate", Request);
+
+
+                    TxtCertificado.Text = Arquivo.Nome;
+
+                    TxtNome.Text = Certificado.Nome.ToStringOrNull();
+                    TxtSerial.Text = Certificado.Serial.ToStringOrNull();
+                    TxtExpira.Text = Certificado.Expira?.ToString("dd/MM/yyyy");
+
+                    ViewModel.Certificado.Senha = TxtPassword.Text;
+
+                    ViewModel.Certificado.Arquivo.Nome = Arquivo.Nome;
+                    ViewModel.Certificado.Arquivo.Tamanho = Arquivo.Tamanho;
+
+                    ViewModel.Certificado.Arquivo.Anexo = Arquivo.Anexo;
+
+
+                }
+
+            }
+            catch (EmptyException)
+            {
+
+            }
+            catch (ErrorException ex)
+            {
+                await App.JSRuntime.InvokeVoidAsync("alert", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                await HelpErro.Show(new Error(ex));
+            }
+        }
+
+        protected async Task BtnConfirmar_Click()
+        {
+            Confirmed = true;
+            await ViewModalCertificado.Hide();
+        }
 
         #endregion
 
